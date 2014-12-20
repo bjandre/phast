@@ -6,6 +6,52 @@ RNNN - language syntax rule NNN
 
 *)
 
+(* ----------------------------------------------------------------------------
+ *
+ * processor character set
+ *
+ * -------------------------------------------------------------------------- *)
+letter = /[a-zA-Z]/ ;
+digit = /[0-9]/ ;
+
+(* R303 *)
+underscore = /_/ ;
+
+(* table 3.1 *)
+special_character = ?/[ =\\+-\\*/\\\\(\\)\\[\\]\\{\\},\\.:;!\\"%&~<>?\\'\\`^|$#@]/? ;
+
+
+(* R301 *)
+character = alphanumeric_character
+          | special_character
+          ;
+
+(* R302 *)
+alphanumeric_character = letter
+                       | digit
+                       | underscore
+                       ;
+
+(* ----------------------------------------------------------------------------
+ *
+ * keywords (not reservered words?)
+ *
+ * -------------------------------------------------------------------------- *)
+end_keyword = "end" ;
+module_keyword = "module" ;
+use_keyword = "use" ;
+
+
+contains_keyword = "contains" ;
+
+
+(* ----------------------------------------------------------------------------
+ *
+ * 
+ *
+ * -------------------------------------------------------------------------- *)
+
+
 (* R201 *)
 program = { program_unit }+
         ;        
@@ -190,14 +236,6 @@ action_stmt = allocate_stmt |
             ;
 
 
-module_stmt = "module"
-            ;
-end_module_stmt = "end module"
+end_module_stmt = end_keyword module_keyword
                 ;
 
-use_stmt = "use"
-         ;
-
-
-contains_stmt = "contains"
-              ;
