@@ -1,25 +1,34 @@
 (* grako ebnf grammer for a subset of fortran 2003-ish
 
-syntax rules from draft of fortran standard 1539-1:2004(E)
+Source:
+ - "Final Committee Draft" of Fortran Standard 1539-1:2004(E)
 
-RNNN - language syntax rule NNN
+ - RNNN - language syntax rule NNN
+
+ - section referes to the section of the draft standard
+
+Notes:
+ - ignoring fixed-format rules.
 
 *)
 
 (* ----------------------------------------------------------------------------
  *
- * processor character set
+ * section 3.1 - processor character set
  *
  * -------------------------------------------------------------------------- *)
-letter = /[a-zA-Z]/ ;
-digit = /[0-9]/ ;
+letter = /[a-zA-Z]/
+       ;
+digit = /[0-9]/
+      ;
 
 (* R303 *)
-underscore = /_/ ;
+underscore = /_/
+           ;
 
 (* table 3.1 *)
 special_character = ?/[ =\\+-\\*/\\\\(\\)\\[\\]\\{\\},\\.:;!\\"%&~<>?\\'\\`^|$#@]/? ;
-
+(*" (* fix broken syntax highlighting *)
 
 (* R301 *)
 character = alphanumeric_character
@@ -34,9 +43,238 @@ alphanumeric_character = letter
 
 (* ----------------------------------------------------------------------------
  *
- * keywords (not reservered words?)
+ * section 3.2 - low level syntax
  *
  * -------------------------------------------------------------------------- *)
+(* R304, FIXME(bja, 201412) C301 for R304 - max name length is 64 characters *)
+name = letter
+     { alphanumeric_character }+
+     ;
+
+(* --- section 3.2.2 - constants --- *)
+(* R305 *)
+constant = literal_constant
+         | named_constant
+         ;
+
+(* R306 *)
+literal_constant = int_literal_constant
+                 | real_literal_constant
+                 | complex_literal_constant
+                 | logical_literal_constant
+                 | char_literal_constant
+                 | boz_literal_constant
+                 ;
+
+(* R307 *)
+named_constant = name
+               ;
+
+(* R308, FIXME(bja, 2014-12) C302 int constant shall be of type integer *)
+int_constant = constant
+             ;
+
+(* R309, FIXME(bja, 2014-12) C303 char constant shall be of type character *)
+char_constant = constant
+;
+
+(* --- section 3.2.3 - operators --- *)
+(* R310 *)
+intrinsic_operator = power_op
+                   | mult_op
+                   | add_op
+                   | concat_op
+                   | rel_op
+                   | not_op
+                   | and_op
+                   | or_op
+                   | equiv_op
+                   ;
+
+(* R707 *)
+power_op = "**"
+         ;
+
+(* R708 *)
+mult_op = "*"
+        | "/"
+        ;
+
+(* R709 *)
+add_op = "+"
+       "-"
+       ;
+
+(* R711 *)
+concat_op = "//"
+          ;
+
+(* R713 *)
+rel_op = ".EQ." | ".eq." | "=="
+       | ".NE." | ".ne." | "/="
+       | ".LT." | ".lt." | "<"
+       | ".LE." | ".le." | "<="
+       | ".GT." | ".gt." | ">"
+       | ".GE." | ".gt." | ">="
+       ;
+
+(* R718 *)
+not_op = ".NOT." | ".not."
+       ;
+
+(* R719 *)
+and_op = ".AND." | ".and."
+       ;
+
+(* R720 *)
+or_op = ".OR." | ".or."
+      ;
+
+(* R721 *)
+equiv_op = ".EQV." | ".eqv."
+         | ".NEQV." | ".neqv."
+         ;
+
+(* R311 *)
+defined_operator = defined_urnary_op
+                 | defined_binary_op
+                 | extended_intrinsic_op
+                 ;
+
+(* R703 *)
+defined_unary_op = "." { letter }+ "."
+                 ;
+
+(* R723 *)
+defined_binary_op = "." { letter }+ "."
+                  ;
+
+(* R312 *)
+extended_intrinsic_op = intrinsic_operator
+                      ;
+
+(* R313 FIXME(bja, 2014-12) will this re catch the begining of line: /^[\d]{1,6}/? lots of constraints for this rule. just make blank... *)
+label = ()
+      ;
+
+
+(* delimiters (...) /.../ [...] (/.../) *)
+(* FIXME(bja 2014-12) not sure what to do with these... *)
+
+
+(* ----------------------------------------------------------------------------
+ *
+ * keywords (not reservered words?).
+ *
+ * NOTES:
+ *   - section 3.3.1 for keywords that do not have to be separated by whitespace.
+ *
+ * -------------------------------------------------------------------------- *)
+end_of_line = "\n" | "\r" | "\n\r"
+            ;
+
+(* section 3.3.1.1 *)
+comment_char = "!" { character }* end_of_line
+             ;
+
+(* section 3.3.1.2 *)
+continue_char = "&"
+              ;
+
+(* section 3.3.1.3 *)
+statement_termination_char = ";" { " " | "\t" ";" }*
+                           ;
+
+block_data_keyword = "BLOCK DATA" | "block data"
+                   | "BLOCKDATA" | "blockdata"
+                   ;
+else_if_keyword = "ELSE IF" | "else if"
+                | "ELSEIF" | "elseif"
+                ;
+end_associate_keyword = "END ASSOCIATE" | "end associate"
+              | "ENDASSOCIATE" | "endassociate"
+              ;
+
+end_do_keyword = "END DO" | "end do"
+               | "ENDDO" | "enddo"
+               ;
+END_FILE = "END FILE" | "end file"
+         | "END FILE" | "endfile"
+         ;
+
+END_FUNCTION = "END FUNCTION" | "end function"
+             | "ENDFUNCTION" | "endfunction"
+             ;
+
+end_interface_keyword = "END INTERFACE" | "end interface"
+                      | "ENDINTERFACE" | "end_interface"
+                      ;
+
+end_program_keyword = "END PROGRAM" | "end program"
+                    | "ENDPROGRAM" | "endprogram"
+                    ;
+
+end_subroutine_keyword = "END SUBROUTINE" | "end subroutine"
+                       | "ENDSUBROUTINE" | "end subroutine"
+                       ;
+
+end_where_keyword = "END WHERE" | "end where"
+                  | "ENDWHERE" | "endwhere"
+                  ;
+
+in_out_keyword = "IN OUT" | "in out"
+               | "INOUT" | "inout"
+               ;
+
+select_type_keyword = "SELECT TYPE" | "select type"
+                    | "SELECTTYPE" | "select type"
+                    ;
+
+double_precision_keyword = "DOUBLE PRECISION" | "double precision"
+                         | "DOUBLEPRECISION" | "doubleprecision"
+                         ;
+
+else_where_keyword = "ELSE WHERE" | "else where"
+                   | "ELSEWHERE" | "elsewhere"
+                   ;
+
+end_block_data_keyword = "END BLOCK DATA" | "end block data"
+                       | "ENDBLOCKDATA" | "endblockdata"
+                       ;
+
+end_enum_keyword = "END ENUM" | "end enum"
+                 | "ENDENUM" | "endenum"
+                 ;
+
+end_forall_keyword = "END FORALL" | "end forall"
+                   | "ENDFORALL" | "endforall"
+                   ;
+
+end_if_keyword = "END IF" | "end if"
+               | "ENDIF" | "endif"
+               ;
+
+end_module_keyword = "END MODULE" | "end module"
+                   | "ENDMODULE" | "endmodule"
+                   ;
+
+end_select_keyword = "END SELECT" | "end select"
+                   | "ENDSELECT" | "endselect"
+                   ;
+
+end_type_keyword = "END TYPE" | "end type"
+                 | "ENDTYPE" | "endtype"
+                 ;
+
+go_to_keyword = "GO TO" | "go to"
+              | "GOTO" | "goto"
+              ;
+
+select_case_keyword = "SELECT CASE" | "select case"
+                    | "SELECTCASE" | "selectcase"
+                    ;
+
+
 end_keyword = "end" ;
 module_keyword = "module" ;
 use_keyword = "use" ;
@@ -47,14 +285,156 @@ contains_keyword = "contains" ;
 
 (* ----------------------------------------------------------------------------
  *
- * 
+ * types
+ *
+ * NOTES:
+ *   - section 4
+ *
+ * -------------------------------------------------------------------------- *)
+(* R401 *)
+type_spec = intrinsic_type_spec
+          | derived_type_spec
+          ;
+
+(* R402 : FIXME(bja, 2014-12) C402 and C403 (":" deferred type
+parameter, only in declaration or pointer/allocatable) "*" assumed
+type parameter *)
+
+type_param_value = scalar_int_expr
+                 | "*"
+                 | ":"
+                 ;
+
+integer_str = "integer" | "INTEGER"
+             ;
+
+real_str = "real" | "REAL"
+             ;
+
+double_str = double_precision_keyword
+            ;
+
+complex_str = "COMPLEX" | "complex"
+            ;
+
+character_str = "CHARACTER" | "character"
+              ;
+
+logical_str = "LOGICAL" | "logical"
+            ;
+
+intrinsic_type_spec = (integer_str [ kind_selector ])
+                    | (real_str [ kind_selector ])
+                    | double_str
+                    | (complex_str [ kind_selector ] )
+                    | (character_str [ char_selector ] )
+                    | (logical_str [ kind_selector ] )
+                    ;
+
+(* R404 : FIXME(bja, 2014-12) C404 scalar-int-initialization-expr nonnegative *)
+kind_keyword = "KIND" | "kind"
+         ;
+
+kind_str = kind_keyword "="
+         ;
+
+kind_selector = "(" [ kind_str ] scalar_int_initialization_expr ")"
+              ;
+
+(* R405 *)
+signed_int_literal_constant = [ sign ] int_literal_constant
+                            ;
+
+(* R406 *)
+int_literal_constant = digit_string [ "_" kind_constant ]
+                     ;
+
+(* R407 C405 - scalar_int_constant_name shall be a named constant of type int; C406 - kind_param sholl be nonnegative *)
+kind_param = digit_string
+           | scalar_int_constant_name
+           ;
+
+kind_constant = "_" kind_param
+              ;
+
+(* R408 *)
+signed_digit_string = [ sign ] digit_string
+                    ;
+
+(* R409 *)
+digit_string = { digit }+
+             ;
+
+(* R410 *)
+sign = "+" | "-"
+     ;
+
+(* R411 FIXME(bja, 2014-12) C410 *)
+boz_literal_constant = binary_constant
+                     | octal_constant
+                     | hex_constant
+                     ;
+
+(* R412 *)
+binary_constant = ("B'" { digit }+ "'")
+                | ('B"' { digit }+ '"')
+                ;
+
+(* R413 *)
+octal_constant = ("O'" { digit }+ "'")
+                | ('O"' { digit }+ '"')
+                ;
+
+(* R414 *)
+hex_constant = ("Z'" { hex_digit }+ "'")
+                | ('Z"' { hex_digit }+ '"')
+                ;
+
+(* R415 *)
+hex_digit = digit
+          | "A" | "a"
+          | "B" | "b"
+          | "C" | "c"
+          | "D" | "d"
+          | "E" | "e"
+          | "F" | "f"
+          ;
+
+(* R416 *)
+signed_real_literal_constant = [ sign ] real_literal_constant
+                             ;
+
+(* R417 FIXME(bja, 2014-12) if both kind_constant and exponent_letter, exponent letter sh all be 'E' *)
+real_literal_constant = (significant [ exponent_letter exponent_ ] [ kind_constant ])
+                      | (digit_string exponent_letter exponent [ kind_constant ])
+                      ;
+
+(* R418 *)
+significand = (digit_string "." digit_string)
+            | ("." digit_string)
+            ;
+
+(* R419 *)
+exponent_letter = "E" | "e"
+                | "D" | "d"
+                ;
+
+(* R420 *)
+exponent = signed_digit_string
+         ;
+
+
+
+(* ----------------------------------------------------------------------------
+ *
+ *
  *
  * -------------------------------------------------------------------------- *)
 
 
 (* R201 *)
 program = { program_unit }+
-        ;        
+        ;
 
 (* R202 *)
 program_unit = main_program |
@@ -91,7 +471,7 @@ subroutine_subprogram = subroutine_stmt
                        [ internal_subprogram_part ]
                        end_subroutine_stmt
                        ;
-                       
+
 (* R1104 *)
 module = module_stmt
         [ specification_part ]
@@ -108,7 +488,7 @@ block_data = block_data_stmt
 (* R204 *)
 specification_part = { use_stmt }*
                    { import_stmt }*
-                   [ implicit_part ] 
+                   [ implicit_part ]
                    { declaration_construct }*
                    ;
 
@@ -141,7 +521,7 @@ declaration_construct = derived_type_def |
 execution_part = exeutable_construct
                 [ execution_part_construt ]
                 ;
-                
+
 (* R209 *)
 execution_part_construct = execution_construct |
                           format_stmt |
@@ -157,17 +537,17 @@ internal_subprogram_part = contains_stmt
 internal_subprogram = function_subprogram |
                     subroutine_subprogram
                     ;
-                    
+
 (* R1107 *)
 module_subprogram_part = contains_stmt
                        { module_subprogram }+
                        ;
-                       
+
 (* R1108 *)
 module_subprogram = function_subprogram |
                   subroutine_subprogram
                   ;
-                  
+
 (* R212  *)
 specification_stmt = access_stmt |
                    allocatable_stmt |
@@ -239,3 +619,6 @@ action_stmt = allocate_stmt |
 end_module_stmt = end_keyword module_keyword
                 ;
 
+(* section 3.4 - not a fortran statement, preprocessor *)
+include_line = "include" char_literal_constant end_of_line
+             ;
