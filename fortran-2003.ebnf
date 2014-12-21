@@ -3,12 +3,21 @@
 Source:
  - "Final Committee Draft" of Fortran Standard 1539-1:2004(E)
 
- - RNNN - language syntax rule NNN
+ - See Annex D for summary of all grammar urles and constraints.
+
+ - section 1.7.2 for bnf grammar metasyntax description.
+
+ - Rsnn - language syntax rule, section s, rule nn
+
+ - Csnn - rule constraints, section s, constraint nn
 
  - section referes to the section of the draft standard
 
 Notes:
+
  - ignoring fixed-format rules.
+
+ - many rule constraints are not implemented. search for FIXME.
 
 *)
 
@@ -76,7 +85,7 @@ int_constant = constant
 
 (* R309, FIXME(bja, 2014-12) C303 char constant shall be of type character *)
 char_constant = constant
-;
+              ;
 
 (* --- section 3.2.3 - operators --- *)
 (* R310 *)
@@ -405,7 +414,7 @@ signed_real_literal_constant = [ sign ] real_literal_constant
                              ;
 
 (* R417 FIXME(bja, 2014-12) if both kind_constant and exponent_letter, exponent letter sh all be 'E' *)
-real_literal_constant = (significant [ exponent_letter exponent_ ] [ kind_constant ])
+real_literal_constant = (significand [ exponent_letter exponent ] [ kind_constant ])
                       | (digit_string exponent_letter exponent [ kind_constant ])
                       ;
 
@@ -422,6 +431,172 @@ exponent_letter = "E" | "e"
 (* R420 *)
 exponent = signed_digit_string
          ;
+
+(* R421 FIXME(bja, 2014-12) each named constant shall be of type integer or real *)
+complex_literal_constant = "(" real_part "," imag_part ")"
+                         ;
+
+(* R422 *)
+real_part = signed_int_literal_constant
+          | signed_real_literal_constant
+          | named_constant
+          ;
+
+(* R423 *)
+imag_part = signed_int_literal_constant
+          | signed_real_literal_constant
+          | named_constant
+          ;
+
+(* R424 FIXME(bja, 2014-12) C414, C416, C421 not implemented *)
+char_selector = length_selector
+              | ("(" length_str type_param_value "," kind_str scalar_int_initialization_expr ")")
+              | ("(" type_param_value "," [ kind_str ] scalar_int_initialization_expr ")")
+              | ("(" kind_str scalar_int_initialization_expr ["," length_str type_param_value] ")")
+              ;
+
+(* R425 FIXME(bja, 2014-12) C416, C419, C420 not implemented *)
+length_keyword = "LEN" | "len"
+         ;
+
+length_str = length_keyword "="
+         ;
+
+length_selector = ("(" [ length_str ] type_param_value ")")
+                | ("*" char_length [","])
+              ;
+
+(* R426 FIXME(bja, 2014-12) C415, C416 not implemented *)
+char_length = "(" type_param_value ")"
+            | scalar_int_literal_constant
+            ;
+
+(* R427 C422 *)
+char_literal_constant = ( [ kind_param "_"] "'" [ rep_char ] "'" )
+                      | ( [ kind_param "_"] '"' [ rep_char ] '"' )
+                      ;
+
+rep_char = character
+         ;
+
+(* R428 *)
+true_str = ".TRUE." | ".true."
+         ;
+
+false_str = ".FALSE." | ".false."
+          ;
+
+logical_literal_constant = (true_str [ "_" kind_param ])
+                         | (false_str [ "_" kind_param ])
+                         ;
+
+(* R429 C427 C428 C429 *)
+derived_type_def = derived_type_stmt
+                     { type_param_def_stmt }*
+                     { private_or_sequence }*
+                     { component_part }*
+                     { type_bound_procedure_part }*
+                 end_type_stmt
+                 ;
+
+(* R430 C424 C425 C430 *)
+type_keyword = "TYPE" | "type"
+             ;
+
+derived_type_stmt = type_keyword [ [ "," type_attr_spec_list ] "::" ] type_name [ "(" type_param_name_list ")" ]
+                  ;
+
+(* R431 C426 *)
+extends_keyword = "EXTENDS" | "extends"
+                ;
+
+abscract_keyword = "ABSTRACT" | "abstract"
+                 ;
+
+bind_keyword = "BIND" | "bind"
+             ;
+
+c_keyword = "C" | "c"
+          ;
+
+type_attr_spec = access_spec
+               | ( extends_keyword "(" parent_type_name ")" )
+               | abstract_keyword
+               | bind_keyword "(" c_keyword ")"
+               ;
+
+(* R432 *)
+private_or_sequence = private_components_stmt
+                    | sequence_stmt
+                    ;
+
+(* R433 C431 - if typename, then it much match the name in derived type *)
+end_type_stmt = end_type_keyword [ type_name ]
+                   ;
+
+(* R434 C432 C433 *)
+sequence_keyword = "SEQUENCE" | "sequence"
+                 ;
+
+sequence_stmt = sequence_keyword
+              ;
+
+(* R435 C434 C435 *)
+type_param_def_stmt = "INTEGER" [ kind_selector ] "," type_param_attr_spec "::" type_param_decl_list
+                    ;
+
+(* R436 *)
+type_param_decl = type_param_name [ "=" scalar_int_initialization_expr ]
+                ;
+
+(* R437 *)
+type_param_attr_spec = kind_keyword
+                     | length_keyword
+                     ;
+
+(* R438 *)
+component_part = { component_def_stmt }*
+               ;
+
+(* R439 C445 *)
+component_def_stmt = data_component_def_stmt
+                   | proc_component_def_stmt
+                   ;
+
+(* R440 C436 C437 C438 C439 C440 C441 C443 C446 C447 *)
+data_component_def_stmt = declaration_type_spec [ [ "," component_attr_spec_list ] "::" ] component_decl_list
+                        ;
+
+(* R441 *)
+pointer_keyword = "POINTER" | "pointer"
+                ;
+
+dimension_keyword = "DIMENSION" | "dimension"
+                  ;
+
+allocatable_keyword = "ALLOCATABLE" | "allocatable"
+                    ;
+
+component_attr_spec = pointer_keyword
+                    | ( dimension_keyword "(" component_array_spec ")" )
+                    | allocatable_keyword
+                    | access_spec
+                    ;
+
+(* R442 C444 *)
+component_decl = component_name [ "(" component_array_spec ")" ] [ "*" char_length ] [ component_initialization ]
+               ;
+
+(* R443 C442 *)
+component_array_spec = explicit_shape_spec_list
+                     | deferred_shape_spec_list
+                     ;
+
+(* R444 *)
+component_initialization = initialization_expr
+                         | "=>" null_init
+                         ;
+
 
 
 
