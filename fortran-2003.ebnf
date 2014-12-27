@@ -1,4 +1,6 @@
-(* grako ebnf grammer for a subset of fortran 2003-ish
+(* **************************************************************************
+
+grako ebnf grammer for a subset of fortran 2003-ish
 
 Source:
  - "Final Committee Draft" of Fortran Standard 1539-1:2004(E)
@@ -17,173 +19,26 @@ Notes:
 
  - ignoring fixed-format rules.
 
- - many rule constraints are not implemented. search for FIXME.
+ - many rule constraints are not implemented(able?) in the EBNF but will be implemented as checks to the parsed code. Search for FIXME.
 
-*)
+ * ************************************************************************** *)
 
-(* ----------------------------------------------------------------------------
- *
- * section 3.1 - processor character set
- *
- * -------------------------------------------------------------------------- *)
-letter = /[a-zA-Z]/
-       ;
-digit = /[0-9]/
-      ;
-
-(* R303 *)
-underscore = /_/
-           ;
-
-(* table 3.1 *)
-special_character = ?/[ =\\+-\\*/\\\\(\\)\\[\\]\\{\\},\\.:;!\\"%&~<>?\\'\\`^|$#@]/? ;
-(*" (* fix broken syntax highlighting *)
-
-(* R301 *)
-character = alphanumeric_character
-          | special_character
-          ;
-
-(* R302 *)
-alphanumeric_character = letter
-                       | digit
-                       | underscore
-                       ;
-
-(* ----------------------------------------------------------------------------
- *
- * section 3.2 - low level syntax
- *
- * -------------------------------------------------------------------------- *)
-(* R304, FIXME(bja, 201412) C301 for R304 - max name length is 64 characters *)
-name = letter
-     { alphanumeric_character }+
-     ;
-
-(* --- section 3.2.2 - constants --- *)
-(* R305 *)
-constant = literal_constant
-         | named_constant
-         ;
-
-(* R306 *)
-literal_constant = int_literal_constant
-                 | real_literal_constant
-                 | complex_literal_constant
-                 | logical_literal_constant
-                 | char_literal_constant
-                 | boz_literal_constant
-                 ;
-
-(* R307 *)
-named_constant = name
-               ;
-
-(* R308, FIXME(bja, 2014-12) C302 int constant shall be of type integer *)
-int_constant = constant
-             ;
-
-(* R309, FIXME(bja, 2014-12) C303 char constant shall be of type character *)
-char_constant = constant
-              ;
-
-(* --- section 3.2.3 - operators --- *)
-(* R310 *)
-intrinsic_operator = power_op
-                   | mult_op
-                   | add_op
-                   | concat_op
-                   | rel_op
-                   | not_op
-                   | and_op
-                   | or_op
-                   | equiv_op
-                   ;
-
-(* R707 *)
-power_op = "**"
-         ;
-
-(* R708 *)
-mult_op = "*"
-        | "/"
-        ;
-
-(* R709 *)
-add_op = "+"
-       "-"
-       ;
-
-(* R711 *)
-concat_op = "//"
-          ;
-
-(* R713 *)
-rel_op = ".EQ." | ".eq." | "=="
-       | ".NE." | ".ne." | "/="
-       | ".LT." | ".lt." | "<"
-       | ".LE." | ".le." | "<="
-       | ".GT." | ".gt." | ">"
-       | ".GE." | ".gt." | ">="
-       ;
-
-(* R718 *)
-not_op = ".NOT." | ".not."
-       ;
-
-(* R719 *)
-and_op = ".AND." | ".and."
-       ;
-
-(* R720 *)
-or_op = ".OR." | ".or."
-      ;
-
-(* R721 *)
-equiv_op = ".EQV." | ".eqv."
-         | ".NEQV." | ".neqv."
-         ;
-
-(* R311 *)
-defined_operator = defined_urnary_op
-                 | defined_binary_op
-                 | extended_intrinsic_op
-                 ;
-
-(* R703 *)
-defined_unary_op = "." { letter }+ "."
-                 ;
-
-(* R723 *)
-defined_binary_op = "." { letter }+ "."
-                  ;
-
-(* R312 *)
-extended_intrinsic_op = intrinsic_operator
-                      ;
-
-(* R313 FIXME(bja, 2014-12) will this re catch the begining of line: /^[\d]{1,6}/? lots of constraints for this rule. just make blank... *)
-label = ()
-      ;
-
-
-(* delimiters (...) /.../ [...] (/.../) *)
-(* FIXME(bja 2014-12) not sure what to do with these... *)
-
-
-(* ----------------------------------------------------------------------------
+(* **************************************************************************
  *
  * keywords (not reservered words?).
  *
  * NOTES:
  *   - section 3.3.1 for keywords that do not have to be separated by whitespace.
  *
- * -------------------------------------------------------------------------- *)
+ * ************************************************************************** *)
 end_of_line = "\n" | "\r" | "\n\r"
             ;
 
 (* section 3.3.1.1 *)
-comment_char = "!" { character }* end_of_line
+comment_char = "!"
+             ;
+
+comment = comment_char { character }* end_of_line
              ;
 
 (* section 3.3.1.2 *)
@@ -207,11 +62,12 @@ end_associate_keyword = "END ASSOCIATE" | "end associate"
 end_do_keyword = "END DO" | "end do"
                | "ENDDO" | "enddo"
                ;
-END_FILE = "END FILE" | "end file"
+
+end_file_keyword = "END FILE" | "end file"
          | "END FILE" | "endfile"
          ;
 
-END_FUNCTION = "END FUNCTION" | "end function"
+end_function_keyword = "END FUNCTION" | "end function"
              | "ENDFUNCTION" | "endfunction"
              ;
 
@@ -284,233 +140,47 @@ select_case_keyword = "SELECT CASE" | "select case"
                     ;
 
 
-end_keyword = "end" ;
-module_keyword = "module" ;
-use_keyword = "use" ;
+end_keyword = "END" | "end"
+            ;
 
+module_keyword = "MODULE | ""module"
+               ;
 
-contains_keyword = "contains" ;
+use_keyword = "USE" | "use"
+            ;
 
-
-(* ----------------------------------------------------------------------------
- *
- * types
- *
- * NOTES:
- *   - section 4
- *
- * -------------------------------------------------------------------------- *)
-(* R401 *)
-type_spec = intrinsic_type_spec
-          | derived_type_spec
-          ;
-
-(* R402 : FIXME(bja, 2014-12) C402 and C403 (":" deferred type
-parameter, only in declaration or pointer/allocatable) "*" assumed
-type parameter *)
-
-type_param_value = scalar_int_expr
-                 | "*"
-                 | ":"
+contains_keyword = "CONTAINS" | "contains"
                  ;
 
-integer_str = "integer" | "INTEGER"
+integer_keyword = "integer" | "INTEGER"
              ;
 
-real_str = "real" | "REAL"
+real_keyword = "real" | "REAL"
              ;
 
-double_str = double_precision_keyword
+double_keyword = double_precision_keyword
             ;
 
-complex_str = "COMPLEX" | "complex"
+complex_keyword = "COMPLEX" | "complex"
             ;
 
-character_str = "CHARACTER" | "character"
+character_keyword = "CHARACTER" | "character"
               ;
 
-logical_str = "LOGICAL" | "logical"
+logical_keyword = "LOGICAL" | "logical"
             ;
 
-intrinsic_type_spec = (integer_str [ kind_selector ])
-                    | (real_str [ kind_selector ])
-                    | double_str
-                    | (complex_str [ kind_selector ] )
-                    | (character_str [ char_selector ] )
-                    | (logical_str [ kind_selector ] )
-                    ;
-
-(* R404 : FIXME(bja, 2014-12) C404 scalar-int-initialization-expr nonnegative *)
 kind_keyword = "KIND" | "kind"
          ;
 
-kind_str = kind_keyword "="
-         ;
 
-kind_selector = "(" [ kind_str ] scalar_int_initialization_expr ")"
-              ;
-
-(* R405 *)
-signed_int_literal_constant = [ sign ] int_literal_constant
-                            ;
-
-(* R406 *)
-int_literal_constant = digit_string [ "_" kind_constant ]
-                     ;
-
-(* R407 C405 - scalar_int_constant_name shall be a named constant of type int; C406 - kind_param sholl be nonnegative *)
-kind_param = digit_string
-           | scalar_int_constant_name
-           ;
-
-kind_constant = "_" kind_param
-              ;
-
-(* R408 *)
-signed_digit_string = [ sign ] digit_string
-                    ;
-
-(* R409 *)
-digit_string = { digit }+
-             ;
-
-(* R410 *)
-sign = "+" | "-"
-     ;
-
-(* R411 FIXME(bja, 2014-12) C410 *)
-boz_literal_constant = binary_constant
-                     | octal_constant
-                     | hex_constant
-                     ;
-
-(* R412 *)
-binary_constant = ("B'" { digit }+ "'")
-                | ('B"' { digit }+ '"')
-                ;
-
-(* R413 *)
-octal_constant = ("O'" { digit }+ "'")
-                | ('O"' { digit }+ '"')
-                ;
-
-(* R414 *)
-hex_constant = ("Z'" { hex_digit }+ "'")
-                | ('Z"' { hex_digit }+ '"')
-                ;
-
-(* R415 *)
-hex_digit = digit
-          | "A" | "a"
-          | "B" | "b"
-          | "C" | "c"
-          | "D" | "d"
-          | "E" | "e"
-          | "F" | "f"
-          ;
-
-(* R416 *)
-signed_real_literal_constant = [ sign ] real_literal_constant
-                             ;
-
-(* R417 FIXME(bja, 2014-12) if both kind_constant and exponent_letter, exponent letter sh all be 'E' *)
-real_literal_constant = (significand [ exponent_letter exponent ] [ kind_constant ])
-                      | (digit_string exponent_letter exponent [ kind_constant ])
-                      ;
-
-(* R418 *)
-significand = (digit_string "." digit_string)
-            | ("." digit_string)
-            ;
-
-(* R419 *)
-exponent_letter = "E" | "e"
-                | "D" | "d"
-                ;
-
-(* R420 *)
-exponent = signed_digit_string
-         ;
-
-(* R421 FIXME(bja, 2014-12) each named constant shall be of type integer or real *)
-complex_literal_constant = "(" real_part "," imag_part ")"
-                         ;
-
-(* R422 *)
-real_part = signed_int_literal_constant
-          | signed_real_literal_constant
-          | named_constant
-          ;
-
-(* R423 *)
-imag_part = signed_int_literal_constant
-          | signed_real_literal_constant
-          | named_constant
-          ;
-
-(* R424 FIXME(bja, 2014-12) C414, C416, C421 not implemented *)
-char_selector = length_selector
-              | ("(" length_str type_param_value "," kind_str scalar_int_initialization_expr ")")
-              | ("(" type_param_value "," [ kind_str ] scalar_int_initialization_expr ")")
-              | ("(" kind_str scalar_int_initialization_expr ["," length_str type_param_value] ")")
-              ;
-
-(* R425 FIXME(bja, 2014-12) C416, C419, C420 not implemented *)
-length_keyword = "LEN" | "len"
-         ;
-
-length_str = length_keyword "="
-         ;
-
-length_selector = ("(" [ length_str ] type_param_value ")")
-                | ("*" char_length [","])
-              ;
-
-(* R426 FIXME(bja, 2014-12) C415, C416 not implemented *)
-char_length = "(" type_param_value ")"
-            | scalar_int_literal_constant
-            ;
-
-(* R427 C422 *)
-char_literal_constant = ( [ kind_param "_"] "'" [ rep_char ] "'" )
-                      | ( [ kind_param "_"] '"' [ rep_char ] '"' )
-                      ;
-
-rep_char = character
-         ;
-
-(* R428 *)
-true_str = ".TRUE." | ".true."
-         ;
-
-false_str = ".FALSE." | ".false."
-          ;
-
-logical_literal_constant = (true_str [ "_" kind_param ])
-                         | (false_str [ "_" kind_param ])
-                         ;
-
-(* R429 C427 C428 C429 *)
-derived_type_def = derived_type_stmt
-                     { type_param_def_stmt }*
-                     { private_or_sequence }*
-                     { component_part }*
-                     { type_bound_procedure_part }*
-                 end_type_stmt
-                 ;
-
-(* R430 C424 C425 C430 *)
 type_keyword = "TYPE" | "type"
              ;
 
-derived_type_stmt = type_keyword [ [ "," type_attr_spec_list ] "::" ] type_name [ "(" type_param_name_list ")" ]
-                  ;
-
-(* R431 C426 *)
 extends_keyword = "EXTENDS" | "extends"
                 ;
 
-abscract_keyword = "ABSTRACT" | "abstract"
+abstract_keyword = "ABSTRACT" | "abstract"
                  ;
 
 bind_keyword = "BIND" | "bind"
@@ -519,55 +189,9 @@ bind_keyword = "BIND" | "bind"
 c_keyword = "C" | "c"
           ;
 
-type_attr_spec = access_spec
-               | ( extends_keyword "(" parent_type_name ")" )
-               | abstract_keyword
-               | bind_keyword "(" c_keyword ")"
-               ;
-
-(* R432 *)
-private_or_sequence = private_components_stmt
-                    | sequence_stmt
-                    ;
-
-(* R433 C431 - if typename, then it much match the name in derived type *)
-end_type_stmt = end_type_keyword [ type_name ]
-                   ;
-
-(* R434 C432 C433 *)
 sequence_keyword = "SEQUENCE" | "sequence"
                  ;
 
-sequence_stmt = sequence_keyword
-              ;
-
-(* R435 C434 C435 *)
-type_param_def_stmt = "INTEGER" [ kind_selector ] "," type_param_attr_spec "::" type_param_decl_list
-                    ;
-
-(* R436 *)
-type_param_decl = type_param_name [ "=" scalar_int_initialization_expr ]
-                ;
-
-(* R437 *)
-type_param_attr_spec = kind_keyword
-                     | length_keyword
-                     ;
-
-(* R438 *)
-component_part = { component_def_stmt }*
-               ;
-
-(* R439 C445 *)
-component_def_stmt = data_component_def_stmt
-                   | proc_component_def_stmt
-                   ;
-
-(* R440 C436 C437 C438 C439 C440 C441 C443 C446 C447 *)
-data_component_def_stmt = declaration_type_spec [ [ "," component_attr_spec_list ] "::" ] component_decl_list
-                        ;
-
-(* R441 *)
 pointer_keyword = "POINTER" | "pointer"
                 ;
 
@@ -577,35 +201,227 @@ dimension_keyword = "DIMENSION" | "dimension"
 allocatable_keyword = "ALLOCATABLE" | "allocatable"
                     ;
 
-component_attr_spec = pointer_keyword
-                    | ( dimension_keyword "(" component_array_spec ")" )
-                    | allocatable_keyword
-                    | access_spec
-                    ;
+procedure_keyword = "PROCEDURE" | "procedure"
+                  ;
 
-(* R442 C444 *)
-component_decl = component_name [ "(" component_array_spec ")" ] [ "*" char_length ] [ component_initialization ]
+pass_keyword = "PASS" | "pass"
+             ;
+
+nopass_keyword = "NOPASS" | "nopass"
                ;
 
-(* R443 C442 *)
-component_array_spec = explicit_shape_spec_list
-                     | deferred_shape_spec_list
+private_keyword = "PRIVATE" | "private"
+                ;
+
+generic_keyword = "GENERIC" | "generic"
+                ;
+
+non_overridable_keyword = "NON_OVERRIDABLE" | "non_overridable"
+                        ;
+
+deffered_keyword = "DEFERRED" | "deferred"
+                 ;
+
+final_keyword = "FINAL" | "final"
+              ;
+
+enum_keyword = "ENUM" | "enum"
+             ;
+
+enumerator_keyword = "ENUMERATOR" | "enumerator"
+                   ;
+
+class_keyword = "CLASS" | "class"
+              ;
+
+asynchronous_keyword = "ASYNCHRONOUS" | "asynchronous"
                      ;
 
-(* R444 *)
-component_initialization = initialization_expr
-                         | "=>" null_init
-                         ;
+external_keyword = "EXTERNAL" | "external"
+                 ;
 
+intent_keyword = "INTENT" | "intent"
+               ;
 
+intrinsic_keyword = "INTRINSIC" | "intrinsic"
+                  ;
 
+optional_keyword = "OPTIONAL" | "optional"
+                 ;
 
-(* ----------------------------------------------------------------------------
+parameter_keyword = "PARAMETER" | "parameter"
+                 ;
+
+protected_keyword = "PROTECTED" | "protected"
+                 ;
+
+save_keyword = "SAVE" | "save"
+                 ;
+
+target_keyword = "TARGET" | "target"
+                 ;
+
+value_keyword = "VALUE" | "value"
+                 ;
+
+volatile_keyword = "VOLATILE" | "volatile"
+                 ;
+
+public_keyword = "PUBLIC" | "public"
+                ;
+
+name_keyword = "NAME" | "name"
+             ;
+
+in_keyword = "IN" | "in"
+           ;
+
+out_keyword = "OUT" | "out"
+            ;
+
+data_keyword = "DATA" | "data"
+             ;
+
+implicit_keyword = "IMPLICIT" | "implicit"
+                 ;
+
+none_keyword = "NONE" | "none"
+             ;
+
+namelist_keyword = "NAMELIST" | "namelist"
+                 ;
+
+equivalence_keyword = "EQUIVALENCE" | "equivalence"
+                    ;
+
+common_keyword = "COMMON" | "common"
+               ;
+
+function_keyword = "FUNCTION" | "function"
+                 ;
+
+recursive_keyword = "RECURSIVE" | "recurnive"
+                  ;
+
+pure_keyword = "PURE" | "pure"
+             ;
+
+elemental_keyword = "ELEMENTAL" | "elemental"
+                  ;
+
+result_keyword = "RESULT" | "result"
+               ;
+
+subroutine_keyword = "SUBROUTINE" | "subroutine"
+                   ;
+
+entry_keyword = "ENTRY" | "entry"
+              ;
+
+return_keyword = "RETURN" | "return"
+               ;
+
+read_keyword = "READ" | "read"
+             ;
+
+write_keyword = "WRITE" | "write"
+              ;
+
+formatted_keyword = "FORMATTED" | "formatted"
+                  ;
+
+unformatted_keyword = "UNFORMATTED" | "unformatted"
+                  ;
+
+assignment_keyword = "ASSIGNMENT" | "assignment"
+                   ;
+
+operator_keyword = "OPERATOR" | "operator"
+                 ;
+
+interface_keyword = "INTERFACE" | "interface"
+                  ;
+
+import_keyword = "IMPORT" | "import"
+               ;
+
+program_keyword = "PROGRAM" | "program"
+                ;
+
+only_keyword = "ONLY" | "only"
+             ;
+
+non_intrinsic_keyword = "NON INTRINSIC" | "non intrinsic"
+                      ;
+
+allocate_keyword = "ALLOCATE" | "allocate"
+                 ;
+
+stat_keyword = "STAT" | "stat"
+             ;
+
+errmsg_keyword = "ERRMSG" | "errmsg"
+               ;
+
+source_keyword = "SOURCE" | "source"
+               ;
+
+nullify_keyword = "NULLIFY" | "nullify"
+                ;
+
+deallocate_keyword = "DEALLOCATE" | "deallocate"
+                   ;
+
+where_keyword = "WHERE" | "where"
+              ;
+
+forall_keyword = "FORALL" | "forall"
+               ;
+
+if_keyword = "IF" | "if"
+           ;
+
+then_keyword = "THEN" | "then"
+             ;
+
+select_keyword = "SELECT" | "select"
+               ;
+
+case_keyword = "CASE" | "case"
+             ;
+
+default_keyword = "DEFAULT" | "default"
+                ;
+
+associate_keyword = "ASSOCIATE" | "associate"
+                  ;
+
+is_keyword = "IS" | "is"
+             ;
+
+do_keyword = "DO" | "do"
+           ;
+
+while_keyword = "WHILE" | "while"
+              ;
+
+cycle_keyword = "CYCLE" | "cycle"
+              ;
+
+exit_keyword = "EXIT" | "exit"
+             ;
+
+continue_keyword = "CONTINUE" | "continue"
+                 ;
+
+stop_keyword = "STOP" | "stop"
+             ;
+
+(* **************************************************************************
  *
+ * section 2
  *
- *
- * -------------------------------------------------------------------------- *)
-
+ * ************************************************************************** *)
 
 (* R201 *)
 program = { program_unit }+
@@ -618,47 +434,11 @@ program_unit = main_program |
               block_data
               ;
 
-(* R1101 *)
-main_program = [ program_stmt ]
-              [ specification_part ]
-              [ execution_part ]
-              [ internal_subprogram_part ]
-              end_program_stmt
-              ;
-
 (* R203 *)
 external_subprogram = function_subprogram |
                      subroutine_subprogram
                      ;
 
-(* R1223 *)
-function_subprogram = function_stmt
-                     [ specification_part ]
-                     [ execution_part ]
-                     [ internal_subprogram_part ]
-                     end_function_stmt
-                     ;
-
-(* R1231 *)
-subroutine_subprogram = subroutine_stmt
-                       [ specification_part ]
-                       [ execution_part ]
-                       [ internal_subprogram_part ]
-                       end_subroutine_stmt
-                       ;
-
-(* R1104 *)
-module = module_stmt
-        [ specification_part ]
-        [ module_subprogram_part ]
-        end_module_stmt
-        ;
-
-(* R1116 *)
-block_data = block_data_stmt
-            [ specification_part ]
-            end_block_data_stmt
-            ;
 
 (* R204 *)
 specification_part = { use_stmt }*
@@ -712,16 +492,6 @@ internal_subprogram_part = contains_stmt
 internal_subprogram = function_subprogram |
                     subroutine_subprogram
                     ;
-
-(* R1107 *)
-module_subprogram_part = contains_stmt
-                       { module_subprogram }+
-                       ;
-
-(* R1108 *)
-module_subprogram = function_subprogram |
-                  subroutine_subprogram
-                  ;
 
 (* R212  *)
 specification_stmt = access_stmt |
@@ -791,9 +561,1838 @@ action_stmt = allocate_stmt |
             ;
 
 
-end_module_stmt = end_keyword module_keyword
-                ;
+(* **************************************************************************
+ *
+ * section 3.1 - processor character set
+ *
+ * ************************************************************************** *)
+letter = /[a-zA-Z]/
+       ;
+digit = /[0-9]/
+      ;
+
+(* R303 *)
+underscore = /_/
+           ;
+
+(* table 3.1 *)
+special_character = ?/[ =\\+-\\*/\\\\(\\)\\[\\]\\{\\},\\.:;!\\"%&~<>?\\'\\`^|$#@]/? ;
+(*" (* fix broken syntax highlighting *)
+
+(* R301 *)
+character = alphanumeric_character
+          | special_character
+          ;
+
+(* R302 *)
+alphanumeric_character = letter
+                       | digit
+                       | underscore
+                       ;
+
+(* **************************************************************************
+ *
+ * section 3.2 - low level syntax
+ *
+ * ************************************************************************** *)
+(* R304, FIXME(bja, 201412) C301 for R304 - max name length is 64 characters *)
+name = letter
+     { alphanumeric_character }+
+     ;
+
+(*  section 3.2.2 - constants  *)
+(* R305 *)
+constant = literal_constant
+         | named_constant
+         ;
+
+(* R306 *)
+literal_constant = int_literal_constant
+                 | real_literal_constant
+                 | complex_literal_constant
+                 | logical_literal_constant
+                 | char_literal_constant
+                 | boz_literal_constant
+                 ;
+
+(* R307 *)
+named_constant = name
+               ;
+
+(* R308, FIXME(bja, 2014-12) C302 int constant shall be of type integer *)
+int_constant = constant
+             ;
+
+(* R309, FIXME(bja, 2014-12) C303 char constant shall be of type character *)
+char_constant = constant
+              ;
+
+(*  section 3.2.3 - operators  *)
+(* R310 *)
+intrinsic_operator = power_op
+                   | mult_op
+                   | add_op
+                   | concat_op
+                   | rel_op
+                   | not_op
+                   | and_op
+                   | or_op
+                   | equiv_op
+                   ;
+
+(* R311 *)
+defined_operator = defined_unary_op
+                 | defined_binary_op
+                 | extended_intrinsic_op
+                 ;
+
+(* R312 *)
+extended_intrinsic_op = intrinsic_operator
+                      ;
+
+(* R313 FIXME(bja, 2014-12) will this re catch the begining of line: /^[\d]{1,6}/? lots of constraints for this rule. just make blank... *)
+label = ()
+      ;
+
+
+(* delimiters (...) /.../ [...] (/.../) *)
+(* FIXME(bja 2014-12) not sure what to do with these... *)
 
 (* section 3.4 - not a fortran statement, preprocessor *)
 include_line = "include" char_literal_constant end_of_line
              ;
+
+
+
+(* **************************************************************************
+ *
+ * section 4 : types
+ *
+ * ************************************************************************** *)
+(* R401 *)
+type_spec = intrinsic_type_spec
+          | derived_type_spec
+          ;
+
+(* R402 : FIXME(bja, 2014-12) C402 and C403 (":" deferred type
+parameter, only in declaration or pointer/allocatable) "*" assumed
+type parameter *)
+
+type_param_value = scalar_int_expr
+                 | "*"
+                 | ":"
+                 ;
+
+intrinsic_type_spec = (integer_keyword [ kind_selector ])
+                    | (real_keyword [ kind_selector ])
+                    | double_keyword
+                    | (complex_keyword [ kind_selector ] )
+                    | (character_keyword [ char_selector ] )
+                    | (logical_keyword [ kind_selector ] )
+                    ;
+
+(* R404 : FIXME(bja, 2014-12) C404 scalar-int-initialization-expr nonnegative *)
+kind_str = kind_keyword "="
+         ;
+
+kind_selector = "(" [ kind_str ] scalar_int_initialization_expr ")"
+              ;
+
+(* R405 *)
+signed_int_literal_constant = [ sign ] int_literal_constant
+                            ;
+
+(* R406 *)
+int_literal_constant = digit_string [ "_" kind_constant ]
+                     ;
+
+(* R407 C405 - scalar_int_constant_name shall be a named constant of type int; C406 - kind_param sholl be nonnegative *)
+kind_param = digit_string
+           | scalar_int_constant_name
+           ;
+
+kind_constant = "_" kind_param
+              ;
+
+(* R408 *)
+signed_digit_string = [ sign ] digit_string
+                    ;
+
+(* R409 *)
+digit_string = { digit }+
+             ;
+
+(* R410 *)
+sign = "+" | "-"
+     ;
+
+(* R411 : C410 *)
+boz_literal_constant = binary_constant
+                     | octal_constant
+                     | hex_constant
+                     ;
+
+(* R412 : C *)
+binary_digit = "0" | "1"
+             ;
+binary_constant = ("B'" { binary_digit }+ "'")
+                | ('B"' { binary_digit }+ '"')
+                ;
+
+(* R413 : C *)
+octal_digit = "0" | "1" | "2" | "3"
+            | "4" | "5" | "6" | "7"
+            ;
+octal_constant = ("O'" { octal_digit }+ "'")
+                | ('O"' { octal_digit }+ '"')
+                ;
+
+(* R414 *)
+hex_constant = ("Z'" { hex_digit }+ "'")
+                | ('Z"' { hex_digit }+ '"')
+                ;
+
+(* R415 *)
+hex_digit = digit
+          | "A" | "a"
+          | "B" | "b"
+          | "C" | "c"
+          | "D" | "d"
+          | "E" | "e"
+          | "F" | "f"
+          ;
+
+(* R416 *)
+signed_real_literal_constant = [ sign ] real_literal_constant
+                             ;
+
+(* R417 FIXME(bja, 2014-12) if both kind_constant and exponent_letter, exponent letter sh all be 'E' *)
+real_literal_constant = (significand [ exponent_letter exponent ] [ kind_constant ])
+                      | (digit_string exponent_letter exponent [ kind_constant ])
+                      ;
+
+(* R418 *)
+significand = (digit_string "." digit_string)
+            | ("." digit_string)
+            ;
+
+(* R419 *)
+exponent_letter = "E" | "e"
+                | "D" | "d"
+                ;
+
+(* R420 *)
+exponent = signed_digit_string
+         ;
+
+(* R421 FIXME(bja, 2014-12) each named constant shall be of type integer or real *)
+complex_literal_constant = "(" real_part "," imag_part ")"
+                         ;
+
+(* R422 *)
+real_part = signed_int_literal_constant
+          | signed_real_literal_constant
+          | named_constant
+          ;
+
+(* R423 *)
+imag_part = signed_int_literal_constant
+          | signed_real_literal_constant
+          | named_constant
+          ;
+
+(* R424 : C414, C416, C421 *)
+char_selector = length_selector
+              | ("(" length_str type_param_value "," kind_str scalar_int_initialization_expr ")")
+              | ("(" type_param_value "," [ kind_str ] scalar_int_initialization_expr ")")
+              | ("(" kind_str scalar_int_initialization_expr ["," length_str type_param_value] ")")
+              ;
+
+(* R425 : C416, C419, C420 not implemented *)
+length_keyword = "LEN" | "len"
+         ;
+
+length_str = length_keyword "="
+         ;
+
+length_selector = ("(" [ length_str ] type_param_value ")")
+                | ("*" char_length [","])
+              ;
+
+(* R426 : C415, C416 *)
+char_length = "(" type_param_value ")"
+            | scalar_int_literal_constant
+            ;
+
+(* R427 : C422 *)
+char_literal_constant = ( [ kind_param "_"] "'" [ rep_char ] "'" )
+                      | ( [ kind_param "_"] '"' [ rep_char ] '"' )
+                      ;
+
+rep_char = character
+         ;
+
+(* R428 *)
+true_str = ".TRUE." | ".true."
+         ;
+
+false_str = ".FALSE." | ".false."
+          ;
+
+logical_literal_constant = (true_str [ "_" kind_param ])
+                         | (false_str [ "_" kind_param ])
+                         ;
+
+(* R429 : C427 C428 C429 *)
+derived_type_def = derived_type_stmt
+                     { type_param_def_stmt }*
+                     { private_or_sequence }*
+                     { component_part }*
+                     { type_bound_procedure_part }*
+                 end_type_stmt
+                 ;
+
+(* R430 : C424 C425 C430 *)
+derived_type_stmt = type_keyword [ [ "," type_attr_spec_list ] "::" ] type_name [ "(" type_param_name_list ")" ]
+                  ;
+
+(* R431 : C426 *)
+type_attr_spec = access_spec
+               | ( extends_keyword "(" parent_type_name ")" )
+               | abstract_keyword
+               | bind_keyword "(" c_keyword ")"
+               ;
+
+(* R432 *)
+private_or_sequence = private_components_stmt
+                    | sequence_stmt
+                    ;
+
+(* R433 : C431 - if typename, then it much match the name in derived type *)
+end_type_stmt = end_type_keyword [ type_name ]
+                   ;
+
+(* R434 : C432 C433 *)
+sequence_stmt = sequence_keyword
+              ;
+
+(* R435 : C434 C435 *)
+type_param_def_stmt = integer_keyword [ kind_selector ] "," type_param_attr_spec "::" type_param_decl_list
+                    ;
+
+(* R436 *)
+type_param_decl = type_param_name [ "=" scalar_int_initialization_expr ]
+                ;
+
+(* R437 *)
+type_param_attr_spec = kind_keyword
+                     | length_keyword
+                     ;
+
+(* R438 *)
+component_part = { component_def_stmt }*
+               ;
+
+(* R439 : C445 *)
+component_def_stmt = data_component_def_stmt
+                   | proc_component_def_stmt
+                   ;
+
+(* R440 : C436 C437 C438 C439 C440 C441 C443 C446 C447 *)
+data_component_def_stmt = declaration_type_spec [ [ "," component_attr_spec_list ] "::" ] component_decl_list
+                        ;
+
+(* R441 *)
+component_attr_spec = pointer_keyword
+                    | ( dimension_keyword "(" component_array_spec ")" )
+                    | allocatable_keyword
+                    | access_spec
+                    ;
+
+(* R442 : C444 *)
+component_decl = component_name [ "(" component_array_spec ")" ] [ "*" char_length ] [ component_initialization ]
+               ;
+
+(* R443 : C442 *)
+component_array_spec = explicit_shape_spec_list
+                     | deferred_shape_spec_list
+                     ;
+
+(* R444 *)
+component_initialization = initialization_expr
+                         | "=>" null_init
+                         ;
+
+
+(* R445 : C448, C449, C450, C451, C452*)
+proc_component_def_stmt = procedure_keyword "(" [ proc_interface ] ")" "," proc_component_attr_spec_list "::" proc_decl_list
+                        ;
+
+(* R446 *)
+proc_component_attr_spec = pointer_keyword
+                         | (pass_keyword [ "(" arg_name ")" ])
+                         | nopass_keyword
+                         | access_spec
+                         ;
+
+(* R447 : C454 *)
+private_components_stmt = private_keyword
+                        ;
+
+
+(* R448 : C455 *)
+type_bound_procedure_part = contains_stmt [ binding_private_stmt ] { proc_binding_stmt }+
+                          ;
+(* R449 *)
+binding_private_stmt = private_keyword
+                     ;
+
+(* R450 *)
+proc_binding_stmt = specific_binding
+                  | generic_binding
+                  | final_binding
+                  ;
+
+(* R451 : C456, C457, C458, C466, C467, C471, C472 *)
+specific_binding = procedure_keyword [ "(" interface_name ")" ] [ [ "," binding_attr_list ] "::" ] binding_name [ "=>" procedure_name ]
+                 ;
+
+binding_name = name
+             ;
+
+(* R452 : C549, C460, C461, C462, C463, C464 *)
+generic_binding = generic_keyword [ "," access_spec ] "::" generic_spec "=>" binding_name_list
+                ;
+
+
+(* R453 : C465, C468, C469, C470 *)
+binding_attr = ( pass_keyword [ "(" arg_name ")" ] )
+             | nopass_keyword
+             | non_overridable_keyword
+             | deffered_keyword
+             | access_spec
+             ;
+
+(* R454 : C473 C474 C475 *)
+final_binding = final_keyword [ "::" ] final_subroutine_name_list
+              ;
+
+
+(* R455 : C476 C477 C478 *)
+derived_type_spec = type_name [ "(" type_param_spec_list ")" ]
+                  ;
+
+(* R456 : C479 C480 C481 *)
+type_param_spec = [ keyword "=" ] type_param_value
+                ;
+
+(* R457 : C482 C483 C484 C485 C488 C489 *)
+structure_constructor = derived_type_spec "(" [ component_spec_list ] ")"
+                      ;
+(* R458 : C486 C487 *)
+component_spec = [ keyword "=" ] component_data_source
+               ;
+(* R459 : C490 C491 *)
+component_data_source = expr
+                      | data_target
+                      | proc_target
+                      ;
+
+(* R460 *)
+enum_def = enum_def_stmt { enumerator_def_stmt }+
+         end_enum_stmt
+         ;
+
+(* R461 *)
+enum_def_stmt = enum_keyword "," bind_keyword "(" c_keyword ")"
+              ;
+
+(* R462 : C492 *)
+enumerator_def_stmt = enumerator_keyword [ "::" ] enumerator_list
+                    ;
+
+(* R463 *)
+enumerator = named_constant [ "=" scalar_int_initialization_expr ]
+           ;
+
+(* R464 *)
+end_enum_stmt = end_enum_keyword
+              ;
+
+(* R465 *)
+array_constructor = ( "(/" ac_spec "/)" )
+                  | ( left_square_bracket ac_spec right_square_bracket )
+                  ;
+
+(* R466 : C494 C495 C496 *)
+ac_spec = ( type_spec "::" )
+        | ( [ type_spec "::" ] ac_value_list )
+        ;
+
+(* R467 *)
+left_square_bracket = "["
+                    ;
+
+(* R468 *)
+right_square_bracket = "]"
+                     ;
+
+(* R469 *)
+ac_value = expr
+         | ac_implied_do
+         ;
+
+(* R470 : C497 *)
+ac_implied_do = "(" ac_value_list "," ac_implied_do_control ")"
+              ;
+
+(* R471 *)
+ac_implied_do_control = ac_do_variable "=" scalar_int_expr "," scalar_int_expr [ "," scalar_int_expr ]
+                      ;
+
+(* R472 : C493 *)
+ac_do_variable = scalar_int_variable
+               ;
+
+(* **************************************************************************
+ *
+ * section 5
+ *
+ * ************************************************************************** *)
+(* R501 : C507-C519 C522 C523 C526-C530 C532 C533 C535 C536 *)
+type_declaration_stmt = declaration_type_spec [ { "," attr_spec }* "::" ] entity_decl_list
+                      ;
+(* R502 : C501 C502 C503 *)
+declaration_type_spec = intrinsic_type_spec
+                      | ( type_keyword "(" derived_type_spec ")" )
+                      | ( class_keyword "(" derived_type_spec ")" )
+                      | ( class_keyword "(*)" )
+                      ;
+
+(* R503 : C531 C534 C547 *)
+attr_spec = access_spec
+          | allocatable_keyword
+          | asynchronous_keyword
+          | ( dimension_keyword "(" array_spec ")" )
+          | external_keyword
+          | ( intent_keyword "(" intent_spec ")" )
+          | intrinsic_keyword
+          | language_binding_spec
+          | optional_keyword
+          | parameter_keyword
+          | pointer_keyword
+          | protected_keyword
+          | save_keyword
+          | target_keyword
+          | value_keyword
+          | volatile_keyword
+          ;
+
+(* R504 : C504 C520 C521 C524 C525 *)
+entity_decl = ( object_name [ "(" array_spec ")" ] [ "*" char_length ] [ initialization ] )
+            | ( function_name [ "*" char_length ] )
+            ;
+
+(* R505 : C505 *)
+object_name = name
+            ;
+
+
+(* R506 *)
+initialization = initialization_expr
+               | ( "=>" null_init )
+               ;
+(* R507 : C506 *)
+null_init = function_reference
+          ;
+
+
+(* R508 : C539 *)
+access_spec = public_keyword | private_keyword
+            ;
+
+(* R509 : C540 *)
+language_binding_spec = bind_keyword "(" c_keyword [ "," name_keyword "=" scalar_char_initialization_expr ] ")"
+                      ;
+
+(* R510 : C541 *)
+array_spec = explicit_shape_spec_list
+           | assumed_shape_spec_list
+           | deferred_shape_spec_list
+           | assumed_size_spec
+           ;
+
+(* R511 : C542 *)
+explicit_shape_spec = [ lower_bound ":" ] upper_bound
+                    ;
+
+(* R512 *)
+lower_bound = specification_expr
+            ;
+
+(* R513 *)
+upper_bound = specification_expr
+            ;
+
+(* R514 *)
+assumed_shape_spec = [ lower_bound ] ":"
+                   ;
+
+(* R515 *)
+deferred_shape_spec = ":"
+                    ;
+
+(* R516 *)
+assumed_size_spec = [ explicit_shape_spec_list "," ] [lower_bound ":" ] "*"
+                  ;
+
+(* R517 : C545 C546 *)
+intent_spec = in_keyword | out_keyword | in_out_keyword
+            ;
+
+(* R518 : C548 *)
+access_stmt = access_spec [ [ "::" ] access_id_list ]
+            ;
+(* R519 : C549 *)
+access_id = use_name
+          | generic_spec
+          ;
+
+(* R520 *)
+allocatable_stmt = allocatable_keyword [ "::" ] object_name [ "(" deferred_shape_spec_list ")" ] { "," object_name [ "(" deferred_shape_spec_list ")" ] }*
+                 ;
+
+(* R521 *)
+asynchronous_stmt = asynchronous_keyword [ "::" ] object_name_list
+                  ;
+
+(* R522 : C550 C551 C552 *)
+bind_stmt = language_binding_spec [ "::" ] bind_entity_list
+          ;
+
+(* R523 *)
+bind_entity = entity_name
+            | "/" common_block_name "/"
+            ;
+
+(* R524 *)
+data_stmt = data_keyword data_stmt_set { [ "," ] data_stmt_set }*
+          ;
+
+(* R525 *)
+data_stmt_set = data_stmt_object_list "/" data_stmt_value_list "/"
+              ;
+
+(* R526 : C553 C554 C555 *)
+data_stmt_object = variable
+                 | data_implied_do
+                 ;
+(* R527 : C557 *)
+data_implied_do = "(" data_i_do_object_list "," data_i_do_variable "=" scalar_int_expr "," scalar_int_expr [ "," scalar_int_expr ] ")"
+                ;
+
+(* R528 : C558 C559 C560 C561 *)
+data_i_do_object = array_element
+                 | scalar_structure_component
+                 | data_implied_do
+                 ;
+
+(* R529 : C556 *)
+data_i_do_variable = scalar_int_variable
+                   ;
+
+
+(* R530 *)
+data_stmt_value = [ data_stmt_repeat "*" ] data_stmt_constant
+                ;
+
+(* R531 : C562 *)
+data_stmt_repeat = scalar_int_constant
+                 | scalar_int_constant_subobject
+                 ;
+
+
+(* R532 : C563 C564 *)
+data_stmt_constant = scalar_constant
+                   | scalar_constant_subobject
+                   | signed_int_literal_constant
+                   | signed_real_literal_constant
+                   | null_init
+                   | structure_constructor
+                   ;
+
+(* R533 : C565 *)
+int_constant_subobject = constant_subobject
+                       ;
+
+(* R534 : C566 C567 *)
+constant_subobject = designator
+                   ;
+
+(* R535 *)
+dimension_stmt = dimension_keyword [ "::" ] array_name "(" array_spec ")" { "," array_name "(" array_spec ")" }*
+               ;
+
+(* R536 *)
+intent_stmt = intent_keyword "(" intent_spec ")" [ "::" ] dummy_arg_name_list
+            ;
+
+(* R537 *)
+optional_stmt = optional_keyword [ "::" ] dummy_arg_name_list
+              ;
+
+(* R538 *)
+parameter_stmt = parameter_keyword "(" named_constant_def_list ")"
+               ;
+
+(* R539 *)
+named_constant_def = named_constant "=" initialization_expr
+                   ;
+
+(* R540 *)
+pointer_stmt = pointer_keyword [ "::" ] pointer_decl_list
+             ;
+
+(* R541 : C568 *)
+pointer_decl = ( object_name [ "(" deferred_shape_spec_list ")" ] )
+             | proc_entity_name
+             ;
+
+(* R542 *)
+protected_stmt = protected_keyword [ "::" ] entity_name_list
+               ;
+
+(* R543 : C570 *)
+save_stmt = save_keyword [ [ "::" ] saved_entity_list ]
+          ;
+
+(* R544 *)
+saved_entity = object_name
+             | proc_pointer_name
+             | ( "/" common_block_name "/" )
+             ;
+
+(* R545 : C569 *)
+proc_pointer_name = name
+                  ;
+
+(* R546 *)
+target_stmt = target_keyword [ "::" ] object_name [ "(" array_spec ")" ] { "," object_name [ "(" array_spec ")" ] }*
+            ;
+
+(* R547 *)
+value_stmt = value_keyword [ "::" ] dummy_arg_name_list
+           ;
+
+(* R548 *)
+volatile_stmt =  volatile [ "::" ] object_name_list
+              ;
+
+(* R549 : C571 *)
+implicit_stmt =  implicit_keyword implicit_spec_list
+              | (implicit_keyword none_keyword)
+              ;
+
+(* R550 *)
+implicit_spec = declaration_type_spec "(" letter_spec_list ")"
+              ;
+
+(* R551 : C572 *)
+letter_spec = letter [ "–" letter ]
+            ;
+
+(* R552 : C573 C575 *)
+namelist_stmt = namelist_keyword "/" namelist_group_name "/" namelist_group_object_list { [ "," ] "/" namelist_group_name "/" namelist_group_object_list }*
+              ;
+
+(* R553 : C574 *)
+namelist_group_object = variable_name
+                      ;
+
+(* R554 *)
+equivalence_stmt = equivalence_keyword equivalence_set_list
+                 ;
+
+(* R555 : C580_C580 *)
+equivalence_set = "(" equivalence_object "," equivalence_object_list ")"
+                ;
+
+(* R556 : C576_C579 C584_C586 *)
+equivalence_object = variable_name
+                   | array_element
+                   | substring
+                   ;
+
+(* R557 *)
+common_stmt = common_keyword [ "/" [ common_block_name ] "/" ] common_block_object_list { [ "," ] "/" [ common_block_name ] "/" common_block_object_list }*
+            ;
+
+common_block_name = name
+                  ;
+
+(* R558 : C587_C590 *)
+common_block_object = ( variable_name [ "(" explicit_shape_spec_list ")" ] )
+                    | proc_pointer_name
+                    ;
+
+(* **************************************************************************
+ *
+ * section 6
+ *
+ * ************************************************************************** *)
+ (* R601 : C601 *)
+ variable = designator
+          ;
+
+(* R602 : C602 *)
+variable_name = name
+              ;
+
+(* R603 *)
+designator = object_name
+           | array_element
+           | array_section
+           | structure_component
+           | substring
+           ;
+
+(* R604 : C603 *)
+logical_variable = variable
+                 ;
+
+(* R605 : C604 *)
+default_logical_variable = variable
+                         ;
+
+(* R606 : C605 *)
+char_variable = variable
+              ;
+
+(* R607 : C606 *)
+default_char_variable = variable
+                      ;
+
+(* R608 : C607 *)
+int_variable = variable
+             ;
+
+(* R609 *)
+substring = parent_string "(" substring_range ")"
+          ;
+
+(* R610 : C608 *)
+scalar_variable_name = name
+                     ;
+
+parent_string = scalar_variable_name
+              | array_element
+              | scalar_structure_component
+              | scalar_constant
+              ;
+
+(* R611 *)
+substring_range = [ scalar_int_expr ] ":" [ scalar_int_expr ]
+                ;
+
+(* R612 : C609 C610 C611 C612 C614 *)
+data_ref = part_ref { "%" part_ref }*
+         ;
+
+(* R613 : C613 *)
+part_ref = part_name [ "(" section_subscript_list ")" ]
+         ;
+
+part_name = name
+          ;
+
+(* R614 : C615 *)
+structure_component = data_ref
+                    ;
+
+(* R615 : C616 *)
+type_param_inquiry = designator "%" type_param_name
+                   ;
+
+(* R616 : C617 *)
+array_element = data_ref
+              ;
+
+(* R617 : C618 C619 *)
+array_section = data_ref [ "(" substring_range ")" ]
+              ;
+
+
+(* R618 *)
+subscript = scalar_int_expr
+          ;
+
+(* R619 *)
+section_subscript = subscript
+                  | subscript_triplet
+                  | vector_subscript
+                  ;
+
+(* R620 : C621 *)
+subscript_triplet = [ subscript ] ":" [ subscript ] [ ":" stride ]
+                  ;
+
+(* R621 *)
+stride = scalar_int_expr
+       ;
+
+(* R622 : C620 *)
+vector_subscript = int_expr
+                 ;
+
+(* R623 : C623 C624 C625 C626 C627 C631 C632 C633 *)
+allocate_stmt = allocate_keyword "(" [ type_spec "::" ] allocation_list ["," alloc_opt_list ] ")"
+              ;
+
+(* R624 : C630 C629 C628 *)
+stat_opt = stat_keyword "=" stat_variable
+         ;
+
+errmsg_opt = errmsg_keyword "=" errmsg_variable
+           ;
+
+alloc_opt = stat_opt
+          | errmsg_opt
+          | (source_keyword "=" source_expr)
+          ;
+
+(* R625 *)
+stat_variable = scalar_int_variable
+              ;
+
+(* R626 *)
+errmsg_variable = scalar_default_char_variable
+                ;
+
+(* R627 *)
+source_expr = expr
+            ;
+
+(* R628 *)
+allocation = allocate_object [ "(" allocate_shape_spec_list ")" ]
+           ;
+
+(* R629 : C622 *)
+allocate_object = variable_name
+                | structure_component
+                ;
+
+(* R630 *)
+allocate_shape_spec = [ lower_bound_expr ":" ] upper_bound_expr
+                    ;
+
+(* R631 *)
+lower_bound_expr = scalar_int_expr
+                 ;
+
+(* R632 *)
+upper_bound_expr = scalar_int_expr
+                 ;
+
+
+(* R633 *)
+nullify_stmt = nullify_keyword "(" pointer_object_list ")"
+             ;
+(* R634 : C634 *)
+pointer_object = variable_name
+               | structure_component
+               | proc_pointer_name
+               ;
+
+(* R635 : C635 *)
+deallocate_stmt = deallocate_keyword "(" allocate_object_list [ "," dealloc_opt_list ] ")"
+                ;
+
+
+(* R636 : C636 *)
+dealloc_opt = stat_opt
+            | errmsg_opt
+            ;
+
+(* **************************************************************************
+ *
+ * section 7
+ *
+ * ************************************************************************** *)
+(* R701 : C701 C702 *)
+primary = constant
+        | designator
+        | array_constructor
+        | structure_constructor
+        | function_reference
+        | type_param_inquiry
+        | type_param_name
+        | "(" expr ")"
+        ;
+
+(* R702 *)
+level_1_expr = [ defined_unary_op ] primary
+             ;
+
+(* R703 : C703 *)
+defined_unary_op = "." { letter }+ "."
+                 ;
+
+(* R704 : *)
+mult_operand = level_1_expr [ power_op mult_operand ]
+             ;
+
+(* R705 : *)
+add_operand = [ add_operand mult_op ] mult_operand
+            ;
+
+(* R706 : *)
+level_2_expr = [ [ level_2_expr ] add_op ] add_operand
+             ;
+
+(* R707 *)
+power_op = "**"
+         ;
+
+(* R708 *)
+mult_op = "*"
+        | "/"
+        ;
+
+(* R709 *)
+add_op = "+"
+       "-"
+       ;
+
+(* R710 : *)
+level_3_expr = [ level_3_expr concat_op ] level_2_expr
+             ;
+
+(* R711 *)
+concat_op = "//"
+          ;
+
+(* R712 : *)
+level_4_expr = [ level_3_expr rel_op ] level_3_expr
+             ;
+
+(* R713 *)
+rel_op = ".EQ." | ".eq." | "=="
+       | ".NE." | ".ne." | "/="
+       | ".LT." | ".lt." | "<"
+       | ".LE." | ".le." | "<="
+       | ".GT." | ".gt." | ">"
+       | ".GE." | ".gt." | ">="
+       ;
+
+(* R714 : *)
+and_operand = [ not_op ] level_4_expr
+            ;
+
+(* R715 : *)
+or_operand = [ or_operand and_op ] and_operand
+           ;
+
+(* R716 : *)
+equiv_operand = [ equiv_operand or_op ] or_operand
+              ;
+
+(* R717 : *)
+level_5_expr = [ level_5_expr equiv_op ] equiv_operand
+             ;
+
+
+(* R718 *)
+not_op = ".NOT." | ".not."
+       ;
+
+(* R719 *)
+and_op = ".AND." | ".and."
+       ;
+
+(* R720 *)
+or_op = ".OR." | ".or."
+      ;
+
+(* R721 *)
+equiv_op = ".EQV." | ".eqv."
+         | ".NEQV." | ".neqv."
+         ;
+
+
+(* R722 : *)
+expr = [ expr defined_binary_op ] level_5_expr
+     ;
+
+(* R723 : C704 *)
+defined_binary_op = "." { letter }+ "."
+                  ;
+
+
+(* R724 : C705 *)
+logical_expr = expr
+             ;
+
+(* R725 : C706 *)
+char_expr = expr
+          ;
+
+(* R726 : C707 *)
+default_char_expr = expr
+                  ;
+
+
+(* R727 : C708 *)
+int_expr = expr
+         ;
+
+(* R728 : C709 *)
+numeric_expr = expr
+             ;
+
+(* R729 : C710 *)
+specification_expr = scalar_int_expr
+                   ;
+
+(* R730 : C711 *)
+initialization_expr = expr
+                    ;
+
+(* R731 : C712 *)
+char_initialization_expr = char_expr
+                         ;
+
+(* R732 : C713 *)
+int_initialization_expr = int_expr
+                        ;
+
+(* R733 : C714 *)
+logical_initialization_expr = logical_expr
+                            ;
+
+(* R734 : C715 *)
+assignment_stmt = variable "=" expr
+                ;
+
+(* R735 : C716 C717 C718 C719 C720 *)
+pointer_assignment_stmt = ( data_pointer_object [ "(" bounds_spec_list ")" ] "=>" data_target )
+                        | ( data_pointer_object "(" bounds_remapping_list ")" "=>" data_target )
+                        | ( proc_pointer_object "=>" proc_target )
+                        ;
+
+(* R736 : C721 C722 *)
+data_pointer_object = variable_name
+                    | ( variable "%" data_pointer_component_name )
+                    ;
+
+(* R737 : *)
+bounds_spec = lower_bound_expr ":"
+            ;
+
+(* R738 : *)
+bounds_remapping = ower_bound_expr ":" upper_bound_expr
+                 ;
+
+(* R739 : C723 C724 *)
+data_target = variable
+            | expr
+            ;
+
+(* R740 : *)
+proc_pointer_object = proc_pointer_name
+                    | proc_component_ref
+                    ;
+
+(* R741 : C725 *)
+proc_component_ref = variable "%" procedure_component_name
+                   ;
+
+(* R742 : C726 C727 C728 *)
+proc_target = expr
+            | procedure_name
+            | proc_component_ref
+            ;
+
+
+
+(* R743 : *)
+where_stmt = where_keyword "(" mask_expr ")" where_assignment_stmt
+           ;
+
+(* R744 : C730 *)
+where_construct = where_construct_stmt
+                    { where_body_construct }*
+                    { masked_elsewhere_stmt { where_body_construct }* }*
+                    [ elsewhere_stmt { where_body_construct }* ]
+                end_where_stmt
+                ;
+
+(* R745 : *)
+where_construct_name = name
+                     ;
+
+where_construct_stmt = [ where_construct_name ":" ] where_keyword "(" mask_expr ")"
+                     ;
+
+(* R746 : C731 *)
+where_body_construct = where_assignment_stmt
+                     | where_stmt
+                     | where_construct
+                     ;
+
+(* R747 : C729 *)
+where_assignment_stmt = assignment_stmt
+                      ;
+
+(* R748 : *)
+mask_expr = logical_expr
+          ;
+
+(* R749 : *)
+masked_elsewhere_stmt = else_where_keyword "(" mask_expr ")" [ where_construct_name ]
+                      ;
+
+(* R750 : *)
+elsewhere_stmt = else_where_keyword [where_construct_name ]
+               ;
+
+(* R751 : *)
+end_where_stmt = end_where_keyword [where_construct_name ]
+               ;
+
+(* R752 : *)
+forall_construct = forall_construct_stmt
+                     { forall_body_construct }*
+                 end_forall_stmt
+                 ;
+
+(* R753 : *)
+forall_construct_stmt = [forall_construct_name ":" ] forall_keyword forall_header
+                      ;
+
+(* R754 : C733 C734 *)
+forall_header = "(" forall_triplet_spec_list ["," scalar_mask_expr] ")"
+              ;
+
+(* R755 : C735 C736 *)
+forall_triplet_spec = index_name "=" subscript ":" subscript [ ":" stride ]
+                    ;
+
+(* R756 : C737 C738 C739 *)
+forall_body_construct = forall_assignment_stmt
+                      | where_stmt
+                      | where_construct
+                      | forall_construct
+                      | forall_stmt
+                      ;
+
+(* R757 : *)
+forall_assignment_stmt = assignment_stmt
+                       | pointer_assignment_stmt
+                       ;
+
+(* R758 : C732 *)
+end_forall_stmt = end_forall_keyword [forall_construct_name ]
+
+                ;
+
+
+(* R759 : *)
+forall_stmt = forall_keyword forall_header forall_assignment_stmt
+            ;
+
+
+(* **************************************************************************
+ *
+ * section 8
+ *
+ * ************************************************************************** *)
+(* R801 : *)
+block = { execution_part_construct }*
+      ;
+
+(* R802 : C801 *)
+if_construct = if_then_stmt
+                 block
+             { else_if_stmt
+                 block }*
+             [ else_stmt
+                 block ]
+             end_if_stmt
+             ;
+
+(* R803 : *)
+if_then_stmt = [ if_construct_name ":" ] if_keyword "(" scalar_logical_expr ")" then_keyword
+             ;
+
+(* R804 : *)
+else_if_stmt = else_if_keyword "(" scalar_logical_expr ")" then_keyword [ if_construct_name ]
+             ;
+
+(* R805 : *)
+else_stmt = else_keyword [ if_construct_name ]
+          ;
+
+(* R806 : *)
+end_if_stmt = end_if_keyword [ if_construct_name ]
+            ;
+
+
+(* R807 : C802 *)
+if_stmt = if_keyword "(" scalar_logical_expr ")" action_stmt
+        ;
+
+
+(* R808 : C803 C804 C805 C806 C807 *)
+case_construct = select_case_stmt { case_stmt block }* end_select_stmt
+               ;
+
+(* R809 : *)
+select_case_stmt =  [ case_construct_name ":" ] select_case_keyword "(" case_expr ")"
+                 ;
+
+(* R810 : *)
+case_stmt = case_keyword case_selector [ case_construct_name ]
+          ;
+
+(* R811 : *)
+end_select_stmt = end_select_keyword [ case_construct_name ]
+                ;
+
+
+(* R812 : *)
+case_expr = scalar_int_expr
+          | scalar_char_expr
+          | scalar_logical_expr
+          ;
+
+(* R813 : *)
+case_selector = ( "(" case_value_range_list ")" )
+              | default_keyword
+              ;
+
+(* R814 : *)
+case_value_range = case_value
+                 | ( case_value ":" )
+                 | ( ":" case_value )
+                 | ( case_value ":" case_value )
+                 ;
+
+(* R815 : *)
+case_value = scalar_int_initialization_expr
+           | scalar_char_initialization_expr
+           | scalar_logical_initialization_expr
+           ;
+
+
+(* R816 : *)
+associate_construct = associate_stmt
+                        block
+                    end_associate_stmt
+                    ;
+
+(* R817 : *)
+associate_stmt = [ associate_construct_name ":" ] associate_keyword "(" association_list ")"
+               ;
+
+(* R818 : C808 C809 *)
+associate_name = name
+               ;
+
+association = associate_name "=>" selector
+            ;
+
+(* R819 : *)
+selector = expr
+         | variable
+         ;
+
+(* R820 : C810 *)
+end_associate_stmt = end_associate_keyword [ associate_construct_name ]
+                   ;
+
+
+(* R821 : *)
+select_type_construct = select_type_stmt
+                          { type_guard_stmt block }*
+                      end_select_type_stmt
+                      ;
+
+(* R822 : C*11 C812 C813 *)
+select_type_stmt = [ select_construct_name ":" ] select_type_keyword "(" [ associate_name "=>" ] selector ")"
+                 ;
+
+(* R823 :  C814 C815 C816 C817 C818 *)
+type_guard_stmt = ( type_keyword is_keyword "(" type_spec ")" [ select_construct_name ] )
+                | ( class_keyword is_keyword "(" type_spec ")" [ select_construct_name ] )
+                | ( class_keyword default_keyword [ select_construct_name ] )
+                ;
+
+(* R824 : C819 *)
+end_select_type_stmt = end_select_keyword [ select_construct_name ]
+                     ;
+
+
+(* R825 : *)
+do_construct = block_do_construct
+             | nonblock_do_construct
+             ;
+
+(* R826 : C821 C822 C823 *)
+block_do_construct = do_stmt
+                       do_block
+                   end_do
+                   ;
+
+(* R827 : *)
+do_stmt = label_do_stmt
+        | nonlabel_do_stmt
+        ;
+
+(* R828 : *)
+label_do_stmt = [ do_construct_name ":" ] do_keyword label [ loop_control ]
+              ;
+
+(* R829 : *)
+nonlabel_do_stmt =  [ do_construct_name ":" ] do_keyword [ loop_control ]
+                 ;
+
+(* R830 : *)
+loop_control = ( [ "," ] do_variable "=" scalar_int_expr "," scalar_int_expr [ "," scalar_int_expr ] )
+             | ( [ "," ] while_keyword "(" scalar_logical_expr ")" )
+             ;
+
+(* R831 : C820 *)
+do_variable = scalar_int_variable
+            ;
+
+
+(* R832 : *)
+do_block = block
+         ;
+
+(* R833 : *)
+end_do = end_do_stmt
+       | continue_stmt
+       ;
+
+(* R834 : *)
+end_do_stmt = end_do_keyword [ do_construct_name ]
+            ;
+
+
+(* R835 : C825 *)
+nonblock_do_construct = action_term_do_construct
+                      | outer_shared_do_construct
+                      ;
+
+(* R836 : *)
+action_term_do_construct = label_do_stmt
+                             do_body
+                             do_term_action_stmt
+                         ;
+
+(* R837 : *)
+do_body = { execution_part_construct }*
+        ;
+
+(* R838 : C824 *)
+do_term_action_stmt = action_stmt
+                    ;
+
+(* R839 : *)
+outer_shared_do_construct = label_do_stmt
+                              do_body
+                              shared_term_do_construct
+                          ;
+
+(* R840 : C827 *)
+shared_term_do_construct = outer_shared_do_construct
+                         | inner_shared_do_construct
+                         ;
+
+(* R841 : *)
+inner_shared_do_construct = label_do_stmt
+                              do_body
+                              do_term_shared_stmt
+                          ;
+
+(* R842 : C826 *)
+do_term_shared_stmt = action_stmt
+                    ;
+
+(* R843 : C828 *)
+cycle_stmt = cycle_keyword [ do_construct_name ]
+           ;
+
+(* R844 : *)
+exit_stmt = exit_keyword [ do_construct_name ]
+          ;
+
+(* R845 : C830 *)
+goto_stmt = go_to_keyword label
+          ;
+
+
+(* R846 : C831 *)
+computed_goto_stmt = go_to_keyword "(" label_list ")" [ "," ] scalar_int_expr
+                   ;
+
+(* R847 : C832 C833 *)
+arithmetic_if_stmt = if_keyword "(" scalar_numeric_expr ")" label "," label "," label
+                   ;
+
+(* R848 : *)
+continue_stmt = continue_keyword
+              ;
+
+(* R849 : *)
+stop_stmt = stop_keyword [ stop_code ]
+          ;
+
+(* R850 : C834 *)
+stop_code = scalar_char_constant
+          | digit [ digit [ digit [ digit [ digit ]]]]
+          ;
+
+
+(* **************************************************************************
+ *
+ * section 9
+ *
+ * ************************************************************************** *)
+
+(* **************************************************************************
+ *
+ * section 10
+ *
+ * ************************************************************************** *)
+
+(* **************************************************************************
+ *
+ * section 11
+ *
+ * ************************************************************************** *)
+
+(* R1101 : C1101 C1102 C1103 *)
+main_program = [ program_stmt ]
+                  [ specification_part ]
+                  [ execution_part ]
+                  [ internal_subprogram_part ]
+              end_program_stmt
+              ;
+
+(* R1102 *)
+program_stmt = program_keyword program_name
+             ;
+program_name = name
+             ;
+
+(* R1103 *)
+end_program_stmt = ( end_keyword )
+                 | ( end_program_keyword [ program_name ] )
+                 ;
+
+(* R1104 : C1104 C1105 C1106 C1107 *)
+module = module_stmt
+            [ specification_part ]
+            [ module_subprogram_part ]
+        end_module_stmt
+        ;
+
+(* R1105 *)
+module_stmt = module_keyword module_name
+            ;
+
+module_name = name
+            ;
+
+(* R1106 *)
+end_module_stmt = end_keyword
+                | ( end_module_keyword [ module_name ] )
+                ;
+
+(* R1107 *)
+module_subprogram_part = contains_stmt
+                       { module_subprogram }+
+                       ;
+
+(* R1108 *)
+module_subprogram = function_subprogram |
+                  subroutine_subprogram
+                  ;
+
+(* R1109 : C1108 C1109 C1110 *)
+use_stmt = ( use_keyword [ [ "," module_nature ] "::" ] module_name [ "," rename_list ] )
+         | ( use_keyword [ [ "," module_nature ] "::" ] module_name "," only_keyword : [ only_list ] )
+         ;
+
+(* R1110 *)
+module_nature = intrinsic_keyword
+              | non_intrinsic_keyword
+              ;
+
+(* R1111 : C1111 *)
+rename = ( local_name "=>" use_name )
+       | operater_keyword "(" local_defined_operator ")" "=>" operater_keyword "(" use_defined_operator ")"
+       ;
+
+use_name = name
+         ;
+
+local_name = name
+           ;
+
+(* R1112 : C1112 C1113 *)
+only = generic_spec
+     | only_use_name
+     | rename
+     ;
+
+(* R1113 : C1114 *)
+only_use_name = use_name
+              ;
+
+(* R1114 *)
+local_defined_operator = defined_unary_op
+                       | defined_binary_op
+                       ;
+
+(* R1115 : C1115 *)
+use_defined_operator = defined_unary_op
+                     | defined_binary_op
+                     ;
+
+(* R1116 : C1116 C117 C1118 *)
+block_data = block_data_stmt
+                [ specification_part ]
+            end_block_data_stmt
+            ;
+
+(* R1117 *)
+block_data_stmt = block_data_keyword [ block_data_name ]
+                ;
+
+block_data_name = name
+                ;
+
+(* R1118 *)
+end_block_data_stmt = end_keyword
+                    | ( end_block_data_keyword [ block_data_name ] )
+                    ;
+
+(* **************************************************************************
+ *
+ * section 12
+ *
+ * ************************************************************************** *)
+(* R1201 : C1201 C1202 *)
+interface_block = interface_stmt
+                    { interface_specification }*
+                end_interface_stmt
+                ;
+
+(* R1202 : C1204 *)
+interface_specification = interface_body
+                        | procedure_stmt
+                        ;
+
+(* R1203 : C1203 *)
+interface_stmt = ( interface_keyword [ generic_spec ] )
+               | ( abstract_keyword interface_keyword )
+               ;
+
+(* R1204 *)
+end_interface_stmt = ( end_keyword [ generic_spec ] )
+                   | ( end_interface_keyword [ generic_spec ])
+                   ;
+
+(* R1205 : C1205 C1206 *)
+interface_body = ( function_stmt [ specification_part ] end_function_stmt )
+               | ( subroutine_stmt [ specification_part ] end_subroutine_stmt )
+               ;
+
+(* R1206 : C1207 C1208 C1209 *)
+procedure_stmt =  [ module_keyword ] procedure_keyword procedure_name_list
+               ;
+
+(* R1207 *)
+generic_spec = generic_name
+             | ( operator_keyword "(" defined_operator ")" )
+             | ( assignment_keyword  "(" "=" ")" )
+             | dtio_generic_spec
+             ;
+
+generic_name = name
+             ;
+
+(* R1208 *)
+dtio_generic_spec = ( read_keyword "(" formatted_keyword ")" )
+                  | ( read_keyword "(" unformatted_keyword ")" )
+                  | ( write_keyword "(" formatted_keyword ")" )
+                  | ( write_keyword "(" unformatted_keyword ")" )
+                  ;
+
+(* R1209 : C1210 C1211 *)
+import_stmt = import_keyword [ "::" ] import_name_list
+            ;
+
+(* R1210 *)
+external_stmt = external_keyword [ "::" ] external_name_list
+              ;
+
+(* R1211 : C1217 C1218 *)
+procedure_declaration_stmt = procedure_keyword "(" [ proc_interface ] ")"
+                           [ { "," proc_attr_spec }* "::" ] proc_decl_list
+                           ;
+(* R1212 *)
+proc_interface = interface_name
+               | declaration_type_spec
+               ;
+
+(* R1213 *)
+proc_attr_spec = access_spec
+               | proc_language_binding_spec
+               | ( intent_keyword "(" intent_spec ")" )
+               | optional_keyword
+               | pointer_keyword
+               | save_keyword
+               ;
+
+(* R1214 : C1216 *)
+proc_decl = procedure_entity_name [ "=>" null_init ]
+          ;
+(* R1215 : C1212 C1223 *)
+interface_name = name
+               ;
+
+(* R1216 : C1219 *)
+intrinsic_stmt = intrinsic_keyword [ "::" ] intrinsic_procedure_name_list
+               ;
+
+(* R1217 : C1220 C1221 *)
+function_reference = procedure_designator "(" [ actual_arg_spec_list ] ")"
+                   ;
+
+(* R1218 : C1222 *)
+call_keyword = "CALL" | "call"
+             ;
+
+call_stmt = call_keyword procedure_designator [ "(" [ actual_arg_spec_list ] ")" ]
+          ;
+
+(* R1219 : C1223 C1224 *)
+procedure_designator = procedure_name
+                     | proc_component_ref
+                     | data_ref "%" binding_name
+                     ;
+
+procedure_name = name
+               ;
+
+(* R1220 : C1225_C1227 *)
+actual_arg_spec = [ keyword "=" ] actual_arg
+                ;
+
+(* R1221 : C1228_C1233 *)
+actual_arg = expr
+           | variable
+           | procedure_name
+           | proc_component_ref
+           | alt_return_spec
+           ;
+
+(* R1222 *)
+alt_return_spec = "*" label
+                ;
+
+(* R1223 : C1244 C1245 *)
+function_subprogram = function_stmt
+                        [ specification_part ]
+                        [ execution_part ]
+                        [ internal_subprogram_part ]
+                    end_function_stmt
+                    ;
+
+(* R1224 : C1234 C1235 *)
+function_stmt = [ prefix ] function_keyword function_name
+              "(" [ dummy_arg_name_list ] ")" [ suffix ]
+              ;
+
+function_name = name
+              ;
+
+(* R1225 : C1236 C1237 C1238 *)
+proc_language_binding_spec = language_binding_spec
+                           ;
+
+(* R1226 : C1239 *)
+dummy_arg_name = name
+               ;
+
+(* R1227 : C1240 C1241 C1242 *)
+prefix = { prefix_spec }+
+       ;
+
+(* R1228 *)
+prefix_spec = declaration_type_spec
+            | recursive_keyword
+            | pure_keyword
+            | elemental_keyword
+            ;
+
+(* R1229 *)
+suffix = ( proc_language_binding_spec [ result_keyword "(" result_name ")" ] )
+       | ( result_keyword "(" result_name ")" [ proc_language_binding_spec ] )
+       ;
+
+result_name = name
+            ;
+
+(* R1230 : C1243 C1246 *)
+end_function_stmt = ( end_keyword [ function_name ] )
+                  | ( end_function_keyword [ function_name ] )
+                  ;
+
+(* R1231 *)
+subroutine_subprogram = subroutine_stmt
+                          [ specification_part ]
+                          [ execution_part ]
+                          [ internal_subprogram_part ]
+                      end_subroutine_stmt
+                      ;
+(* R1232 : C1247 *)
+subroutine_stmt = [ prefix ] subroutine_keyword subroutine_name
+                [ "(" [ dummy_arg_list ] ")" [ proc_language_binding_spec ] ]
+                ;
+
+subroutine_name = name
+                ;
+
+(* R1231 : C1249 C1250 *)
+dummy_arg = dummy_arg_name
+          | "*"
+          ;
+
+(* R1234 : C1348 C1251 *)
+end_subroutine_stmt = ( end_keyword [ subroutine_name ] )
+                    | ( end_subroutine_keyword [ subroutine_name ] )
+                    ;
+
+(* R1235 : C1252_C1257 *)
+entry_stmt = entry_keyword entry_name [ "(" [ dummy_arg_list ] ")" [ suffix ] ]
+           ;
+
+entry_name = name
+           ;
+
+(* R1236 : C1258 C1259 *)
+return_stmt = return_keyword [ scalar_int_expr ]
+            ;
+
+(* R1237 *)
+contains_stmt = contains_keyword
+              ;
+
+(* R1238 : C1261_C1265 *)
+stmt_function_stmt = function_name "(" [ dummy_arg_name_list ] ")" "=" scalar_expr
+                   ;
