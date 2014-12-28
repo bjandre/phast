@@ -417,6 +417,141 @@ continue_keyword = "CONTINUE" | "continue"
 stop_keyword = "STOP" | "stop"
              ;
 
+open_keyword = "OPEN" | "open"
+             ;
+
+unit_keyword = "UNIT" | "unit"
+             ;
+
+access_keyword= "ACCESS" | "access"
+                ;
+
+action_keyword= "ACTION" | "action"
+                ;
+
+blank_keyword= "BLANK" | "blank"
+               ;
+
+decimal_keyword= "DECIMAL" | "decimal"
+                 ;
+
+delim_keyword= "DELIM" | "delim"
+               ;
+
+encoding_keyword= "ENCODING" | "encoding"
+                  ;
+
+err_keyword= "ERR" | "err"
+             ;
+
+form_keyword= "FORM" | "form"
+              ;
+
+iomsg_keyword= "IOMSG" | "iomsg"
+               ;
+
+iostat_keyword= "IOSTAT" | "iostat"
+                ;
+
+pad_keyword= "PAD" | "pad"
+             ;
+
+position_keyword= "POSITION" | "position"
+                  ;
+
+recl_keyword= "RECL" | "recl"
+              ;
+
+round_keyword= "ROUND" | "round"
+               ;
+
+sign_keyword= "SIGN" | "sign"
+              ;
+
+status_keyword= "STATUS" | "status"
+                ;
+
+close_keyword= "CLOSE" | "close"
+               ;
+
+print_keyword= "PRINT" | "print"
+               ;
+
+fmt_keyword = "FMT" | "fmt"
+            ;
+
+nml_keyword = "NML" | "nml"
+            ;
+
+advance_keyword = "ADVANCE" | "advance"
+                ;
+
+eor_keyword = "EOR" | "eor"
+            ;
+
+id_keyword = "ID" | "id"
+           ;
+
+pos_keyword = "POS" | "pos"
+            ;
+
+rec_keyword = "REC" | "rec"
+            ;
+
+size_keyword = "SIZE" | "size"
+             ;
+
+wait_keyword = "WAIT" | "wait"
+             ;
+
+backspace_keyword = "BACKSPACE" | "backspace"
+                  ;
+
+rewind_keyword = "REWIND" | "rewind"
+                  ;
+
+flush_keyword = "FLUSH" | "flush"
+                  ;
+
+inquire_keyword = "INQUIRE" | "inquire"
+                ;
+
+iolength_keyword = "IOLENGTH" | "iolength"
+                 ;
+
+file_keyword = "FILE" | "file"
+             ;
+
+direct_keyword = "DIRECT" | "direct"
+               ;
+
+exist_keyword = "EXIST" | "exist"
+              ;
+
+named_keyword = "NAMED" | "named"
+              ;
+
+nextrec_keyword = "NEXTREC" | "nextrec"
+                ;
+
+number_keyword = "NUMBER" | "number"
+               ;
+
+opened_keyword = "OPENED" | "opened"
+               ;
+
+pending_keyword = "PENDING" | "pending"
+                ;
+
+readwrite_keyword = "READWRITE" | "readwrite"
+                  ;
+
+sequential_keyword = "SEQUENTIAL" | "sequential"
+                   ;
+
+stream_keyword = "STREAM" | "stream"
+               ;
+
 (* **************************************************************************
  *
  * section 2
@@ -619,11 +754,11 @@ literal_constant = int_literal_constant
 named_constant = name
                ;
 
-(* R308, FIXME(bja, 2014-12) C302 int constant shall be of type integer *)
+(* R308, FIXME(bja, 2014_12) C302 int constant shall be of type integer *)
 int_constant = constant
              ;
 
-(* R309, FIXME(bja, 2014-12) C303 char constant shall be of type character *)
+(* R309, FIXME(bja, 2014_12) C303 char constant shall be of type character *)
 char_constant = constant
               ;
 
@@ -650,13 +785,13 @@ defined_operator = defined_unary_op
 extended_intrinsic_op = intrinsic_operator
                       ;
 
-(* R313 FIXME(bja, 2014-12) will this re catch the begining of line: /^[\d]{1,6}/? lots of constraints for this rule. just make blank... *)
+(* R313 FIXME(bja, 2014_12) will this re catch the begining of line: /^[\d]{1,6}/? lots of constraints for this rule. just make blank... *)
 label = ()
       ;
 
 
 (* delimiters (...) /.../ [...] (/.../) *)
-(* FIXME(bja 2014-12) not sure what to do with these... *)
+(* FIXME(bja 2014_12) not sure what to do with these... *)
 
 (* section 3.4 - not a fortran statement, preprocessor *)
 include_line = "include" char_literal_constant end_of_line
@@ -674,7 +809,7 @@ type_spec = intrinsic_type_spec
           | derived_type_spec
           ;
 
-(* R402 : FIXME(bja, 2014-12) C402 and C403 (":" deferred type
+(* R402 : FIXME(bja, 2014_12) C402 and C403 (":" deferred type
 parameter, only in declaration or pointer/allocatable) "*" assumed
 type parameter *)
 
@@ -691,7 +826,7 @@ intrinsic_type_spec = (integer_keyword [ kind_selector ])
                     | (logical_keyword [ kind_selector ] )
                     ;
 
-(* R404 : FIXME(bja, 2014-12) C404 scalar-int-initialization-expr nonnegative *)
+(* R404 : FIXME(bja, 2014_12) C404 scalar_int_initialization_expr nonnegative *)
 kind_str = kind_keyword "="
          ;
 
@@ -766,7 +901,7 @@ hex_digit = digit
 signed_real_literal_constant = [ sign ] real_literal_constant
                              ;
 
-(* R417 FIXME(bja, 2014-12) if both kind_constant and exponent_letter, exponent letter sh all be 'E' *)
+(* R417 FIXME(bja, 2014_12) if both kind_constant and exponent_letter, exponent letter sh all be 'E' *)
 real_literal_constant = (significand [ exponent_letter exponent ] [ kind_constant ])
                       | (digit_string exponent_letter exponent [ kind_constant ])
                       ;
@@ -785,7 +920,7 @@ exponent_letter = "E" | "e"
 exponent = signed_digit_string
          ;
 
-(* R421 FIXME(bja, 2014-12) each named constant shall be of type integer or real *)
+(* R421 FIXME(bja, 2014_12) each named constant shall be of type integer or real *)
 complex_literal_constant = "(" real_part "," imag_part ")"
                          ;
 
@@ -1059,7 +1194,7 @@ ac_do_variable = scalar_int_variable
  * section 5
  *
  * ************************************************************************** *)
-(* R501 : C507-C519 C522 C523 C526-C530 C532 C533 C535 C536 *)
+(* R501 : C507_C519 C522 C523 C526_C530 C532 C533 C535 C536 *)
 type_declaration_stmt = declaration_type_spec [ { "," attr_spec }* "::" ] entity_decl_list
                       ;
 (* R502 : C501 C502 C503 *)
@@ -2060,6 +2195,255 @@ stop_code = scalar_char_constant
  * section 9
  *
  * ************************************************************************** *)
+(* R901 : *)
+io_unit = file_unit_number
+        | "*"
+        | internal_file_variable
+        ;
+
+(* R902 : *)
+file_unit_number = scalar_int_expr
+                 ;
+
+(* R903 : C901 C902 *)
+internal_file_variable = char_variable
+                       ;
+
+
+(* R904 : *)
+open_stmt = open_keyword "(" connect_spec_list ")"
+          ;
+
+(* R905 : C903 C904 C905 *)
+connect_spec_list = { connect_spec }+
+                  ;
+
+connect_spec = ( [ unit_keyword "=" ] file_unit_number )
+             | ( access_keyword "=" scalar_default_char_expr )
+             | ( action_keyword "=" scalar_default_char_expr )
+             | ( asynchronous_keyword "=" scalar_default_char_expr )
+             | ( blank_keyword "=" scalar_default_char_expr )
+             | ( decimal_keyword "=" scalar_default_char_expr )
+             | ( delim_keyword "=" scalar_default_char_expr )
+             | ( encoding_keyword "=" scalar_default_char_expr )
+             | ( err_keyword "=" label )
+             | ( file_keyword "=" file_name_expr )
+             | ( form_keyword "=" scalar_default_char_expr )
+             | ( iomsg_keyword "=" iomsg_variable )
+             | ( iostat_keyword "=" scalar_int_variable )
+             | ( pad_keyword "=" scalar_default_char_expr )
+             | ( position_keyword "=" scalar_default_char_expr )
+             | ( recl_keyword "=" scalar_int_expr )
+             | ( round_keyword "=" scalar_default_char_expr )
+             | ( sign_keyword "=" scalar_default_char_expr )
+             | ( status_keyword "=" scalar_default_char_expr )
+             ;
+
+(* R906 : *)
+file_name_expr = scalar_default_char_expr
+               ;
+
+(* R907 : *)
+iomsg_variable = scalar_default_char_variable
+               ;
+
+(* R908 : *)
+close_stmt = close_keyword "(" close_spec_list ")"
+           ;
+
+(* R909 : C906 C907 C908 *)
+close_spec_list = { close_spec }+
+                ;
+
+close_spec =  ( [ unit_keyword "=" ] file_unit_number )
+           | ( iostat_keyword "=" scalar_int_variable )
+           | ( iomsg_keyword "=" iomsg_variable )
+           | ( err_keyword "=" label )
+           | ( status_keyword "=" scalar_default_char_expr )
+           ;
+
+(* R910 : *)
+read_stmt = ( read_keyword "(" io_control_spec_list ")" [ input_item_list ] )
+          | ( read_keyword format [ "," input_item_list ] )
+          ;
+
+(* R911 : *)
+write_stmt = write_keyword "(" io_control_spec_list ")" [ output_item_list ]
+           ;
+
+(* R912 : *)
+print_stmt = print_keyword format [ "," output_item_list ]
+           ;
+
+(* R913 : C909 C910 C911 C912 C913 C914 C915 C916 C917 C918 C919 C920 C921 C922 C923 C924 C925 C926 C927 C928 C929  *)
+
+io_control_spec = ( [ unit_keyword "=" ] io_unit )
+                | ( [ fmt_keyword "=" ]format )
+                | ( [ nml_keyword "=" ] namelist_group_name )
+                | ( advance_keyword "=" scalar_default_char_expr )
+                | ( asynchronous_keyword "=" scalar_char_initialization_expr )
+                | ( blank_keyword "=" scalar_default_char_expr )
+                | ( decimal_keyword "=" scalar_default_char_expr )
+                | ( delim_keyword "=" scalar_default_char_expr )
+                | ( end_keyword "=" label )
+                | ( eor_keyword "=" label )
+                | ( err_keyword "=" label )
+                | ( id_keyword "=" scalar_int_variable )
+                | ( iomsg_keyword "=" iomsg_variable )
+                | ( iostat_keyword "=" scalar_int_variable )
+                | ( pad_keyword "=" scalar_default_char_expr )
+                | ( pos_keyword "=" scalar_int_expr )
+                | ( rec_keyword "=" scalar_int_expr )
+                | ( round_keyword "=" scalar_default_char_expr )
+                | ( sign_keyword "=" scalar_default_char_expr )
+                | ( size_keyword "=" scalar_int_variable )
+                ;
+
+(* R914 : C930 *)
+format = default_char_expr
+       | label
+       | "*"
+       ;
+
+
+(* R915 : C931 C932 *)
+input_item   = variable
+             | io_implied_do
+             ;
+
+(* R916 : C935 *)
+output_item = expr
+            | io_implied_do
+            ;
+
+(* R917 : *)
+io_implied_do = "(" io_implied_do_object_list "," io_implied_do_control ")"
+              ;
+
+(* R918 : C934 *)
+io_implied_do_object_list = { io_implied_do_object }+
+                          ;
+
+io_implied_do_object = input_item
+                     | output_item
+                     ;
+
+(* R919 : C933 *)
+io_implied_do_control = do_variable "=" scalar_int_expr "," scalar_int_expr [ "," scalar_int_expr ]
+                      ;
+
+(* R920 : C936 C937 *)
+dtv_type_spec = ( type_keyword "(" derived_type_spec ")" )
+              | ( class_keyword "(" derived_type_spec ")" )
+              ;
+
+
+(* R921 : *)
+wait_stmt = wait_keyword "(" wait_spec_list ")"
+          ;
+
+(* R922 : C938 C939 C940 *)
+wait_spec_list = { wait_spec }*
+               ;
+
+wait_spec = ( [ unit_keyword "=" ] file_unit_number )
+          | ( end_keyword "=" label )
+          | ( eor_keyword "=" label )
+          | ( err_keyword "=" label )
+          | ( id_keyword "=" scalar_int_variable )
+          | ( iomsg_keyword "=" iomsg_variable )
+          | ( iostat_keyword "=" scalar_int_variable )
+          ;
+
+(* R923 : *)
+backspace_stmt = ( backspace_keyword file_unit_number )
+               | ( backspoce_keyword "(" position_spec_list ")" )
+               ;
+
+(* R924 : *)
+endfile_stmt = ( end_file_keyword file_unit_number )
+             | ( end_file_keyword "(" position_spec_list ")" )
+             ;
+
+(* R925 : *)
+rewind_stmt = ( rewind_keyword file_unit_number )
+            | ( rewind_keyword "(" position_spec_list ")" )
+            ;
+
+
+(* R926 : C941 C942 C943 *)
+position_spec_list = { position_spec }+
+                   ;
+
+position_spec =  ( [ unit_keyword "=" ] file_unit_number )
+              | ( iomsg_keyword "=" iomsg_variable )
+              | ( iostat_keyword "=" scalar_int_variable )
+              | ( err_keyword "=" label )
+              ;
+
+(* R927 : *)
+flush_stmt = ( flush_keyword file_unit_number )
+            | ( flush_keyword "(" flush_spec_list ")" )
+            ;
+
+
+(* R928 : C944 C945 C946 *)
+flush_spec_list = { flush_spec }+
+                   ;
+
+flush_spec =  ( [ unit_keyword "=" ] file_unit_number )
+              | ( iomsg_keyword "=" iomsg_variable )
+              | ( iostat_keyword "=" scalar_int_variable )
+              | ( err_keyword "=" label )
+              ;
+
+(* R929 : *)
+inquire_stmt = ( inquire_keyword "(" inquire_spec_list ")" )
+             | ( inquire_keyword "(" iolength_keyword "=" scalar_int_variable ")" output_item_list )
+             ;
+
+(* R930 : C947 C948 C949 C950 *)
+inquire_spec_list = { inquire_spec }+
+                  ;
+
+inquire_spec = ( [ unit_keyword "=" ] file_unit_number )
+             | ( file_keyword "=" file_name_expr )
+             | ( access_keyword "=" scalar_default_char_variable )
+             | ( action_keyword "=" scalar_default_char_variable )
+             | ( asynchronous_keyword "=" scalar_default_char_variable )
+             | ( blank_keyword "=" scalar_default_char_variable )
+             | ( decimal_keyword "=" scalar_default_char_variable )
+             | ( delim_keyword "=" scalar_default_char_variable )
+             | ( direct_keyword "=" scalar_default_char_variable )
+             | ( encoding_keyword "=" scalar_default_char_variable )
+             | ( err_keyword "=" label )
+             | ( exist_keyword "=" scalar_default_logical_variable )
+             | ( form_keyword "=" scalar_default_char_variable )
+             | ( formatted_keyword "=" scalar_default_char_variable )
+             | ( id_keyword "=" scalar_int_variable )
+             | ( iomsg_keyword "=" iomsg_variable )
+             | ( iostat_keyword "=" scalar_int_variable )
+             | ( name_keyword "=" scalar_default_char_variable )
+             | ( named_keyword "=" scalar_default_logical_variable )
+             | ( nextrec_keyword "=" scalar_int_variable )
+             | ( number_keyword "=" scalar_int_variable )
+             | ( opened_keyword "=" scalar_default_logical_variable )
+             | ( pad_keyword "=" scalar_default_char_variable )
+             | ( pending_keyword "=" scalar_default_logical_variable )
+             | ( pos_keyword "=" scalar_int_variable )
+             | ( position_keyword "=" scalar_default_char_variable )
+             | ( read_keyword "=" scalar_default_char_variable )
+             | ( readwrite_keyword "=" scalar_default_char_variable )
+             | ( recl_keyword "=" scalar_int_variable )
+             | ( round_keyword "=" scalar_default_char_variable )
+             | ( sequential_keyword "=" scalar_default_char_variable )
+             | ( sign_keyword "=" scalar_default_char_variable )
+             | ( size_keyword "=" scalar_int_variable )
+             | ( stream_keyword "=" scalar_default_char_variable )
+             | ( unformatted_keyword "=" scalar_default_char_variable )
+             | ( write_keyword "=" scalar_default_char_variable )
+             ;
+
 
 (* **************************************************************************
  *
