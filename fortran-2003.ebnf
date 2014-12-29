@@ -557,6 +557,21 @@ stream_keyword = "STREAM" | "stream"
 
 (* **************************************************************************
  *
+ * section 1
+ *
+ * ************************************************************************** *)
+
+(* assumed syntax
+R101 xyz_list = xyz [ , xyz ] ...
+R102 xyz-name = name
+R103 scalar-xyz = xyz
+
+
+*)
+
+
+(* **************************************************************************
+ *
  * section 2
  *
  * ************************************************************************** *)
@@ -995,6 +1010,9 @@ derived_type_stmt = type_keyword [ [ "," type_attr_spec_list ] "::" ] type_name 
                   ;
 
 (* R431 : C426 *)
+type_attr_spec_list = type_attr_spec { "," type_attr_spec }*
+                    ;
+
 type_attr_spec = access_spec
                | ( extends_keyword "(" parent_type_name ")" )
                | abstract_keyword
@@ -1436,6 +1454,9 @@ implicit_spec = declaration_type_spec "(" letter_spec_list ")"
               ;
 
 (* R551 : C572 *)
+letter_spec_list = letter_spec { "," letter_spec }*
+                 ;
+
 letter_spec = letter [ "–" letter ]
             ;
 
@@ -1444,6 +1465,9 @@ namelist_stmt = namelist_keyword "/" namelist_group_name "/" namelist_group_obje
               ;
 
 (* R553 : C574 *)
+namelist_group_object_list = namelist_group_object { "," namelist_group_object }*
+                           ;
+
 namelist_group_object = variable_name
                       ;
 
@@ -1452,10 +1476,16 @@ equivalence_stmt = equivalence_keyword equivalence_set_list
                  ;
 
 (* R555 : C580_C580 *)
+equivalence_set_list = equivalence_set { "," equivalence_set }*
+                     ;
+
 equivalence_set = "(" equivalence_object "," equivalence_object_list ")"
                 ;
 
 (* R556 : C576_C579 C584_C586 *)
+equivalence_object_list = equivalence_object { "," equivalence_object }*
+                        ;
+
 equivalence_object = variable_name
                    | array_element
                    | substring
@@ -1469,6 +1499,9 @@ common_block_name = name
                   ;
 
 (* R558 : C587_C590 *)
+common_block_object_list = common_block_object { "," common_block_object }*
+                         ;
+
 common_block_object = ( variable_name [ "(" explicit_shape_spec_list ")" ] )
                     | proc_pointer_name
                     ;
@@ -1565,6 +1598,9 @@ subscript = scalar_int_expr
           ;
 
 (* R619 *)
+section_subscript_list = section_subscript { "," section_subscript }*
+                       ;
+
 section_subscript = subscript
                   | subscript_triplet
                   | vector_subscript
@@ -1620,6 +1656,9 @@ allocate_object = variable_name
                 ;
 
 (* R630 *)
+allocate_shape_spec_list = allocate_shape_spec { "," allocate_shape_spec }*
+                         ;
+
 allocate_shape_spec = [ lower_bound_expr ":" ] upper_bound_expr
                     ;
 
@@ -2218,7 +2257,7 @@ open_stmt = open_keyword "(" connect_spec_list ")"
           ;
 
 (* R905 : C903 C904 C905 *)
-connect_spec_list = { connect_spec }+
+connect_spec_list = connect_spec { "," connect_spec }*
                   ;
 
 connect_spec = ( [ unit_keyword "=" ] file_unit_number )
@@ -2255,7 +2294,7 @@ close_stmt = close_keyword "(" close_spec_list ")"
            ;
 
 (* R909 : C906 C907 C908 *)
-close_spec_list = { close_spec }+
+close_spec_list =  close_spec { "," close_spec }*
                 ;
 
 close_spec =  ( [ unit_keyword "=" ] file_unit_number )
@@ -2279,6 +2318,8 @@ print_stmt = print_keyword format [ "," output_item_list ]
            ;
 
 (* R913 : C909 C910 C911 C912 C913 C914 C915 C916 C917 C918 C919 C920 C921 C922 C923 C924 C925 C926 C927 C928 C929  *)
+io_control_spec_list =  io_control_spec { "," io_control_spec }*
+                     ;
 
 io_control_spec = ( [ unit_keyword "=" ] io_unit )
                 | ( [ fmt_keyword "=" ]format )
@@ -2310,11 +2351,17 @@ format = default_char_expr
 
 
 (* R915 : C931 C932 *)
+input_item_list =  input_item { "," input_item }*
+                ;
+
 input_item   = variable
              | io_implied_do
              ;
 
 (* R916 : C935 *)
+output_item_list =  output_item { "," output_item }*
+                 ;
+
 output_item = expr
             | io_implied_do
             ;
@@ -2324,7 +2371,7 @@ io_implied_do = "(" io_implied_do_object_list "," io_implied_do_control ")"
               ;
 
 (* R918 : C934 *)
-io_implied_do_object_list = { io_implied_do_object }+
+io_implied_do_object_list =  io_implied_do_object { "," io_implied_do_object }*
                           ;
 
 io_implied_do_object = input_item
@@ -2346,7 +2393,7 @@ wait_stmt = wait_keyword "(" wait_spec_list ")"
           ;
 
 (* R922 : C938 C939 C940 *)
-wait_spec_list = { wait_spec }*
+wait_spec_list =  wait_spec { "," wait_spec }*
                ;
 
 wait_spec = ( [ unit_keyword "=" ] file_unit_number )
@@ -2375,7 +2422,7 @@ rewind_stmt = ( rewind_keyword file_unit_number )
 
 
 (* R926 : C941 C942 C943 *)
-position_spec_list = { position_spec }+
+position_spec_list =  position_spec { "," position_spec }*
                    ;
 
 position_spec =  ( [ unit_keyword "=" ] file_unit_number )
@@ -2391,7 +2438,7 @@ flush_stmt = ( flush_keyword file_unit_number )
 
 
 (* R928 : C944 C945 C946 *)
-flush_spec_list = { flush_spec }+
+flush_spec_list =  flush_spec { "," flush_spec }*
                    ;
 
 flush_spec =  ( [ unit_keyword "=" ] file_unit_number )
@@ -2406,7 +2453,7 @@ inquire_stmt = ( inquire_keyword "(" inquire_spec_list ")" )
              ;
 
 (* R930 : C947 C948 C949 C950 *)
-inquire_spec_list = { inquire_spec }+
+inquire_spec_list =  inquire_spec { "," inquire_spec }*
                   ;
 
 inquire_spec = ( [ unit_keyword "=" ] file_unit_number )
@@ -2462,7 +2509,7 @@ format_specification = "(" [ format_item_list ] ")"
                      ;
 
 (* R1003 : *)
-format_item_list = { format_item }+
+format_item_list =  format_item { "," format_item }*
                  ;
 
 format_item = ( [ r ] data_edit_desc )
@@ -2508,6 +2555,8 @@ e = int_literal_constant
   ;
 
 (* R1010 : *)
+v_list =  v { "," v }*
+       ;
 v = signed_int_literal_constant
   ;
 
@@ -2633,8 +2682,11 @@ module_nature = intrinsic_keyword
               ;
 
 (* R1111 : C1111 *)
+rename_list =  rename { "," rename }*
+            ;
+
 rename = ( local_name "=>" use_name )
-       | operater_keyword "(" local_defined_operator ")" "=>" operater_keyword "(" use_defined_operator ")"
+       | operator_keyword "(" local_defined_operator ")" "=>" operator_keyword "(" use_defined_operator ")"
        ;
 
 use_name = name
@@ -2644,6 +2696,9 @@ local_name = name
            ;
 
 (* R1112 : C1112 C1113 *)
+only_list =  only { "," only }*
+          ;
+
 only = generic_spec
      | only_use_name
      | rename
@@ -2737,9 +2792,21 @@ dtio_generic_spec = ( read_keyword "(" formatted_keyword ")" )
 import_stmt = import_keyword [ "::" ] import_name_list
             ;
 
+import_name_list = import_name { "," import_name }*
+                 ;
+
+import_name = name
+            ;
+
 (* R1210 *)
 external_stmt = external_keyword [ "::" ] external_name_list
               ;
+
+external_name_list = external_name { "," external_name }*
+                 ;
+
+external_name = name
+            ;
 
 (* R1211 : C1217 C1218 *)
 procedure_declaration_stmt = procedure_keyword "(" [ proc_interface ] ")"
@@ -2760,8 +2827,15 @@ proc_attr_spec = access_spec
                ;
 
 (* R1214 : C1216 *)
+proc_decl_list = proc_decl { "," proc_decl }*
+                 ;
+
+procedure_entity_name = name
+                      ;
+
 proc_decl = procedure_entity_name [ "=>" null_init ]
           ;
+
 (* R1215 : C1212 C1223 *)
 interface_name = name
                ;
@@ -2787,13 +2861,16 @@ procedure_designator = procedure_name
                      | data_ref "%" binding_name
                      ;
 
+procedure_name_list =  procedure_name { "," procedure_name }*
+                    ;
+
 procedure_name = name
                ;
 
 (* R1220 : C1225_C1227 *)
-actual_arg_spec_list = { actual_arg_spec }+
+actual_arg_spec_list =  actual_arg_spec { "," actual_arg_spec }*
                      ;
-                     
+
 actual_arg_spec = [ keyword "=" ] actual_arg
                 ;
 
@@ -2830,9 +2907,9 @@ proc_language_binding_spec = language_binding_spec
                            ;
 
 (* R1226 : C1239 *)
-dummy_arg_name_list = { dummy_arg_name }+
+dummy_arg_name_list =  dummy_arg_name { "," dummy_arg_name }*
                     ;
-                    
+
 dummy_arg_name = name
                ;
 
@@ -2876,7 +2953,7 @@ subroutine_name = name
                 ;
 
 (* R1231 : C1249 C1250 *)
-dummy_arg_list = { dummy_arg }+
+dummy_arg_list =  dummy_arg { "," dummy_arg }*
                ;
 
 dummy_arg = dummy_arg_name
@@ -2913,7 +2990,7 @@ stmt_function_stmt = function_name "(" [ dummy_arg_name_list ] ")" "=" scalar_ex
  * section 13
  *
  * ************************************************************************** *)
-intrinsic_procedure_name_list = { intrinsic_procedure_name }+
+intrinsic_procedure_name_list =  intrinsic_procedure_name { "," intrinsic_procedure_name }*
                               ;
 
 intrinsic_procedure_name = intrinsic_numeric_function_name
@@ -3002,7 +3079,7 @@ intrinsic_kind_function_name = ( "KIND" | "kind" )
 
 
 intrinsic_type_conversion_function_name = ( "LOGICAL" | "logical" )
-                                        | ( "TRANSFER" | "transfer" ) 
+                                        | ( "TRANSFER" | "transfer" )
                                         ;
 
 intrinsic_numeric_inquiry_function_name = ( "DIGITS" | "digits" )
@@ -3101,4 +3178,3 @@ intrinsic_system_environment_function_name = ( "COMMAND_ARGUMENT_COUNT" | "comma
                                            | ( "IS_IOSTAT_EOR" | "is_iostat_eor" )
                                            | ( "SYSTEM_CLOCK" | "system_clock" )
                                            ;
-
