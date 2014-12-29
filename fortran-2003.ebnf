@@ -387,6 +387,9 @@ if_keyword = "IF" | "if"
 then_keyword = "THEN" | "then"
              ;
 
+else_keyword = "ELSE" | "else"
+           ;
+
 select_keyword = "SELECT" | "select"
                ;
 
@@ -626,12 +629,12 @@ declaration_construct = derived_type_def |
                        ;
 
 (* R208 *)
-execution_part = exeutable_construct
-                [ execution_part_construt ]
+execution_part = executable_construct
+                [ execution_part_construct ]
                 ;
 
 (* R209 *)
-execution_part_construct = execution_construct |
+execution_part_construct = executable_construct |
                           format_stmt |
                           entry_stmt |
                           data_stmt
@@ -755,6 +758,9 @@ name = letter
 
 (*  section 3.2.2 - constants  *)
 (* R305 *)
+scalar_constant = constant
+;
+
 constant = literal_constant
          | named_constant
          ;
@@ -773,10 +779,16 @@ named_constant = name
                ;
 
 (* R308, FIXME(bja, 2014_12) C302 int constant shall be of type integer *)
+scalar_int_constant = int_constant
+;
+
 int_constant = constant
              ;
 
 (* R309, FIXME(bja, 2014_12) C303 char constant shall be of type character *)
+scalar_char_constant = char_constant
+;
+
 char_constant = constant
               ;
 
@@ -803,8 +815,11 @@ defined_operator = defined_unary_op
 extended_intrinsic_op = intrinsic_operator
                       ;
 
-(* R313 FIXME(bja, 2014_12) will this re catch the begining of line: /^[\d]{1,6}/? lots of constraints for this rule. just make blank... *)
-label = ()
+(* R313 : C 304 *)
+label_list = label { "," label }*
+;
+
+label = digit [digit [digit [digit [digit ]]]]
       ;
 
 
@@ -856,10 +871,16 @@ signed_int_literal_constant = [ sign ] int_literal_constant
                             ;
 
 (* R406 *)
+scalar_int_literal_constant = int_literal_constant
+;
+
 int_literal_constant = digit_string [ "_" kind_constant ]
                      ;
 
 (* R407 C405 - scalar_int_constant_name shall be a named constant of type int; C406 - kind_param sholl be nonnegative *)
+scalar_int_constant_name = name
+;
+
 kind_param = digit_string
            | scalar_int_constant_name
            ;
@@ -1006,12 +1027,18 @@ derived_type_def = derived_type_stmt
                  ;
 
 (* R430 : C424 C425 C430 *)
+type_name = name
+;
+
 derived_type_stmt = type_keyword [ [ "," type_attr_spec_list ] "::" ] type_name [ "(" type_param_name_list ")" ]
                   ;
 
 (* R431 : C426 *)
 type_attr_spec_list = type_attr_spec { "," type_attr_spec }*
                     ;
+
+parent_type_name = name
+;
 
 type_attr_spec = access_spec
                | ( extends_keyword "(" parent_type_name ")" )
@@ -1037,6 +1064,15 @@ type_param_def_stmt = integer_keyword [ kind_selector ] "," type_param_attr_spec
                     ;
 
 (* R436 *)
+type_param_name_list = type_param_name { "," type_param_name }*
+;
+
+type_param_name = name
+                ;
+
+type_param_decl_list = type_param_decl { "," type_param_decl }*
+;
+
 type_param_decl = type_param_name [ "=" scalar_int_initialization_expr ]
                 ;
 
@@ -1059,6 +1095,9 @@ data_component_def_stmt = declaration_type_spec [ [ "," component_attr_spec_list
                         ;
 
 (* R441 *)
+component_attr_spec_list = component_attr_spec { "," component_attr_spec }*
+;
+
 component_attr_spec = pointer_keyword
                     | ( dimension_keyword "(" component_array_spec ")" )
                     | allocatable_keyword
@@ -1066,8 +1105,15 @@ component_attr_spec = pointer_keyword
                     ;
 
 (* R442 : C444 *)
+component_decl_list = component_decl { "," component_decl }*
+;
+
 component_decl = component_name [ "(" component_array_spec ")" ] [ "*" char_length ] [ component_initialization ]
                ;
+
+component_name = name
+;
+
 
 (* R443 : C442 *)
 component_array_spec = explicit_shape_spec_list
@@ -1085,11 +1131,18 @@ proc_component_def_stmt = procedure_keyword "(" [ proc_interface ] ")" "," proc_
                         ;
 
 (* R446 *)
+proc_component_attr_spec_list = proc_component_attr_spec { "," proc_component_attr_spec }*
+;
+
 proc_component_attr_spec = pointer_keyword
                          | (pass_keyword [ "(" arg_name ")" ])
                          | nopass_keyword
                          | access_spec
                          ;
+
+arg_name = name
+;
+
 
 (* R447 : C454 *)
 private_components_stmt = private_keyword
@@ -1113,15 +1166,21 @@ proc_binding_stmt = specific_binding
 specific_binding = procedure_keyword [ "(" interface_name ")" ] [ [ "," binding_attr_list ] "::" ] binding_name [ "=>" procedure_name ]
                  ;
 
+(* R452 : C549, C460, C461, C462, C463, C464 *)
 binding_name = name
              ;
 
-(* R452 : C549, C460, C461, C462, C463, C464 *)
+binding_name_list = binding_name { "," binding_name }*
+                  ;
+
 generic_binding = generic_keyword [ "," access_spec ] "::" generic_spec "=>" binding_name_list
                 ;
 
 
 (* R453 : C465, C468, C469, C470 *)
+binding_attr_list = binding_attr { "," binding_attr }*
+;
+
 binding_attr = ( pass_keyword [ "(" arg_name ")" ] )
              | nopass_keyword
              | non_overridable_keyword
@@ -1133,12 +1192,25 @@ binding_attr = ( pass_keyword [ "(" arg_name ")" ] )
 final_binding = final_keyword [ "::" ] final_subroutine_name_list
               ;
 
+final_subroutine_name_list = final_subroutine_name { "," final_subroutine_name }*
+                           ;
+
+final_subroutine_name = name
+                      ;
+
+
 
 (* R455 : C476 C477 C478 *)
 derived_type_spec = type_name [ "(" type_param_spec_list ")" ]
                   ;
 
 (* R456 : C479 C480 C481 *)
+type_param_spec_list = type_param_spec { "," type_param_spec }*
+;
+
+keyword = name
+        ;
+
 type_param_spec = [ keyword "=" ] type_param_value
                 ;
 
@@ -1146,8 +1218,12 @@ type_param_spec = [ keyword "=" ] type_param_value
 structure_constructor = derived_type_spec "(" [ component_spec_list ] ")"
                       ;
 (* R458 : C486 C487 *)
+component_spec_list = component_spec { "," component_spec }*
+;
+
 component_spec = [ keyword "=" ] component_data_source
                ;
+
 (* R459 : C490 C491 *)
 component_data_source = expr
                       | data_target
@@ -1168,6 +1244,9 @@ enumerator_def_stmt = enumerator_keyword [ "::" ] enumerator_list
                     ;
 
 (* R463 *)
+enumerator_list = enumerator { "," enumerator }*
+;
+
 enumerator = named_constant [ "=" scalar_int_initialization_expr ]
            ;
 
@@ -1194,6 +1273,9 @@ right_square_bracket = "]"
                      ;
 
 (* R469 *)
+ac_value_list = ac_value { "," ac_value }*
+;
+
 ac_value = expr
          | ac_implied_do
          ;
@@ -1245,14 +1327,25 @@ attr_spec = access_spec
           ;
 
 (* R504 : C504 C520 C521 C524 C525 *)
+entity_name_list = entity_name { "," entity_name }*
+;
+
+entity_name = name
+;
+
+entity_decl_list = entity_decl { "," entity_decl }*
+;
+
 entity_decl = ( object_name [ "(" array_spec ")" ] [ "*" char_length ] [ initialization ] )
             | ( function_name [ "*" char_length ] )
             ;
 
 (* R505 : C505 *)
+object_name_list = object_name { "," object_name }*
+;
+
 object_name = name
             ;
-
 
 (* R506 *)
 initialization = initialization_expr
@@ -1279,6 +1372,9 @@ array_spec = explicit_shape_spec_list
            ;
 
 (* R511 : C542 *)
+explicit_shape_spec_list = explicit_shape_spec { "," explicit_shape_spec }*
+;
+
 explicit_shape_spec = [ lower_bound ":" ] upper_bound
                     ;
 
@@ -1291,10 +1387,16 @@ upper_bound = specification_expr
             ;
 
 (* R514 *)
+assumed_shape_spec_list = assumed_shape_spec { "," assumed_shape_spec }*
+;
+
 assumed_shape_spec = [ lower_bound ] ":"
                    ;
 
 (* R515 *)
+deferred_shape_spec_list = deferred_shape_spec { "," deferred_shape_spec }*
+;
+
 deferred_shape_spec = ":"
                     ;
 
@@ -1310,6 +1412,9 @@ intent_spec = in_keyword | out_keyword | in_out_keyword
 access_stmt = access_spec [ [ "::" ] access_id_list ]
             ;
 (* R519 : C549 *)
+access_id_list = access_id { "," access_id }*
+;
+
 access_id = use_name
           | generic_spec
           ;
@@ -1327,6 +1432,9 @@ bind_stmt = language_binding_spec [ "::" ] bind_entity_list
           ;
 
 (* R523 *)
+bind_entity_list = bind_entity { "," bind_entity }*
+;
+
 bind_entity = entity_name
             | "/" common_block_name "/"
             ;
@@ -1336,10 +1444,16 @@ data_stmt = data_keyword data_stmt_set { [ "," ] data_stmt_set }*
           ;
 
 (* R525 *)
+data_stmt_set_list = data_stmt_set { "," data_stmt_set }*
+;
+
 data_stmt_set = data_stmt_object_list "/" data_stmt_value_list "/"
               ;
 
 (* R526 : C553 C554 C555 *)
+data_stmt_object_list = data_stmt_object { "," data_stmt_object }*
+;
+
 data_stmt_object = variable
                  | data_implied_do
                  ;
@@ -1348,6 +1462,9 @@ data_implied_do = "(" data_i_do_object_list "," data_i_do_variable "=" scalar_in
                 ;
 
 (* R528 : C558 C559 C560 C561 *)
+data_i_do_object_list = data_i_do_object { "," data_i_do_object }*
+;
+
 data_i_do_object = array_element
                  | scalar_structure_component
                  | data_implied_do
@@ -1359,6 +1476,9 @@ data_i_do_variable = scalar_int_variable
 
 
 (* R530 *)
+data_stmt_value_list = data_stmt_value { "," data_stmt_value }*
+;
+
 data_stmt_value = [ data_stmt_repeat "*" ] data_stmt_constant
                 ;
 
@@ -1378,16 +1498,25 @@ data_stmt_constant = scalar_constant
                    ;
 
 (* R533 : C565 *)
+scalar_int_constant_subobject = int_constant_subobject
+;
+
 int_constant_subobject = constant_subobject
                        ;
 
 (* R534 : C566 C567 *)
+scalar_constant_subobject = constant_subobject
+;
+
 constant_subobject = designator
                    ;
 
 (* R535 *)
 dimension_stmt = dimension_keyword [ "::" ] array_name "(" array_spec ")" { "," array_name "(" array_spec ")" }*
                ;
+
+array_name = name
+;
 
 (* R536 *)
 intent_stmt = intent_keyword "(" intent_spec ")" [ "::" ] dummy_arg_name_list
@@ -1402,6 +1531,9 @@ parameter_stmt = parameter_keyword "(" named_constant_def_list ")"
                ;
 
 (* R539 *)
+named_constant_def_list = named_constant_def { "," named_constant_def }*
+;
+
 named_constant_def = named_constant "=" initialization_expr
                    ;
 
@@ -1410,9 +1542,15 @@ pointer_stmt = pointer_keyword [ "::" ] pointer_decl_list
              ;
 
 (* R541 : C568 *)
+pointer_decl_list = pointer_decl { "," pointer_decl }*
+;
+
 pointer_decl = ( object_name [ "(" deferred_shape_spec_list ")" ] )
              | proc_entity_name
              ;
+
+proc_entity_name = name
+;
 
 (* R542 *)
 protected_stmt = protected_keyword [ "::" ] entity_name_list
@@ -1423,6 +1561,9 @@ save_stmt = save_keyword [ [ "::" ] saved_entity_list ]
           ;
 
 (* R544 *)
+saved_entity_list = saved_entity { "," saved_entity }*
+;
+
 saved_entity = object_name
              | proc_pointer_name
              | ( "/" common_block_name "/" )
@@ -1441,7 +1582,7 @@ value_stmt = value_keyword [ "::" ] dummy_arg_name_list
            ;
 
 (* R548 *)
-volatile_stmt =  volatile [ "::" ] object_name_list
+volatile_stmt =  volatile_keyword [ "::" ] object_name_list
               ;
 
 (* R549 : C571 *)
@@ -1450,6 +1591,9 @@ implicit_stmt =  implicit_keyword implicit_spec_list
               ;
 
 (* R550 *)
+implicit_spec_list = implicit_spec { "," implicit_spec }*
+;
+
 implicit_spec = declaration_type_spec "(" letter_spec_list ")"
               ;
 
@@ -1470,6 +1614,9 @@ namelist_group_object_list = namelist_group_object { "," namelist_group_object }
 
 namelist_group_object = variable_name
                       ;
+
+namelist_group_name = name
+;
 
 (* R554 *)
 equivalence_stmt = equivalence_keyword equivalence_set_list
@@ -1532,6 +1679,9 @@ logical_variable = variable
                  ;
 
 (* R605 : C604 *)
+scalar_default_logical_variable = default_logical_variable
+;
+
 default_logical_variable = variable
                          ;
 
@@ -1540,10 +1690,16 @@ char_variable = variable
               ;
 
 (* R607 : C606 *)
+scalar_default_char_variable = default_char_variable
+;
+
 default_char_variable = variable
                       ;
 
 (* R608 : C607 *)
+scalar_int_variable = int_variable
+;
+
 int_variable = variable
              ;
 
@@ -1577,6 +1733,9 @@ part_name = name
           ;
 
 (* R614 : C615 *)
+scalar_structure_component = structure_component
+;
+
 structure_component = data_ref
                     ;
 
@@ -1629,6 +1788,9 @@ stat_opt = stat_keyword "=" stat_variable
 errmsg_opt = errmsg_keyword "=" errmsg_variable
            ;
 
+alloc_opt_list = alloc_opt { "," alloc_opt }*
+;
+
 alloc_opt = stat_opt
           | errmsg_opt
           | (source_keyword "=" source_expr)
@@ -1647,10 +1809,16 @@ source_expr = expr
             ;
 
 (* R628 *)
+allocation_list = allocation { "," allocation }*
+;
+
 allocation = allocate_object [ "(" allocate_shape_spec_list ")" ]
            ;
 
 (* R629 : C622 *)
+allocate_object_list = allocate_object { "," allocate_object }*
+;
+
 allocate_object = variable_name
                 | structure_component
                 ;
@@ -1675,6 +1843,9 @@ upper_bound_expr = scalar_int_expr
 nullify_stmt = nullify_keyword "(" pointer_object_list ")"
              ;
 (* R634 : C634 *)
+pointer_object_list = pointer_object { "," pointer_object }*
+;
+
 pointer_object = variable_name
                | structure_component
                | proc_pointer_name
@@ -1686,6 +1857,9 @@ deallocate_stmt = deallocate_keyword "(" allocate_object_list [ "," dealloc_opt_
 
 
 (* R636 : C636 *)
+dealloc_opt_list = dealloc_opt { "," dealloc_opt }*
+;
+
 dealloc_opt = stat_opt
             | errmsg_opt
             ;
@@ -1797,6 +1971,9 @@ equiv_op = ".EQV." | ".eqv."
 
 
 (* R722 : *)
+scalar_expr = expr
+;
+
 expr = [ expr defined_binary_op ] level_5_expr
      ;
 
@@ -1806,23 +1983,38 @@ defined_binary_op = "." { letter }+ "."
 
 
 (* R724 : C705 *)
+scalar_logical_expr = logical_expr
+;
+
 logical_expr = expr
              ;
 
 (* R725 : C706 *)
+scalar_char_expr = char_expr
+;
+
 char_expr = expr
           ;
 
 (* R726 : C707 *)
+scalar_default_char_expr = default_char_expr
+;
+
 default_char_expr = expr
                   ;
 
 
 (* R727 : C708 *)
+scalar_int_expr = int_expr
+;
+
 int_expr = expr
          ;
 
 (* R728 : C709 *)
+scalar_numeric_expr = numeric_expr
+;
+
 numeric_expr = expr
              ;
 
@@ -1835,14 +2027,23 @@ initialization_expr = expr
                     ;
 
 (* R731 : C712 *)
+scalar_char_initialization_expr = char_initialization_expr
+;
+
 char_initialization_expr = char_expr
                          ;
 
 (* R732 : C713 *)
+scalar_int_initialization_expr = int_initialization_expr
+;
+
 int_initialization_expr = int_expr
                         ;
 
 (* R733 : C714 *)
+scalar_logical_initialization_expr = logical_initialization_expr
+;
+
 logical_initialization_expr = logical_expr
                             ;
 
@@ -1861,12 +2062,21 @@ data_pointer_object = variable_name
                     | ( variable "%" data_pointer_component_name )
                     ;
 
+data_pointer_component_name = name
+;
+
 (* R737 : *)
+bounds_spec_list = bounds_spec { "," bounds_spec }*
+;
+
 bounds_spec = lower_bound_expr ":"
             ;
 
 (* R738 : *)
-bounds_remapping = ower_bound_expr ":" upper_bound_expr
+bounds_remapping_list = bounds_remapping { "," bounds_remapping }*
+;
+
+bounds_remapping = lower_bound_expr ":" upper_bound_expr
                  ;
 
 (* R739 : C723 C724 *)
@@ -1882,6 +2092,9 @@ proc_pointer_object = proc_pointer_name
 (* R741 : C725 *)
 proc_component_ref = variable "%" procedure_component_name
                    ;
+
+procedure_component_name = name
+;
 
 (* R742 : C726 C727 C728 *)
 proc_target = expr
@@ -1921,6 +2134,9 @@ where_assignment_stmt = assignment_stmt
                       ;
 
 (* R748 : *)
+scalar_mask_expr = mask_expr
+;
+
 mask_expr = logical_expr
           ;
 
@@ -1943,7 +2159,10 @@ forall_construct = forall_construct_stmt
                  ;
 
 (* R753 : *)
-forall_construct_stmt = [forall_construct_name ":" ] forall_keyword forall_header
+forall_construct_name = name
+;
+
+forall_construct_stmt = [ forall_construct_name ":" ] forall_keyword forall_header
                       ;
 
 (* R754 : C733 C734 *)
@@ -1951,6 +2170,12 @@ forall_header = "(" forall_triplet_spec_list ["," scalar_mask_expr] ")"
               ;
 
 (* R755 : C735 C736 *)
+forall_triplet_spec_list = forall_triplet_spec { "," forall_triplet_spec }*
+;
+
+index_name = name
+;
+
 forall_triplet_spec = index_name "=" subscript ":" subscript [ ":" stride ]
                     ;
 
@@ -1988,6 +2213,9 @@ block = { execution_part_construct }*
       ;
 
 (* R802 : C801 *)
+if_construct_name = name
+;
+
 if_construct = if_then_stmt
                  block
              { else_if_stmt
@@ -2020,6 +2248,9 @@ if_stmt = if_keyword "(" scalar_logical_expr ")" action_stmt
 
 
 (* R808 : C803 C804 C805 C806 C807 *)
+case_construct_name = name
+;
+
 case_construct = select_case_stmt { case_stmt block }* end_select_stmt
                ;
 
@@ -2048,6 +2279,9 @@ case_selector = ( "(" case_value_range_list ")" )
               ;
 
 (* R814 : *)
+case_value_range_list = case_value_range { "," case_value_range }*
+;
+
 case_value_range = case_value
                  | ( case_value ":" )
                  | ( ":" case_value )
@@ -2062,6 +2296,9 @@ case_value = scalar_int_initialization_expr
 
 
 (* R816 : *)
+associate_construct_name = name
+;
+
 associate_construct = associate_stmt
                         block
                     end_associate_stmt
@@ -2074,6 +2311,9 @@ associate_stmt = [ associate_construct_name ":" ] associate_keyword "(" associat
 (* R818 : C808 C809 *)
 associate_name = name
                ;
+
+association_list = association { "," association }*
+;
 
 association = associate_name "=>" selector
             ;
@@ -2095,6 +2335,9 @@ select_type_construct = select_type_stmt
                       ;
 
 (* R822 : C*11 C812 C813 *)
+select_construct_name = name
+;
+
 select_type_stmt = [ select_construct_name ":" ] select_type_keyword "(" [ associate_name "=>" ] selector ")"
                  ;
 
@@ -2110,6 +2353,9 @@ end_select_type_stmt = end_select_keyword [ select_construct_name ]
 
 
 (* R825 : *)
+do_construct_name = name
+;
+
 do_construct = block_do_construct
              | nonblock_do_construct
              ;
@@ -2407,7 +2653,7 @@ wait_spec = ( [ unit_keyword "=" ] file_unit_number )
 
 (* R923 : *)
 backspace_stmt = ( backspace_keyword file_unit_number )
-               | ( backspoce_keyword "(" position_spec_list ")" )
+               | ( backspace_keyword "(" position_spec_list ")" )
                ;
 
 (* R924 : *)
