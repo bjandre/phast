@@ -110,288 +110,148 @@ go_to_keyword = "GO TO" | "go to" | "GOTO" | "goto" ;
 
 select_case_keyword = "SELECT CASE" | "select case" | "SELECTCASE" | "selectcase" ;
 
+double_keyword          = double_precision_keyword              ;
 
-end_keyword = "END" | "end" ;
-
-module_keyword = "MODULE" | "module" ;
-
-use_keyword = "USE" | "use" ;
-
-contains_keyword = "CONTAINS" | "contains" ;
-
-integer_keyword = "integer" | "INTEGER" ;
-
-real_keyword = "real" | "REAL" ;
-
-double_keyword = double_precision_keyword ;
-
-complex_keyword = "COMPLEX" | "complex" ;
-
-character_keyword = "CHARACTER" | "character" ;
-
-logical_keyword = "LOGICAL" | "logical" ;
-
-kind_keyword = "KIND" | "kind" ;
-
-type_keyword = "TYPE" | "type" ;
-
-extends_keyword = "EXTENDS" | "extends" ;
-
-abstract_keyword = "ABSTRACT" | "abstract" ;
-
-bind_keyword = "BIND" | "bind" ;
-
-c_keyword = "C" | "c" ;
-
-sequence_keyword = "SEQUENCE" | "sequence" ;
-
-pointer_keyword = "POINTER" | "pointer" ;
-
-dimension_keyword = "DIMENSION" | "dimension" ;
-
-allocatable_keyword = "ALLOCATABLE" | "allocatable" ;
-
-procedure_keyword = "PROCEDURE" | "procedure" ;
-
-pass_keyword = "PASS" | "pass" ;
-
-nopass_keyword = "NOPASS" | "nopass" ;
-
-private_keyword = "PRIVATE" | "private" ;
-
-generic_keyword = "GENERIC" | "generic" ;
-
+abstract_keyword        = "ABSTRACT"        | "abstract"        ;
+access_keyword          = "ACCESS"          | "access"          ;
+action_keyword          = "ACTION"          | "action"          ;
+advance_keyword         = "ADVANCE"         | "advance"         ;
+allocatable_keyword     = "ALLOCATABLE"     | "allocatable"     ;
+allocate_keyword        = "ALLOCATE"        | "allocate"        ;
+assignment_keyword      = "ASSIGNMENT"      | "assignment"      ;
+associate_keyword       = "ASSOCIATE"       | "associate"       ;
+asynchronous_keyword    = "ASYNCHRONOUS"    | "asynchronous"    ;
+backspace_keyword       = "BACKSPACE"       | "backspace"       ;
+bind_keyword            = "BIND"            | "bind"            ;
+blank_keyword           = "BLANK"           | "blank"           ;
+c_keyword               = "C"               | "c"               ;
+call_keyword            = "CALL"            | "call"            ;
+case_keyword            = "CASE"            | "case"            ;
+character_keyword       = "CHARACTER"       | "character"       ;
+class_keyword           = "CLASS"           | "class"           ;
+close_keyword           = "CLOSE"           | "close"           ;
+common_keyword          = "COMMON"          | "common"          ;
+complex_keyword         = "COMPLEX"         | "complex"         ;
+contains_keyword        = "CONTAINS"        | "contains"        ;
+continue_keyword        = "CONTINUE"        | "continue"        ;
+cycle_keyword           = "CYCLE"           | "cycle"           ;
+data_keyword            = "DATA"            | "data"            ;
+deallocate_keyword      = "DEALLOCATE"      | "deallocate"      ;
+decimal_keyword         = "DECIMAL"         | "decimal"         ;
+default_keyword         = "DEFAULT"         | "default"         ;
+deffered_keyword        = "DEFERRED"        | "deferred"        ;
+delim_keyword           = "DELIM"           | "delim"           ;
+dimension_keyword       = "DIMENSION"       | "dimension"       ;
+direct_keyword          = "DIRECT"          | "direct"          ;
+do_keyword              = "DO"              | "do"              ;
+elemental_keyword       = "ELEMENTAL"       | "elemental"       ;
+else_keyword            = "ELSE"            | "else"            ;
+encoding_keyword        = "ENCODING"        | "encoding"        ;
+end_keyword             = "END"             | "end"             ;
+entry_keyword           = "ENTRY"           | "entry"           ;
+enum_keyword            = "ENUM"            | "enum"            ;
+enumerator_keyword      = "ENUMERATOR"      | "enumerator"      ;
+eor_keyword             = "EOR"             | "eor"             ;
+equivalence_keyword     = "EQUIVALENCE"     | "equivalence"     ;
+err_keyword             = "ERR"             | "err"             ;
+errmsg_keyword          = "ERRMSG"          | "errmsg"          ;
+exist_keyword           = "EXIST"           | "exist"           ;
+exit_keyword            = "EXIT"            | "exit"            ;
+extends_keyword         = "EXTENDS"         | "extends"         ;
+external_keyword        = "EXTERNAL"        | "external"        ;
+file_keyword            = "FILE"            | "file"            ;
+final_keyword           = "FINAL"           | "final"           ;
+flush_keyword           = "FLUSH"           | "flush"           ;
+fmt_keyword             = "FMT"             | "fmt"             ;
+forall_keyword          = "FORALL"          | "forall"          ;
+form_keyword            = "FORM"            | "form"            ;
+format_keyword          = "FORMAT"          | "format"          ;
+formatted_keyword       = "FORMATTED"       | "formatted"       ;
+function_keyword        = "FUNCTION"        | "function"        ;
+generic_keyword         = "GENERIC"         | "generic"         ;
+id_keyword              = "ID"              | "id"              ;
+if_keyword              = "IF"              | "if"              ;
+implicit_keyword        = "IMPLICIT"        | "implicit"        ;
+import_keyword          = "IMPORT"          | "import"          ;
+in_keyword              = "IN"              | "in"              ;
+inquire_keyword         = "INQUIRE"         | "inquire"         ;
+integer_keyword         = "integer"         | "INTEGER"         ;
+intent_keyword          = "INTENT"          | "intent"          ;
+interface_keyword       = "INTERFACE"       | "interface"       ;
+intrinsic_keyword       = "INTRINSIC"       | "intrinsic"       ;
+iolength_keyword        = "IOLENGTH"        | "iolength"        ;
+iomsg_keyword           = "IOMSG"           | "iomsg"           ;
+iostat_keyword          = "IOSTAT"          | "iostat"          ;
+is_keyword              = "IS"              | "is"              ;
+kind_keyword            = "KIND"            | "kind"            ;
+length_keyword          = "LEN"             | "len"             ;
+logical_keyword         = "LOGICAL"         | "logical"         ;
+module_keyword          = "MODULE"          | "module"          ;
+name_keyword            = "NAME"            | "name"            ;
+named_keyword           = "NAMED"           | "named"           ;
+namelist_keyword        = "NAMELIST"        | "namelist"        ;
+nextrec_keyword         = "NEXTREC"         | "nextrec"         ;
+nml_keyword             = "NML"             | "nml"             ;
+non_intrinsic_keyword   = "NON INTRINSIC"   | "non intrinsic"   ;
 non_overridable_keyword = "NON_OVERRIDABLE" | "non_overridable" ;
-
-deffered_keyword = "DEFERRED" | "deferred" ;
-
-final_keyword = "FINAL" | "final" ;
-
-enum_keyword = "ENUM" | "enum" ;
-
-enumerator_keyword = "ENUMERATOR" | "enumerator" ;
-
-class_keyword = "CLASS" | "class" ;
-
-asynchronous_keyword = "ASYNCHRONOUS" | "asynchronous" ;
-
-external_keyword = "EXTERNAL" | "external" ;
-
-intent_keyword = "INTENT" | "intent" ;
-
-intrinsic_keyword = "INTRINSIC" | "intrinsic" ;
-
-optional_keyword = "OPTIONAL" | "optional" ;
-
-parameter_keyword = "PARAMETER" | "parameter" ;
-
-protected_keyword = "PROTECTED" | "protected" ;
-
-save_keyword = "SAVE" | "save" ;
-
-target_keyword = "TARGET" | "target" ;
-
-value_keyword = "VALUE" | "value" ;
-
-volatile_keyword = "VOLATILE" | "volatile" ;
-
-public_keyword = "PUBLIC" | "public" ;
-
-name_keyword = "NAME" | "name" ;
-
-in_keyword = "IN" | "in" ;
-
-out_keyword = "OUT" | "out" ;
-
-data_keyword = "DATA" | "data" ;
-
-implicit_keyword = "IMPLICIT" | "implicit" ;
-
-none_keyword = "NONE" | "none" ;
-
-namelist_keyword = "NAMELIST" | "namelist" ;
-
-equivalence_keyword = "EQUIVALENCE" | "equivalence" ;
-
-common_keyword = "COMMON" | "common" ;
-
-function_keyword = "FUNCTION" | "function" ;
-
-recursive_keyword = "RECURSIVE" | "recurnive" ;
-
-pure_keyword = "PURE" | "pure" ;
-
-elemental_keyword = "ELEMENTAL" | "elemental" ;
-
-result_keyword = "RESULT" | "result" ;
-
-subroutine_keyword = "SUBROUTINE" | "subroutine" ;
-
-entry_keyword = "ENTRY" | "entry" ;
-
-return_keyword = "RETURN" | "return" ;
-
-read_keyword = "READ" | "read" ;
-
-write_keyword = "WRITE" | "write" ;
-
-format_keyword = "FORMAT" | "format" ;
-
-formatted_keyword = "FORMATTED" | "formatted" ;
-
-unformatted_keyword = "UNFORMATTED" | "unformatted" ;
-
-assignment_keyword = "ASSIGNMENT" | "assignment" ;
-
-operator_keyword = "OPERATOR" | "operator" ;
-
-interface_keyword = "INTERFACE" | "interface" ;
-
-import_keyword = "IMPORT" | "import" ;
-
-program_keyword = "PROGRAM" | "program" ;
-
-only_keyword = "ONLY" | "only" ;
-
-non_intrinsic_keyword = "NON INTRINSIC" | "non intrinsic" ;
-
-allocate_keyword = "ALLOCATE" | "allocate" ;
-
-stat_keyword = "STAT" | "stat" ;
-
-errmsg_keyword = "ERRMSG" | "errmsg" ;
-
-source_keyword = "SOURCE" | "source" ;
-
-nullify_keyword = "NULLIFY" | "nullify" ;
-
-deallocate_keyword = "DEALLOCATE" | "deallocate" ;
-
-where_keyword = "WHERE" | "where" ;
-
-forall_keyword = "FORALL" | "forall" ;
-
-if_keyword = "IF" | "if" ;
-
-then_keyword = "THEN" | "then" ;
-
-else_keyword = "ELSE" | "else" ;
-
-select_keyword = "SELECT" | "select" ;
-
-case_keyword = "CASE" | "case" ;
-
-default_keyword = "DEFAULT" | "default" ;
-
-associate_keyword = "ASSOCIATE" | "associate" ;
-
-is_keyword = "IS" | "is" ;
-
-do_keyword = "DO" | "do" ;
-
-while_keyword = "WHILE" | "while" ;
-
-cycle_keyword = "CYCLE" | "cycle" ;
-
-exit_keyword = "EXIT" | "exit" ;
-
-continue_keyword = "CONTINUE" | "continue" ;
-
-stop_keyword = "STOP" | "stop" ;
-
-open_keyword = "OPEN" | "open" ;
-
-unit_keyword = "UNIT" | "unit" ;
-
-access_keyword= "ACCESS" | "access" ;
-
-action_keyword= "ACTION" | "action" ;
-
-blank_keyword= "BLANK" | "blank" ;
-
-decimal_keyword= "DECIMAL" | "decimal" ;
-
-delim_keyword= "DELIM" | "delim" ;
-
-encoding_keyword= "ENCODING" | "encoding" ;
-
-err_keyword= "ERR" | "err" ;
-
-form_keyword= "FORM" | "form" ;
-
-iomsg_keyword= "IOMSG" | "iomsg" ;
-
-iostat_keyword= "IOSTAT" | "iostat" ;
-
-pad_keyword= "PAD" | "pad" ;
-
-position_keyword= "POSITION" | "position" ;
-
-recl_keyword= "RECL" | "recl" ;
-
-round_keyword= "ROUND" | "round" ;
-
-sign_keyword= "SIGN" | "sign" ;
-
-status_keyword= "STATUS" | "status" ;
-
-close_keyword= "CLOSE" | "close" ;
-
-print_keyword= "PRINT" | "print" ;
-
-fmt_keyword = "FMT" | "fmt" ;
-
-nml_keyword = "NML" | "nml" ;
-
-advance_keyword = "ADVANCE" | "advance" ;
-
-eor_keyword = "EOR" | "eor" ;
-
-id_keyword = "ID" | "id" ;
-
-pos_keyword = "POS" | "pos" ;
-
-rec_keyword = "REC" | "rec" ;
-
-size_keyword = "SIZE" | "size" ;
-
-wait_keyword = "WAIT" | "wait" ;
-
-backspace_keyword = "BACKSPACE" | "backspace" ;
-
-rewind_keyword = "REWIND" | "rewind" ;
-
-flush_keyword = "FLUSH" | "flush" ;
-
-inquire_keyword = "INQUIRE" | "inquire" ;
-
-iolength_keyword = "IOLENGTH" | "iolength" ;
-
-file_keyword = "FILE" | "file" ;
-
-direct_keyword = "DIRECT" | "direct" ;
-
-exist_keyword = "EXIST" | "exist" ;
-
-named_keyword = "NAMED" | "named" ;
-
-nextrec_keyword = "NEXTREC" | "nextrec" ;
-
-number_keyword = "NUMBER" | "number" ;
-
-opened_keyword = "OPENED" | "opened" ;
-
-pending_keyword = "PENDING" | "pending" ;
-
-readwrite_keyword = "READWRITE" | "readwrite" ;
-
-sequential_keyword = "SEQUENTIAL" | "sequential" ;
-
-stream_keyword = "STREAM" | "stream" ;
-
-call_keyword = "CALL" | "call" ;
-
-length_keyword = "LEN" | "len" ;
+none_keyword            = "NONE"            | "none"            ;
+nopass_keyword          = "NOPASS"          | "nopass"          ;
+nullify_keyword         = "NULLIFY"         | "nullify"         ;
+number_keyword          = "NUMBER"          | "number"          ;
+only_keyword            = "ONLY"            | "only"            ;
+open_keyword            = "OPEN"            | "open"            ;
+opened_keyword          = "OPENED"          | "opened"          ;
+operator_keyword        = "OPERATOR"        | "operator"        ;
+optional_keyword        = "OPTIONAL"        | "optional"        ;
+out_keyword             = "OUT"             | "out"             ;
+pad_keyword             = "PAD"             | "pad"             ;
+parameter_keyword       = "PARAMETER"       | "parameter"       ;
+pass_keyword            = "PASS"            | "pass"            ;
+pending_keyword         = "PENDING"         | "pending"         ;
+pointer_keyword         = "POINTER"         | "pointer"         ;
+pos_keyword             = "POS"             | "pos"             ;
+position_keyword        = "POSITION"        | "position"        ;
+print_keyword           = "PRINT"           | "print"           ;
+private_keyword         = "PRIVATE"         | "private"         ;
+procedure_keyword       = "PROCEDURE"       | "procedure"       ;
+program_keyword         = "PROGRAM"         | "program"         ;
+protected_keyword       = "PROTECTED"       | "protected"       ;
+public_keyword          = "PUBLIC"          | "public"          ;
+pure_keyword            = "PURE"            | "pure"            ;
+read_keyword            = "READ"            | "read"            ;
+readwrite_keyword       = "READWRITE"       | "readwrite"       ;
+real_keyword            = "real"            | "REAL"            ;
+rec_keyword             = "REC"             | "rec"             ;
+recl_keyword            = "RECL"            | "recl"            ;
+recursive_keyword       = "RECURSIVE"       | "recurnive"       ;
+result_keyword          = "RESULT"          | "result"          ;
+return_keyword          = "RETURN"          | "return"          ;
+rewind_keyword          = "REWIND"          | "rewind"          ;
+round_keyword           = "ROUND"           | "round"           ;
+save_keyword            = "SAVE"            | "save"            ;
+select_keyword          = "SELECT"          | "select"          ;
+sequence_keyword        = "SEQUENCE"        | "sequence"        ;
+sequential_keyword      = "SEQUENTIAL"      | "sequential"      ;
+sign_keyword            = "SIGN"            | "sign"            ;
+size_keyword            = "SIZE"            | "size"            ;
+source_keyword          = "SOURCE"          | "source"          ;
+stat_keyword            = "STAT"            | "stat"            ;
+status_keyword          = "STATUS"          | "status"          ;
+stop_keyword            = "STOP"            | "stop"            ;
+stream_keyword          = "STREAM"          | "stream"          ;
+subroutine_keyword      = "SUBROUTINE"      | "subroutine"      ;
+target_keyword          = "TARGET"          | "target"          ;
+then_keyword            = "THEN"            | "then"            ;
+type_keyword            = "TYPE"            | "type"            ;
+unformatted_keyword     = "UNFORMATTED"     | "unformatted"     ;
+unit_keyword            = "UNIT"            | "unit"            ;
+use_keyword             = "USE"             | "use"             ;
+value_keyword           = "VALUE"           | "value"           ;
+volatile_keyword        = "VOLATILE"        | "volatile"        ;
+wait_keyword            = "WAIT"            | "wait"            ;
+where_keyword           = "WHERE"           | "where"           ;
+while_keyword           = "WHILE"           | "while"           ;
+write_keyword           = "WRITE"           | "write"           ;
 
 (* **************************************************************************
  *
