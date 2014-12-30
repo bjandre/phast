@@ -41,6 +41,10 @@ comment_char = "!"
 comment = comment_char { character }* end_of_line
              ;
 
+comments_re =
+           /!.*?$/
+           ;
+
 (* section 3.3.1.2 *)
 continue_char = "&"
               ;
@@ -143,7 +147,7 @@ select_case_keyword = "SELECT CASE" | "select case"
 end_keyword = "END" | "end"
             ;
 
-module_keyword = "MODULE | ""module"
+module_keyword = "MODULE" | "module"
                ;
 
 use_keyword = "USE" | "use"
@@ -726,6 +730,9 @@ letter = /[a-zA-Z]/
        ;
 digit = /[0-9]/
       ;
+
+whitespace = /[ \n\r\t]/
+           ;
 
 (* R303 *)
 underscore = /_/
@@ -2920,7 +2927,7 @@ module_subprogram = function_subprogram |
 
 (* R1109 : C1108 C1109 C1110 *)
 use_stmt = ( use_keyword [ [ "," module_nature ] "::" ] module_name [ "," rename_list ] )
-         | ( use_keyword [ [ "," module_nature ] "::" ] module_name "," only_keyword : [ only_list ] )
+         | ( use_keyword [ [ "," module_nature ] "::" ] module_name "," only_keyword ":" [ only_list ] )
          ;
 
 (* R1110 *)
