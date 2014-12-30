@@ -65,50 +65,29 @@ continue_char = "&"
 statement_termination_char = ";" { " " | "\t" ";" }*
                            ;
 
-block_data_keyword = "BLOCK DATA" | "block data" | "BLOCKDATA" | "blockdata" ;
-
-else_if_keyword = "ELSE IF" | "else if" | "ELSEIF" | "elseif" ;
-end_associate_keyword = "END ASSOCIATE" | "end associate" | "ENDASSOCIATE" | "endassociate" ;
-
-end_do_keyword = "END DO" | "end do" | "ENDDO" | "enddo" ;
-
-end_file_keyword = "END FILE" | "end file" | "END FILE" | "endfile" ;
-
-end_function_keyword = "END FUNCTION" | "end function" | "ENDFUNCTION" | "endfunction" ;
-
-end_interface_keyword = "END INTERFACE" | "end interface" | "ENDINTERFACE" | "end_interface" ;
-
-end_program_keyword = "END PROGRAM" | "end program" | "ENDPROGRAM" | "endprogram" ;
-
-end_subroutine_keyword = "END SUBROUTINE" | "end subroutine" | "ENDSUBROUTINE" | "end subroutine" ;
-
-end_where_keyword = "END WHERE" | "end where" | "ENDWHERE" | "endwhere" ;
-
-in_out_keyword = "IN OUT" | "in out" | "INOUT" | "inout" ;
-
-select_type_keyword = "SELECT TYPE" | "select type" | "SELECTTYPE" | "select type" ;
-
+block_data_keyword       = "BLOCK DATA" | "block data" | "BLOCKDATA" | "blockdata" ;
 double_precision_keyword = "DOUBLE PRECISION" | "double precision" | "DOUBLEPRECISION" | "doubleprecision" ;
-
-else_where_keyword = "ELSE WHERE" | "else where" | "ELSEWHERE" | "elsewhere" ;
-
-end_block_data_keyword = "END BLOCK DATA" | "end block data" | "ENDBLOCKDATA" | "endblockdata" ;
-
-end_enum_keyword = "END ENUM" | "end enum" | "ENDENUM" | "endenum" ;
-
-end_forall_keyword = "END FORALL" | "end forall" | "ENDFORALL" | "endforall" ;
-
-end_if_keyword = "END IF" | "end if" | "ENDIF" | "endif" ;
-
-end_module_keyword = "END MODULE" | "end module" | "ENDMODULE" | "endmodule" ;
-
-end_select_keyword = "END SELECT" | "end select" | "ENDSELECT" | "endselect" ;
-
-end_type_keyword = "END TYPE" | "end type" | "ENDTYPE" | "endtype" ;
-
-go_to_keyword = "GO TO" | "go to" | "GOTO" | "goto" ;
-
-select_case_keyword = "SELECT CASE" | "select case" | "SELECTCASE" | "selectcase" ;
+else_if_keyword          = "ELSE IF" | "else if" | "ELSEIF" | "elseif" ;
+else_where_keyword       = "ELSE WHERE" | "else where" | "ELSEWHERE" | "elsewhere" ;
+end_associate_keyword    = "END ASSOCIATE" | "end associate" | "ENDASSOCIATE" | "endassociate" ;
+end_block_data_keyword   = "END BLOCK DATA" | "end block data" | "ENDBLOCKDATA" | "endblockdata" ;
+end_do_keyword           = "END DO" | "end do" | "ENDDO" | "enddo" ;
+end_enum_keyword         = "END ENUM" | "end enum" | "ENDENUM" | "endenum" ;
+end_file_keyword         = "END FILE" | "end file" | "END FILE" | "endfile" ;
+end_forall_keyword       = "END FORALL" | "end forall" | "ENDFORALL" | "endforall" ;
+end_function_keyword     = "END FUNCTION" | "end function" | "ENDFUNCTION" | "endfunction" ;
+end_if_keyword           = "END IF" | "end if" | "ENDIF" | "endif" ;
+end_interface_keyword    = "END INTERFACE" | "end interface" | "ENDINTERFACE" | "end_interface" ;
+end_module_keyword       = "END MODULE" | "end module" | "ENDMODULE" | "endmodule" ;
+end_program_keyword      = "END PROGRAM" | "end program" | "ENDPROGRAM" | "endprogram" ;
+end_select_keyword       = "END SELECT" | "end select" | "ENDSELECT" | "endselect" ;
+end_subroutine_keyword   = "END SUBROUTINE" | "end subroutine" | "ENDSUBROUTINE" | "end subroutine" ;
+end_type_keyword         = "END TYPE" | "end type" | "ENDTYPE" | "endtype" ;
+end_where_keyword        = "END WHERE" | "end where" | "ENDWHERE" | "endwhere" ;
+go_to_keyword            = "GO TO" | "go to" | "GOTO" | "goto" ;
+in_out_keyword           = "IN OUT" | "in out" | "INOUT" | "inout" ;
+select_case_keyword      = "SELECT CASE" | "select case" | "SELECTCASE" | "selectcase" ;
+select_type_keyword      = "SELECT TYPE" | "select type" | "SELECTTYPE" | "select type" ;
 
 double_keyword          = double_precision_keyword              ;
 
