@@ -2746,8 +2746,11 @@ module_subprogram = function_subprogram |
                   ;
 
 (* R1109 : C1108 C1109 C1110 *)
-use_stmt = ( use_keyword [ [ comma module_nature ] coloncolon ] module_name [ comma rename_list ] )
-         | ( use_keyword [ [ comma module_nature ] coloncolon ] module_name comma only_keyword colon [ only_list ] )
+use_stmt =
+         use_keyword [ [ comma module_nature ] coloncolon ] module_name (
+             ( comma rename_list )
+             | ( comma only_keyword colon [ only_list ] )
+         ) spacing comment
          ;
 
 (* R1110 *)
