@@ -1,4 +1,4 @@
-module test_module_01
+module t0001_minimal_module
   
 contains
   
@@ -6,4 +6,5 @@ contains
 
   end subroutine foo
   
-end module test_module_01
+end module t0001_minimal_module
+
