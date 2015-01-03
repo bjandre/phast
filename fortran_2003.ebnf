@@ -50,24 +50,46 @@ asterisk     = "*"      continuation ;
 percent      = "%"      continuation ;
 equal        = "=" !">" continuation ;
 arrow        = "=>"     continuation ;
+plus         = "+"      continuation ;
+minus        = "-"      continuation ;
+
+(* only used in special characters, don't want continuation? *)
+backslash         = "\\" ;
+quote             = '"'  ; (* " fix broken syntax highlighting *)
+lsquare           = "["  ;
+rsquare           = "]"  ;
+lcurly            = "{"  ;
+rcurly            = "}"  ;
+decimal_point     = "."  ;
+semicolon         = ";"  ;
+exclamation_point = "!"  ;
+ampersand         = "&"  ;
+tilde             = "~"  ;
+less_than         = "<"  ;
+greater_than      = ">"  ;
+question_mark     = "?"  ;
+apostrophe        = "'"  ;
+grave_accent      = "`"  ;
+circumflex_accent = "^"  ;
+vertical_line     = "|"  ;
+currency_symbol   = "$"  ;
+number_sign       = "#"  ;
+commercial_at      = "@"  ;
+
 
 (* section 3.3.1.1 *)
-comment_char = "!" ;
+comment_char = exclamation_point ;
 
 comment = { { comment_char {character}* }* end_of_line }* ;
 
-comments_re =
-           /!.*?$/
-           ;
-
 (* section 3.3.1.2 *)
-continuation_char = "&" ;
+continuation_char = ampersand ;
 
 continuation = { continuation_char ( end_of_line | comment) }*;
 
 (* section 3.3.1.3 *)
 (* end of statement *)
-eos = ";" | comment | end_of_line ;
+eos = semicolon | comment | end_of_line ;
 
 block_data_keyword       = ( "block data"       | "blockdata"       ) continuation;
 double_precision_keyword = ( "double precision" | "doubleprecision" ) continuation;
@@ -555,14 +577,41 @@ space = /[ \t]/ ;
 (* R303 *)
 underscore = /_/ ;
 
-(* table 3.1 FIXME(bja, 201501) replace this mess with rules/quoted characters *)
-special_character = ?/[ =\\+-\\*/\\\\(\\)\\[\\]\\{\\},\\.:;!\\"%&~<>?\\'\\`^|$#@]/? ;
-(*" (* fix broken syntax highlighting *)
+(* table 3.1 *)
+special_character = space
+                  | equal
+                  | plus
+                  | minus
+                  | asterisk
+                  | forwardslash
+                  | backslash
+                  | lparen | rparen
+                  | lsquare | rsquare
+                  | lcurly | rcurly
+                  | comma
+                  | decimal_point
+                  | colon
+                  ! semicolon
+                  | exclamation_point
+                  | quote
+                  | percent
+                  | ampersand
+                  | tilde
+                  | less_than
+                  | greater_than
+                  | question_mark
+                  | apostrophe
+                  | grave_accent
+                  | circumflex_accent
+                  | vertical_line
+                  | currency_symbol
+                  | number_sign
+                  | commercial_at
+                  ;
 
 (* R301 *)
 character = alphanumeric_character
           | special_character
-          | space
           ;
 
 (* R302 *)
@@ -725,7 +774,7 @@ digit_string = { digit }+
              ;
 
 (* R410 *)
-sign = "+" | "-"
+sign = plus | minus
      ;
 
 (* R411 : C410 *)
@@ -1737,8 +1786,8 @@ mult_op = asterisk
         ;
 
 (* R709 *)
-add_op = "+"
-       "-"
+add_op = plus
+       minus
        ;
 
 (* R710 : *)
@@ -2777,9 +2826,9 @@ local_name = name
 only_list =  only { comma only }*
           ;
 
-only = generic_spec
+only = rename
      | only_use_name
-     | rename
+     | generic_spec
      ;
 
 (* R1113 : C1114 *)
