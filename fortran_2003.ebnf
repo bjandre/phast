@@ -32,213 +32,209 @@ Notes:
  *
  * ************************************************************************** *)
 
-whitespace = /[ \t\n\r]/ ;
+(* we want the parser to ignore all whitespace except end of lines. *)
 
-space = /[ \t]/ ;
 
-end_of_line = /[\n\r]/;
+end_of_line = { "\n" | "\r" | "\n\r" }+ ;
 
 (* FIXME(bja, 201412 ) should account for continuation
 lines...? *)
 
-spacing = { space }*;
-
-blank_line = /^[\s]*$/ ;
-
-lparen       = "(" !"/" spacing comment ;
-rparen       = ")"      spacing comment ;
-forwardslash = "/"      spacing comment ;
-comma        = ","      spacing comment ;
-colon        = ":" !":" spacing comment ;
-coloncolon   = "::"     spacing comment ;
-asterisk     = "*"      spacing comment ;
-percent      = "%"      spacing comment ;
-equal        = "=" !">" spacing comment ;
-arrow        = "=>"     spacing comment ;
+rparen       = ")"      (continuation | eos);
+lparen       = "(" !"/" continuation ;
+forwardslash = "/"      continuation ;
+comma        = ","      continuation ;
+colon        = ":" !":" continuation ;
+coloncolon   = "::"     continuation ;
+asterisk     = "*"      continuation ;
+percent      = "%"      continuation ;
+equal        = "=" !">" continuation ;
+arrow        = "=>"     continuation ;
 
 (* section 3.3.1.1 *)
 comment_char = "!" ;
 
-comment = { {space}* { comment_char {character}* }* end_of_line }* ;
+comment = { { comment_char {character}* }* end_of_line }* ;
 
 comments_re =
            /!.*?$/
            ;
 
 (* section 3.3.1.2 *)
-continuation_char = "&"
-              ;
+continuation_char = "&" ;
+
+continuation = { continuation_char ( end_of_line | comment) }*;
 
 (* section 3.3.1.3 *)
-statement_termination_char = ";" { " " | "\t" ";" }*
-                           ;
+(* end of statement *)
+eos = ";" | end_of_line | comment ;
 
-block_data_keyword       = ( "block data"       | "blockdata"       ) spacing comment;
-double_precision_keyword = ( "double precision" | "doubleprecision" ) spacing comment;
-else_if_keyword          = ( "else if"          | "elseif"          ) spacing comment;
-else_where_keyword       = ( "else where"       | "elsewhere"       ) spacing comment;
-end_associate_keyword    = ( "end associate"    | "endassociate"    ) spacing comment;
-end_block_data_keyword   = ( "end block data"   | "endblockdata"    ) spacing comment;
-end_do_keyword           = ( "end do"           | "enddo"           ) spacing comment;
-end_enum_keyword         = ( "end enum"         | "endenum"         ) spacing comment;
-end_file_keyword         = ( "end file"         | "endfile"         ) spacing comment;
-end_forall_keyword       = ( "end forall"       | "endforall"       ) spacing comment;
-end_function_keyword     = ( "end function"     | "endfunction"     ) spacing comment;
-end_if_keyword           = ( "end if"           | "endif"           ) spacing comment;
-end_interface_keyword    = ( "end interface"    | "end_interface"   ) spacing comment;
-end_module_keyword       = ( "end module"       | "endmodule"       ) spacing comment;
-end_program_keyword      = ( "end program"      | "endprogram"      ) spacing comment;
-end_select_keyword       = ( "end select"       | "endselect"       ) spacing comment;
-end_subroutine_keyword   = ( "end subroutine"   | "end subroutine"  ) spacing comment;
-end_type_keyword         = ( "end type"         | "endtype"         ) spacing comment;
-end_where_keyword        = ( "end where"        | "endwhere"        ) spacing comment;
-go_to_keyword            = ( "go to"            | "goto"            ) spacing comment;
-in_out_keyword           = ( "in out"           | "inout"           ) spacing comment;
-select_case_keyword      = ( "select case"      | "selectcase"      ) spacing comment;
-select_type_keyword      = ( "select type"      | "select type"     ) spacing comment;
+block_data_keyword       = ( "block data"       | "blockdata"       ) continuation;
+double_precision_keyword = ( "double precision" | "doubleprecision" ) continuation;
+else_if_keyword          = ( "else if"          | "elseif"          ) continuation;
+else_where_keyword       = ( "else where"       | "elsewhere"       ) continuation;
+end_associate_keyword    = ( "end associate"    | "endassociate"    ) continuation;
+end_block_data_keyword   = ( "end block data"   | "endblockdata"    ) continuation;
+end_do_keyword           = ( "end do"           | "enddo"           ) continuation;
+end_enum_keyword         = ( "end enum"         | "endenum"         ) continuation;
+end_file_keyword         = ( "end file"         | "endfile"         ) continuation;
+end_forall_keyword       = ( "end forall"       | "endforall"       ) continuation;
+end_function_keyword     = ( "end function"     | "endfunction"     ) continuation;
+end_if_keyword           = ( "end if"           | "endif"           ) continuation;
+end_interface_keyword    = ( "end interface"    | "end_interface"   ) continuation;
+end_module_keyword       = ( "end module"       | "endmodule"       ) continuation;
+end_program_keyword      = ( "end program"      | "endprogram"      ) continuation;
+end_select_keyword       = ( "end select"       | "endselect"       ) continuation;
+end_subroutine_keyword   = ( "end subroutine"   | "end subroutine"  ) continuation;
+end_type_keyword         = ( "end type"         | "endtype"         ) continuation;
+end_where_keyword        = ( "end where"        | "endwhere"        ) continuation;
+go_to_keyword            = ( "go to"            | "goto"            ) continuation;
+in_out_keyword           = ( "in out"           | "inout"           ) continuation;
+select_case_keyword      = ( "select case"      | "selectcase"      ) continuation;
+select_type_keyword      = ( "select type"      | "select type"     ) continuation;
 
-double_keyword          = double_precision_keyword spacing comment;
+double_keyword          = double_precision_keyword continuation;
 
-abstract_keyword        = spacing "abstract"        spacing comment;
-access_keyword          = spacing "access"          spacing comment;
-action_keyword          = spacing "action"          spacing comment;
-advance_keyword         = spacing "advance"         spacing comment;
-allocatable_keyword     = spacing "allocatable"     spacing comment;
-allocate_keyword        = spacing "allocate"        spacing comment;
-assignment_keyword      = spacing "assignment"      spacing comment;
-associate_keyword       = spacing "associate"       spacing comment;
-asynchronous_keyword    = spacing "asynchronous"    spacing comment;
-backspace_keyword       = spacing "backspace"       spacing comment;
-bind_keyword            = spacing "bind"            spacing comment;
-blank_keyword           = spacing "blank"           spacing comment;
-c_keyword               = spacing "c"               spacing comment;
-call_keyword            = spacing "call"            spacing comment;
-case_keyword            = spacing "case"            spacing comment;
-character_keyword       = spacing "character"       spacing comment;
-class_keyword           = spacing "class"           spacing comment;
-close_keyword           = spacing "close"           spacing comment;
-common_keyword          = spacing "common"          spacing comment;
-complex_keyword         = spacing "complex"         spacing comment;
-contains_keyword        = spacing "contains"        spacing comment;
-continue_keyword        = spacing "continue"        spacing comment;
-cycle_keyword           = spacing "cycle"           spacing comment;
-data_keyword            = spacing "data"            spacing comment;
-deallocate_keyword      = spacing "deallocate"      spacing comment;
-decimal_keyword         = spacing "decimal"         spacing comment;
-default_keyword         = spacing "default"         spacing comment;
-deffered_keyword        = spacing "deferred"        spacing comment;
-delim_keyword           = spacing "delim"           spacing comment;
-dimension_keyword       = spacing "dimension"       spacing comment;
-direct_keyword          = spacing "direct"          spacing comment;
-do_keyword              = spacing "do"              spacing comment;
-elemental_keyword       = spacing "elemental"       spacing comment;
-else_keyword            = spacing "else"            spacing comment;
-encoding_keyword        = spacing "encoding"        spacing comment;
-end_keyword             = spacing "end"             spacing comment;
-entry_keyword           = spacing "entry"           spacing comment;
-enum_keyword            = spacing "enum"            spacing comment;
-enumerator_keyword      = spacing "enumerator"      spacing comment;
-eor_keyword             = spacing "eor"             spacing comment;
-equivalence_keyword     = spacing "equivalence"     spacing comment;
-err_keyword             = spacing "err"             spacing comment;
-errmsg_keyword          = spacing "errmsg"          spacing comment;
-exist_keyword           = spacing "exist"           spacing comment;
-exit_keyword            = spacing "exit"            spacing comment;
-extends_keyword         = spacing "extends"         spacing comment;
-external_keyword        = spacing "external"        spacing comment;
-file_keyword            = spacing "file"            spacing comment;
-final_keyword           = spacing "final"           spacing comment;
-flush_keyword           = spacing "flush"           spacing comment;
-fmt_keyword             = spacing "fmt"             spacing comment;
-forall_keyword          = spacing "forall"          spacing comment;
-form_keyword            = spacing "form"            spacing comment;
-format_keyword          = spacing "format"          spacing comment;
-formatted_keyword       = spacing "formatted"       spacing comment;
-function_keyword        = spacing "function"        spacing comment;
-generic_keyword         = spacing "generic"         spacing comment;
-id_keyword              = spacing "id"              spacing comment;
-if_keyword              = spacing "if"              spacing comment;
-implicit_keyword        = spacing "implicit"        spacing comment;
-import_keyword          = spacing "import"          spacing comment;
-in_keyword              = spacing "in"              spacing comment;
-inquire_keyword         = spacing "inquire"         spacing comment;
-integer_keyword         = spacing "integer"         spacing comment;
-intent_keyword          = spacing "intent"          spacing comment;
-interface_keyword       = spacing "interface"       spacing comment;
-intrinsic_keyword       = spacing "intrinsic"       spacing comment;
-iolength_keyword        = spacing "iolength"        spacing comment;
-iomsg_keyword           = spacing "iomsg"           spacing comment;
-iostat_keyword          = spacing "iostat"          spacing comment;
-is_keyword              = spacing "is"              spacing comment;
-kind_keyword            = spacing "kind"            spacing comment;
-length_keyword          = spacing "len"             spacing comment;
-logical_keyword         = spacing "logical"         spacing comment;
-module_keyword          = spacing "module"          spacing comment;
-name_keyword            = spacing "name"            spacing comment;
-named_keyword           = spacing "named"           spacing comment;
-namelist_keyword        = spacing "namelist"        spacing comment;
-nextrec_keyword         = spacing "nextrec"         spacing comment;
-nml_keyword             = spacing "nml"             spacing comment;
-non_intrinsic_keyword   = spacing "non intrinsic"   spacing comment;
-non_overridable_keyword = spacing "non_overridable" spacing comment;
-none_keyword            = spacing "none"            spacing comment;
-nopass_keyword          = spacing "nopass"          spacing comment;
-nullify_keyword         = spacing "nullify"         spacing comment;
-number_keyword          = spacing "number"          spacing comment;
-only_keyword            = spacing "only"            spacing comment;
-open_keyword            = spacing "open"            spacing comment;
-opened_keyword          = spacing "opened"          spacing comment;
-operator_keyword        = spacing "operator"        spacing comment;
-optional_keyword        = spacing "optional"        spacing comment;
-out_keyword             = spacing "out"             spacing comment;
-pad_keyword             = spacing "pad"             spacing comment;
-parameter_keyword       = spacing "parameter"       spacing comment;
-pass_keyword            = spacing "pass"            spacing comment;
-pending_keyword         = spacing "pending"         spacing comment;
-pointer_keyword         = spacing "pointer"         spacing comment;
-pos_keyword             = spacing "pos"             spacing comment;
-position_keyword        = spacing "position"        spacing comment;
-print_keyword           = spacing "print"           spacing comment;
-private_keyword         = spacing "private"         spacing comment;
-procedure_keyword       = spacing "procedure"       spacing comment;
-program_keyword         = spacing "program"         spacing comment;
-protected_keyword       = spacing "protected"       spacing comment;
-public_keyword          = spacing "public"          spacing comment;
-pure_keyword            = spacing "pure"            spacing comment;
-read_keyword            = spacing "read"            spacing comment;
-readwrite_keyword       = spacing "readwrite"       spacing comment;
-real_keyword            = spacing "real"            spacing comment;
-rec_keyword             = spacing "rec"             spacing comment;
-recl_keyword            = spacing "recl"            spacing comment;
-recursive_keyword       = spacing "recursive"       spacing comment;
-result_keyword          = spacing "result"          spacing comment;
-return_keyword          = spacing "return"          spacing comment;
-rewind_keyword          = spacing "rewind"          spacing comment;
-round_keyword           = spacing "round"           spacing comment;
-save_keyword            = spacing "save"            spacing comment;
-select_keyword          = spacing "select"          spacing comment;
-sequence_keyword        = spacing "sequence"        spacing comment;
-sequential_keyword      = spacing "sequential"      spacing comment;
-sign_keyword            = spacing "sign"            spacing comment;
-size_keyword            = spacing "size"            spacing comment;
-source_keyword          = spacing "source"          spacing comment;
-stat_keyword            = spacing "stat"            spacing comment;
-status_keyword          = spacing "status"          spacing comment;
-stop_keyword            = spacing "stop"            spacing comment;
-stream_keyword          = spacing "stream"          spacing comment;
-subroutine_keyword      = spacing "subroutine"      spacing comment;
-target_keyword          = spacing "target"          spacing comment;
-then_keyword            = spacing "then"            spacing comment;
-type_keyword            = spacing "type"            spacing comment;
-unformatted_keyword     = spacing "unformatted"     spacing comment;
-unit_keyword            = spacing "unit"            spacing comment;
-use_keyword             = spacing "use"             spacing comment;
-value_keyword           = spacing "value"           spacing comment;
-volatile_keyword        = spacing "volatile"        spacing comment;
-wait_keyword            = spacing "wait"            spacing comment;
-where_keyword           = spacing "where"           spacing comment;
-while_keyword           = spacing "while"           spacing comment;
-write_keyword           = spacing "write"           spacing comment;
+abstract_keyword        = "abstract"        continuation;
+access_keyword          = "access"          continuation;
+action_keyword          = "action"          continuation;
+advance_keyword         = "advance"         continuation;
+allocatable_keyword     = "allocatable"     continuation;
+allocate_keyword        = "allocate"        continuation;
+assignment_keyword      = "assignment"      continuation;
+associate_keyword       = "associate"       continuation;
+asynchronous_keyword    = "asynchronous"    continuation;
+backspace_keyword       = "backspace"       continuation;
+bind_keyword            = "bind"            continuation;
+blank_keyword           = "blank"           continuation;
+c_keyword               = "c"               continuation;
+call_keyword            = "call"            continuation;
+case_keyword            = "case"            continuation;
+character_keyword       = "character"       continuation;
+class_keyword           = "class"           continuation;
+close_keyword           = "close"           continuation;
+common_keyword          = "common"          continuation;
+complex_keyword         = "complex"         continuation;
+contains_keyword        = "contains"        continuation;
+continue_keyword        = "continue"        continuation;
+cycle_keyword           = "cycle"           continuation;
+data_keyword            = "data"            continuation;
+deallocate_keyword      = "deallocate"      continuation;
+decimal_keyword         = "decimal"         continuation;
+default_keyword         = "default"         continuation;
+deffered_keyword        = "deferred"        continuation;
+delim_keyword           = "delim"           continuation;
+dimension_keyword       = "dimension"       continuation;
+direct_keyword          = "direct"          continuation;
+do_keyword              = "do"              continuation;
+elemental_keyword       = "elemental"       continuation;
+else_keyword            = "else"            continuation;
+encoding_keyword        = "encoding"        continuation;
+end_keyword             = "end"             continuation;
+entry_keyword           = "entry"           continuation;
+enum_keyword            = "enum"            continuation;
+enumerator_keyword      = "enumerator"      continuation;
+eor_keyword             = "eor"             continuation;
+equivalence_keyword     = "equivalence"     continuation;
+err_keyword             = "err"             continuation;
+errmsg_keyword          = "errmsg"          continuation;
+exist_keyword           = "exist"           continuation;
+exit_keyword            = "exit"            continuation;
+extends_keyword         = "extends"         continuation;
+external_keyword        = "external"        continuation;
+file_keyword            = "file"            continuation;
+final_keyword           = "final"           continuation;
+flush_keyword           = "flush"           continuation;
+fmt_keyword             = "fmt"             continuation;
+forall_keyword          = "forall"          continuation;
+form_keyword            = "form"            continuation;
+format_keyword          = "format"          continuation;
+formatted_keyword       = "formatted"       continuation;
+function_keyword        = "function"        continuation;
+generic_keyword         = "generic"         continuation;
+id_keyword              = "id"              continuation;
+if_keyword              = "if"              continuation;
+implicit_keyword        = "implicit"        continuation;
+import_keyword          = "import"          continuation;
+in_keyword              = "in"              continuation;
+inquire_keyword         = "inquire"         continuation;
+integer_keyword         = "integer"         continuation;
+intent_keyword          = "intent"          continuation;
+interface_keyword       = "interface"       continuation;
+intrinsic_keyword       = "intrinsic"       continuation;
+iolength_keyword        = "iolength"        continuation;
+iomsg_keyword           = "iomsg"           continuation;
+iostat_keyword          = "iostat"          continuation;
+is_keyword              = "is"              continuation;
+kind_keyword            = "kind"            continuation;
+length_keyword          = "len"             continuation;
+logical_keyword         = "logical"         continuation;
+module_keyword          = "module"          continuation;
+name_keyword            = "name"            continuation;
+named_keyword           = "named"           continuation;
+namelist_keyword        = "namelist"        continuation;
+nextrec_keyword         = "nextrec"         continuation;
+nml_keyword             = "nml"             continuation;
+non_intrinsic_keyword   = "non intrinsic"   continuation;
+non_overridable_keyword = "non_overridable" continuation;
+none_keyword            = "none"            continuation;
+nopass_keyword          = "nopass"          continuation;
+nullify_keyword         = "nullify"         continuation;
+number_keyword          = "number"          continuation;
+only_keyword            = "only"            continuation;
+open_keyword            = "open"            continuation;
+opened_keyword          = "opened"          continuation;
+operator_keyword        = "operator"        continuation;
+optional_keyword        = "optional"        continuation;
+out_keyword             = "out"             continuation;
+pad_keyword             = "pad"             continuation;
+parameter_keyword       = "parameter"       continuation;
+pass_keyword            = "pass"            continuation;
+pending_keyword         = "pending"         continuation;
+pointer_keyword         = "pointer"         continuation;
+pos_keyword             = "pos"             continuation;
+position_keyword        = "position"        continuation;
+print_keyword           = "print"           continuation;
+private_keyword         = "private"         continuation;
+procedure_keyword       = "procedure"       continuation;
+program_keyword         = "program"         continuation;
+protected_keyword       = "protected"       continuation;
+public_keyword          = "public"          continuation;
+pure_keyword            = "pure"            continuation;
+read_keyword            = "read"            continuation;
+readwrite_keyword       = "readwrite"       continuation;
+real_keyword            = "real"            continuation;
+rec_keyword             = "rec"             continuation;
+recl_keyword            = "recl"            continuation;
+recursive_keyword       = "recursive"       continuation;
+result_keyword          = "result"          continuation;
+return_keyword          = "return"          continuation;
+rewind_keyword          = "rewind"          continuation;
+round_keyword           = "round"           continuation;
+save_keyword            = "save"            continuation;
+select_keyword          = "select"          continuation;
+sequence_keyword        = "sequence"        continuation;
+sequential_keyword      = "sequential"      continuation;
+sign_keyword            = "sign"            continuation;
+size_keyword            = "size"            continuation;
+source_keyword          = "source"          continuation;
+stat_keyword            = "stat"            continuation;
+status_keyword          = "status"          continuation;
+stop_keyword            = "stop"            continuation;
+stream_keyword          = "stream"          continuation;
+subroutine_keyword      = "subroutine"      continuation;
+target_keyword          = "target"          continuation;
+then_keyword            = "then"            continuation;
+type_keyword            = "type"            continuation;
+unformatted_keyword     = "unformatted"     continuation;
+unit_keyword            = "unit"            continuation;
+use_keyword             = "use"             continuation;
+value_keyword           = "value"           continuation;
+volatile_keyword        = "volatile"        continuation;
+wait_keyword            = "wait"            continuation;
+where_keyword           = "where"           continuation;
+while_keyword           = "while"           continuation;
+write_keyword           = "write"           continuation;
 
 keywords =
            "abstract"
@@ -550,16 +546,16 @@ action_stmt = allocate_stmt
  * section 3.1 - processor character set
  *
  * ************************************************************************** *)
-letter = /[a-zA-Z]/
-       ;
-digit = /[0-9]/
-      ;
+letter = /[a-zA-Z]/ ;
+
+digit = /[0-9]/ ;
+
+space = /[ \t]/ ;
 
 (* R303 *)
-underscore = /_/
-           ;
+underscore = /_/ ;
 
-(* table 3.1 *)
+(* table 3.1 FIXME(bja, 201501) replace this mess with rules/quoted characters *)
 special_character = ?/[ =\\+-\\*/\\\\(\\)\\[\\]\\{\\},\\.:;!\\"%&~<>?\\'\\`^|$#@]/? ;
 (*" (* fix broken syntax highlighting *)
 
@@ -570,9 +566,11 @@ character = alphanumeric_character
           ;
 
 (* R302 *)
-alphanumeric_character = letter
-                       | digit
-                       | underscore
+alphanumeric_character = !end_of_line
+                       ( letter
+                         | digit
+                         | underscore
+                       )
                        ;
 
 (* **************************************************************************
@@ -581,9 +579,9 @@ alphanumeric_character = letter
  *
  * ************************************************************************** *)
 (* R304, FIXME(bja, 201412) C301 for R304 - max name length is 64 characters *)
-name = !keywords {spacing}*
+name = !keywords
      letter
-     { alphanumeric_character }+
+     { alphanumeric_character }*
      ;
 
 (*  section 3.2.2 - constants  *)
@@ -857,7 +855,7 @@ derived_type_def = derived_type_stmt
 type_name = name
 ;
 
-derived_type_stmt = type_keyword [ [ comma type_attr_spec_list ] coloncolon ] type_name [ lparen type_param_name_list rparen ]
+derived_type_stmt = type_keyword [ [ comma type_attr_spec_list ] coloncolon ] type_name [ lparen type_param_name_list rparen ] eos
                   ;
 
 (* R431 : C426 *)
@@ -879,15 +877,15 @@ private_or_sequence = private_components_stmt
                     ;
 
 (* R433 : C431 - if typename, then it much match the name in derived type *)
-end_type_stmt = end_type_keyword [ type_name ]
+end_type_stmt = end_type_keyword [ type_name ] eos
                    ;
 
 (* R434 : C432 C433 *)
-sequence_stmt = sequence_keyword
+sequence_stmt = sequence_keyword eos
               ;
 
 (* R435 : C434 C435 *)
-type_param_def_stmt = integer_keyword [ kind_selector ] comma type_param_attr_spec coloncolon type_param_decl_list
+type_param_def_stmt = integer_keyword [ kind_selector ] comma type_param_attr_spec coloncolon type_param_decl_list eos
                     ;
 
 (* R436 *)
@@ -918,7 +916,7 @@ component_def_stmt = data_component_def_stmt
                    ;
 
 (* R440 : C436 C437 C438 C439 C440 C441 C443 C446 C447 *)
-data_component_def_stmt = declaration_type_spec [ [ comma component_attr_spec_list ] coloncolon ] component_decl_list
+data_component_def_stmt = declaration_type_spec [ [ comma component_attr_spec_list ] coloncolon ] component_decl_list eos
                         ;
 
 (* R441 *)
@@ -954,7 +952,7 @@ component_initialization = initialization_expr
 
 
 (* R445 : C448, C449, C450, C451, C452*)
-proc_component_def_stmt = procedure_keyword lparen [ proc_interface ] rparen comma proc_component_attr_spec_list coloncolon proc_decl_list
+proc_component_def_stmt = procedure_keyword lparen [ proc_interface ] rparen comma proc_component_attr_spec_list coloncolon proc_decl_list eos
                         ;
 
 (* R446 *)
@@ -972,7 +970,7 @@ arg_name = name
 
 
 (* R447 : C454 *)
-private_components_stmt = private_keyword
+private_components_stmt = private_keyword eos
                         ;
 
 
@@ -980,13 +978,14 @@ private_components_stmt = private_keyword
 type_bound_procedure_part = contains_stmt [ binding_private_stmt ] { proc_binding_stmt }+
                           ;
 (* R449 *)
-binding_private_stmt = private_keyword
+binding_private_stmt = private_keyword eos
                      ;
 
 (* R450 *)
-proc_binding_stmt = specific_binding
+proc_binding_stmt = ( specific_binding
                   | generic_binding
-                  | final_binding
+                  | final_binding )
+                  eos
                   ;
 
 (* R451 : C456, C457, C458, C466, C467, C471, C472 *)
@@ -1063,11 +1062,11 @@ enum_def = enum_def_stmt { enumerator_def_stmt }+
          ;
 
 (* R461 *)
-enum_def_stmt = enum_keyword comma bind_keyword lparen c_keyword rparen
+enum_def_stmt = enum_keyword comma bind_keyword lparen c_keyword rparen eos
               ;
 
 (* R462 : C492 *)
-enumerator_def_stmt = enumerator_keyword [ coloncolon ] enumerator_list
+enumerator_def_stmt = enumerator_keyword [ coloncolon ] enumerator_list eos
                     ;
 
 (* R463 *)
@@ -1078,7 +1077,7 @@ enumerator = named_constant [ equal scalar_int_initialization_expr ]
            ;
 
 (* R464 *)
-end_enum_stmt = end_enum_keyword
+end_enum_stmt = end_enum_keyword eos
               ;
 
 (* R465 *)
@@ -1125,7 +1124,7 @@ ac_do_variable = scalar_int_variable
  *
  * ************************************************************************** *)
 (* R501 : C507_C519 C522 C523 C526_C530 C532 C533 C535 C536 *)
-type_declaration_stmt = declaration_type_spec [ { comma attr_spec }* coloncolon ] entity_decl_list
+type_declaration_stmt = declaration_type_spec [ { comma attr_spec }* coloncolon ] entity_decl_list eos
                       ;
 (* R502 : C501 C502 C503 *)
 declaration_type_spec = intrinsic_type_spec
@@ -1236,7 +1235,7 @@ intent_spec = in_keyword | out_keyword | in_out_keyword
             ;
 
 (* R518 : C548 *)
-access_stmt = access_spec [ [ coloncolon ] access_id_list ]
+access_stmt = access_spec [ [ coloncolon ] access_id_list ] eos
             ;
 (* R519 : C549 *)
 access_id_list = access_id { comma access_id }*
@@ -1247,15 +1246,15 @@ access_id = use_name
           ;
 
 (* R520 *)
-allocatable_stmt = allocatable_keyword [ coloncolon ] object_name [ lparen deferred_shape_spec_list rparen ] { comma object_name [ lparen deferred_shape_spec_list rparen ] }*
+allocatable_stmt = allocatable_keyword [ coloncolon ] object_name [ lparen deferred_shape_spec_list rparen ] { comma object_name [ lparen deferred_shape_spec_list rparen ] }* eos
                  ;
 
 (* R521 *)
-asynchronous_stmt = asynchronous_keyword [ coloncolon ] object_name_list
+asynchronous_stmt = asynchronous_keyword [ coloncolon ] object_name_list eos
                   ;
 
 (* R522 : C550 C551 C552 *)
-bind_stmt = language_binding_spec [ coloncolon ] bind_entity_list
+bind_stmt = language_binding_spec [ coloncolon ] bind_entity_list eos
           ;
 
 (* R523 *)
@@ -1350,11 +1349,11 @@ intent_stmt = intent_keyword lparen intent_spec rparen [ coloncolon ] dummy_arg_
             ;
 
 (* R537 *)
-optional_stmt = optional_keyword [ coloncolon ] dummy_arg_name_list
+optional_stmt = optional_keyword [ coloncolon ] dummy_arg_name_list eos
               ;
 
 (* R538 *)
-parameter_stmt = parameter_keyword lparen named_constant_def_list rparen
+parameter_stmt = parameter_keyword lparen named_constant_def_list rparen eos
                ;
 
 (* R539 *)
@@ -1365,7 +1364,7 @@ named_constant_def = named_constant equal initialization_expr
                    ;
 
 (* R540 *)
-pointer_stmt = pointer_keyword [ coloncolon ] pointer_decl_list
+pointer_stmt = pointer_keyword [ coloncolon ] pointer_decl_list eos
              ;
 
 (* R541 : C568 *)
@@ -1380,11 +1379,11 @@ proc_entity_name = name
 ;
 
 (* R542 *)
-protected_stmt = protected_keyword [ coloncolon ] entity_name_list
+protected_stmt = protected_keyword [ coloncolon ] entity_name_list eos
                ;
 
 (* R543 : C570 *)
-save_stmt = save_keyword [ [ coloncolon ] saved_entity_list ]
+save_stmt = save_keyword [ [ coloncolon ] saved_entity_list ] eos
           ;
 
 (* R544 *)
@@ -1401,20 +1400,21 @@ proc_pointer_name = name
                   ;
 
 (* R546 *)
-target_stmt = target_keyword [ coloncolon ] object_name [ lparen array_spec rparen ] { comma object_name [ lparen array_spec rparen ] }*
+target_stmt = target_keyword [ coloncolon ] object_name [ lparen array_spec rparen ] { comma object_name [ lparen array_spec rparen ] }* eos
             ;
 
 (* R547 *)
-value_stmt = value_keyword [ coloncolon ] dummy_arg_name_list
+value_stmt = value_keyword [ coloncolon ] dummy_arg_name_list eos
            ;
 
 (* R548 *)
-volatile_stmt =  volatile_keyword [ coloncolon ] object_name_list
+volatile_stmt =  volatile_keyword [ coloncolon ] object_name_list eos
               ;
 
 (* R549 : C571 *)
-implicit_stmt =  implicit_keyword implicit_spec_list
-              | (implicit_keyword none_keyword)
+implicit_stmt =  (implicit_keyword implicit_spec_list
+              | (implicit_keyword none_keyword) )
+              eos
               ;
 
 (* R550 *)
@@ -1432,7 +1432,7 @@ letter_spec = letter [ "–" letter ]
             ;
 
 (* R552 : C573 C575 *)
-namelist_stmt = namelist_keyword forwardslash namelist_group_name forwardslash namelist_group_object_list { [ comma ] forwardslash namelist_group_name forwardslash namelist_group_object_list }*
+namelist_stmt = namelist_keyword forwardslash namelist_group_name forwardslash namelist_group_object_list { [ comma ] forwardslash namelist_group_name forwardslash namelist_group_object_list }* eos
               ;
 
 (* R553 : C574 *)
@@ -1446,7 +1446,7 @@ namelist_group_name = name
 ;
 
 (* R554 *)
-equivalence_stmt = equivalence_keyword equivalence_set_list
+equivalence_stmt = equivalence_keyword equivalence_set_list eos
                  ;
 
 (* R555 : C580_C580 *)
@@ -1466,7 +1466,7 @@ equivalence_object = variable_name
                    ;
 
 (* R557 *)
-common_stmt = common_keyword [ forwardslash [ common_block_name ] forwardslash ] common_block_object_list { [ comma ] forwardslash [ common_block_name ] forwardslash common_block_object_list }*
+common_stmt = common_keyword [ forwardslash [ common_block_name ] forwardslash ] common_block_object_list { [ comma ] forwardslash [ common_block_name ] forwardslash common_block_object_list }* eos
             ;
 
 common_block_name = name
@@ -2724,15 +2724,16 @@ module = module_stmt
         ;
 
 (* R1105 *)
-module_stmt = module_keyword module_name spacing comment
+module_stmt = module_keyword module_name eos
             ;
 
 module_name = name
             ;
 
 (* R1106 *)
-end_module_stmt = end_keyword
-                | ( end_module_keyword [ module_name ] )
+end_module_stmt = ( end_keyword
+                | ( end_module_keyword [ module_name ] ))
+                eos
                 ;
 
 (* R1107 *)
@@ -2750,7 +2751,7 @@ use_stmt =
          use_keyword [ [ comma module_nature ] coloncolon ] module_name (
              ( comma rename_list )
              | ( comma only_keyword colon [ only_list ] )
-         ) spacing comment
+         ) eos
          ;
 
 (* R1110 *)
@@ -2971,7 +2972,7 @@ function_subprogram = function_stmt
 
 (* R1224 : C1234 C1235 *)
 function_stmt = [ prefix ] function_keyword function_name
-              lparen [ dummy_arg_name_list ] rparen [ suffix ] spacing comment
+              lparen [ dummy_arg_name_list ] rparen [ suffix ] eos
               ;
 
 function_name = name
@@ -3012,7 +3013,7 @@ end_function_stmt =
                   (
                       ( end_function_keyword [ function_name ] )
                       | ( end_keyword [ function_name ] )
-                  ) space comment
+                  ) eos
                   ;
 
 (* R1231 *)
@@ -3024,7 +3025,7 @@ subroutine_subprogram = subroutine_stmt
                       ;
 (* R1232 : C1247 *)
 subroutine_stmt = [ prefix ] subroutine_keyword subroutine_name
-                [ lparen [ dummy_arg_list ] rparen [ proc_language_binding_spec ] ]  spacing comment
+                [ lparen [ dummy_arg_list ] rparen [ proc_language_binding_spec ] ]  eos
                 ;
 
 subroutine_name = name
@@ -3043,7 +3044,7 @@ end_subroutine_stmt =
                     (
                         ( end_subroutine_keyword [ subroutine_name ] )
                         | ( end_keyword [ subroutine_name ] )
-                    ) spacing comment
+                    ) eos
                     ;
 
 (* R1235 : C1252_C1257 *)
@@ -3054,11 +3055,11 @@ entry_name = name
            ;
 
 (* R1236 : C1258 C1259 *)
-return_stmt = return_keyword [ scalar_int_expr ]
+return_stmt = return_keyword [ scalar_int_expr ] eos
             ;
 
 (* R1237 *)
-contains_stmt = contains_keyword
+contains_stmt = contains_keyword eos
               ;
 
 (* R1238 : C1261_C1265 *)

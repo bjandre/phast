@@ -3,9 +3,12 @@ from fortran_2003 import fortran_2003Parser
 
 def main(filename, startrule, trace=False, whitespace=None, nameguard=None):
     import json
+
+    whitespace = " \t"
+
     with open(filename) as f:
         text = f.read()
-    parser = fortran_2003Parser(parseinfo=False, ignorecase=True, whitespace="") #, eol_comments_re="!.*?")
+    parser = fortran_2003Parser(parseinfo=False, ignorecase=True)
     ast = parser.parse(
         text,
         startrule,
