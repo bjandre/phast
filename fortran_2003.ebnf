@@ -626,7 +626,7 @@ alphanumeric_character = letter
  *
  * ************************************************************************** *)
 (* R304, FIXME(bja, 201412) C301 for R304 - max name length is 64 characters *)
-name = !keywords
+name = 
      letter
      { alphanumeric_character }*
      ;

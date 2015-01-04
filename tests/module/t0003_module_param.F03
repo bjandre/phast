@@ -1,14 +1,16 @@
 module t0003_module_var
 
   integer, public :: coffee
+  integer, public :: cream_use
+  integer, public :: use_sugar
   
 contains
   
-  subroutine foo()
+  subroutine maker()
 
-    real :: cream
+    real :: water
 
-  end subroutine foo
+  end subroutine maker
   
 end module t0003_module_var
 
