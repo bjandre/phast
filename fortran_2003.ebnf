@@ -615,11 +615,9 @@ character = alphanumeric_character
           ;
 
 (* R302 *)
-alphanumeric_character = !end_of_line
-                       ( letter
+alphanumeric_character = letter
                          | digit
                          | underscore
-                       )
                        ;
 
 (* **************************************************************************
@@ -2797,10 +2795,10 @@ module_subprogram = function_subprogram |
 
 (* R1109 : C1108 C1109 C1110 *)
 use_stmt =
-         use_keyword [ [ comma module_nature ] coloncolon ] module_name (
+         use_keyword [ [ comma module_nature ] coloncolon ] module_name {
              ( comma rename_list )
              | ( comma only_keyword colon [ only_list ] )
-         ) eos
+         }* eos 
          ;
 
 (* R1110 *)
