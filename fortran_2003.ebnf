@@ -447,16 +447,14 @@ specification_part = { use_stmt }*
                    { declaration_construct }*
                    ;
 
-(* R205 *)
-implicit_part = { implicit_part_stmt }*
-               implicit_stmt
+(* R205 : NOTE(bja, 201501) R205 and R206 as stated in standard doesn't allow a single implicit stmt (e.g. implicit none). *)
+implicit_part = { implicit_part_stmt }* { implicit_stmt }+
                ;
 
-(* R206 *)
-implicit_part_stmt = implicit_stmt |
-                    parameter_stmt |
-                    format_stmt |
-                    entry_stmt
+(* R206 : *)
+implicit_part_stmt = parameter_stmt
+                    | format_stmt
+                    | entry_stmt
                     ;
 
 (* R207 *)
@@ -1459,9 +1457,10 @@ volatile_stmt =  volatile_keyword [ coloncolon ] object_name_list eos
               ;
 
 (* R549 : C571 *)
-implicit_stmt =  (implicit_keyword implicit_spec_list
-              | (implicit_keyword none_keyword) )
-              eos
+implicit_stmt = (
+                  (implicit_keyword implicit_spec_list)
+                  | (implicit_keyword none_keyword)
+                ) eos
               ;
 
 (* R550 *)
@@ -2622,7 +2621,7 @@ inquire_spec = ( [ unit_keyword equal ] file_unit_number )
  * ************************************************************************** *)
 
 (* R1001 : C1001 *)
-format_stmt = format_keyword format_specification
+format_stmt = format_keyword format_specification eos
             ;
 
 (* R1002 : C1002 *)
@@ -3095,7 +3094,7 @@ end_subroutine_stmt =
                     ;
 
 (* R1235 : C1252_C1257 *)
-entry_stmt = entry_keyword entry_name [ lparen [ dummy_arg_list ] rparen [ suffix ] ]
+entry_stmt = entry_keyword entry_name [ lparen [ dummy_arg_list ] rparen [ suffix ] ] eos
            ;
 
 entry_name = name
