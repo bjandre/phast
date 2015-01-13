@@ -1,3 +1,6 @@
+PARSER = fortran_2003.py
+GRAMMAR = fortran_2003.ebnf
+
 SUBDIRS = \
 	tests
 
@@ -20,13 +23,15 @@ $(SUBDIRS) : FORCE
 	@echo Build complete: $@ : $(shell date)
 endif	
 
+$(PARSER) : $(GRAMMAR)
+	grako -o $@ $<
+
 #
 # all - Make everything in the listed sub directories
 #
-all : $(SUBDIRS)
+all : $(PARSER) $(SUBDIRS)
 
-
-test : $(SUBDIRS)
+test : $(PARSER) $(SUBDIRS)
 
 #
 # clean - Clean up the directory.
