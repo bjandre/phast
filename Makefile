@@ -1,7 +1,7 @@
-PARSER = fortran_2003.py
-GRAMMAR = fortran_2003.ebnf
+SRC_SUBDIRS = \
+	phast
 
-SUBDIRS = \
+TEST_SUBDIRS = \
 	tests
 
 # MAKECMDGOALS is the make option: make 'clobber' or 'all'
@@ -15,28 +15,33 @@ endif
 #
 # macro for executing TARGET in all SUBDIRS
 #
-ifdef SUBDIRS
-$(SUBDIRS) : FORCE
+ifdef SRC_SUBDIRS
+$(SRC_SUBDIRS) : FORCE
 	@if [ -d $@ ]; then \
 		$(MAKE) --directory=$@ $(TARGET); \
 	fi	
 	@echo Build complete: $@ : $(shell date)
 endif	
 
-$(PARSER) : $(GRAMMAR)
-	grako -o $@ $<
+ifdef TEST_SUBDIRS
+$(TEST_SUBDIRS) : FORCE
+	@if [ -d $@ ]; then \
+		$(MAKE) --directory=$@ $(TARGET); \
+	fi	
+	@echo Build complete: $@ : $(shell date)
+endif	
 
 #
 # all - Make everything in the listed sub directories
 #
-all : $(PARSER) $(SUBDIRS)
+all : $(SRC_SUBDIRS)
 
-test : $(PARSER) $(SUBDIRS)
+test : all $(TEST_SUBDIRS)
 
 #
 # clean - Clean up the directory.
 #
-clean : $(SUBDIRS)
+clean : $(SRC_SUBDIRS) $(TEST_SUBDIRS)
 	-rm -f *~ *.CKP *.ln *.BAK *.bak .*.bak \
 		core errs \
 		,* .emacs_* \
@@ -46,8 +51,8 @@ clean : $(SUBDIRS)
 #
 # clobber - Really clean up the directory.
 #
-clobber : clean $(SUBDIRS)
-	-rm -f .Makedepend *.o *.il *.pyc
+clobber : clean $(SRC_SUBDIRS) $(TEST_SUBDIRS)
+	-rm -f .Makedepend *.o *.mod *.il *.pyc
 
 #
 # FORCE - Null rule to force things to happen.

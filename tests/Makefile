@@ -41,7 +41,7 @@ clean : $(SUBDIRS)
 # clobber - Really clean up the directory.
 #
 clobber : clean $(SUBDIRS)
-	-rm -f .Makedepend *.o *.il *.pyc
+	-rm -f .Makedepend *.o *.mod *.il *.pyc
 
 #
 # FORCE - Null rule to force things to happen.
