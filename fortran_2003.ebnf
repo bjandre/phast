@@ -1219,7 +1219,7 @@ object_name = name
             ;
 
 (* R506 *)
-initialization = initialization_expr
+initialization = ( equal initialization_expr )
                | ( arrow null_init )
                ;
 (* R507 : C506 *)
