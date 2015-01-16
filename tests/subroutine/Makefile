@@ -1,6 +1,12 @@
-SUBDIRS = \
-	subroutine \
-	module
+FC=gfortran
+TEST_SRCS = \
+	./t0008_subroutine_dummy_args.F03 \
+	./t0009_subroutine_expression.F03
+
+TEST_OBJS = \
+	$(TEST_SRCS:%.F03=%.o)
+
+TEST_LIBRARIES = libf03testmodule.a
 
 # MAKECMDGOALS is the make option: make 'clobber' or 'all'
 TARGET = $(MAKECMDGOALS)
@@ -22,18 +28,20 @@ $(SUBDIRS) : FORCE
 endif	
 
 #
-# all - Make everything in the listed sub directories
+# Generic rule to generate objects
 #
-all : $(SUBDIRS)
+%.o : %.F03
+	$(FC) -c $(FFLAGS) -o $@ $<
 
-test : $(SUBDIRS) py-unit
+libf03testmodule.a : $(TEST_OBJS)
+	$(AR) $(ARFLAGS) $@ $(TEST_OBJS)
 
-py-unit : FORCE
-	PYTHONPATH="${PYTHONPATH}:.." python -m unittest discover
+#
+# 
+#
+all : $(TEST_LIBRARIES)
 
-py3-unit : FORCE
-	PYTHONPATH="${PYTHONPATH}:.." python3 -m unittest discover
-
+test : $(TEST_LIBRARIES)
 
 #
 # clean - Clean up the directory.
