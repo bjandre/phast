@@ -25,7 +25,7 @@ endif
 #
 all : $(SUBDIRS)
 
-test : $(SUBDIRS) py-unit py3-unit
+test : $(SUBDIRS) py-unit
 
 py-unit : FORCE
 	PYTHONPATH="${PYTHONPATH}:.." python -m unittest discover
