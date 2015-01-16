@@ -5,7 +5,8 @@ TEST_SRCS = \
 	./t0003_module_param.F03 \
 	./t0004_module_use.F03 \
 	./t0005_module_implicit_none.F03 \
-	./t0006_module_dummy_args.F03
+	./t0006_module_dummy_args.F03 \
+	./t0007_minimal_module_fail.F03
 
 TEST_OBJS = \
 	$(TEST_SRCS:%.F03=%.o)

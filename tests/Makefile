@@ -25,7 +25,14 @@ endif
 #
 all : $(SUBDIRS)
 
-test : $(SUBDIRS)
+test : $(SUBDIRS) py-unit py3-unit
+
+py-unit : FORCE
+	PYTHONPATH="${PYTHONPATH}:.." python -m unittest discover
+
+py3-unit : FORCE
+	PYTHONPATH="${PYTHONPATH}:.." python3 -m unittest discover
+
 
 #
 # clean - Clean up the directory.
