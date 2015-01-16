@@ -458,16 +458,16 @@ implicit_part_stmt = parameter_stmt
                     ;
 
 (* R207 *)
-declaration_construct = derived_type_def |
-                       entry_stmt |
-                       enum_def |
-                       format_stmt |
-                       interface_block |
-                       parameter_stmt |
-                       procedure_declaration_stmt |
-                       specification_stmt |
-                       type_declaration_stmt |
-                       stmt_function_stmt
+declaration_construct = derived_type_def
+                      | entry_stmt
+                      | enum_def
+                      | format_stmt
+                      | interface_block
+                      | parameter_stmt
+                      | procedure_declaration_stmt
+                      | specification_stmt
+                      | type_declaration_stmt
+                      | stmt_function_stmt
                        ;
 
 (* R208 *)
@@ -782,31 +782,31 @@ boz_literal_constant = binary_constant
 (* R412 : C *)
 binary_digit = "0" | "1"
              ;
-binary_constant = ("B'" { binary_digit }+ "'")
-                | ('B"' { binary_digit }+ '"')
+binary_constant = ("b'" { binary_digit }+ "'")
+                | ('b"' { binary_digit }+ '"')
                 ;
 
 (* R413 : C *)
 octal_digit = "0" | "1" | "2" | "3"
             | "4" | "5" | "6" | "7"
             ;
-octal_constant = ("O'" { octal_digit }+ "'")
-                | ('O"' { octal_digit }+ '"')
+octal_constant = ("o'" { octal_digit }+ "'")
+                | ('o"' { octal_digit }+ '"')
                 ;
 
 (* R414 *)
-hex_constant = ("Z'" { hex_digit }+ "'")
-                | ('Z"' { hex_digit }+ '"')
+hex_constant = ("z'" { hex_digit }+ "'")
+                | ('z"' { hex_digit }+ '"')
                 ;
 
 (* R415 *)
 hex_digit = digit
-          | "A" | "a"
-          | "B" | "b"
-          | "C" | "c"
-          | "D" | "d"
-          | "E" | "e"
-          | "F" | "f"
+          | "a"
+          | "b"
+          | "c"
+          | "d"
+          | "e"
+          | "f"
           ;
 
 (* R416 *)
@@ -1800,12 +1800,12 @@ level_4_expr = [ level_3_expr rel_op ] level_3_expr
              ;
 
 (* R713 *)
-rel_op = ".EQ." | ".eq." | "=="
-       | ".NE." | ".ne." | "/="
-       | ".LT." | ".lt." | "<"
-       | ".LE." | ".le." | "<="
-       | ".GT." | ".gt." | ">"
-       | ".GE." | ".gt." | ">="
+rel_op = ".eq." | "=="
+       | ".ne." | "/="
+       | ".lt." | "<"
+       | ".le." | "<="
+       | ".gt." | ">"
+       | ".gt." | ">="
        ;
 
 (* R714 : *)
@@ -1826,20 +1826,19 @@ level_5_expr = [ level_5_expr equiv_op ] equiv_operand
 
 
 (* R718 *)
-not_op = ".NOT." | ".not."
+not_op = ".not."
        ;
 
 (* R719 *)
-and_op = ".AND." | ".and."
+and_op = ".and."
        ;
 
 (* R720 *)
-or_op = ".OR." | ".or."
+or_op = ".or."
       ;
 
 (* R721 *)
-equiv_op = ".EQV." | ".eqv."
-         | ".NEQV." | ".neqv."
+equiv_op = ".eqv." | ".neqv."
          ;
 
 
