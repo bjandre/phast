@@ -1784,7 +1784,7 @@ mult_op = asterisk
 
 (* R709 *)
 add_op = plus
-       minus
+       | minus
        ;
 
 (* R710 : *)
