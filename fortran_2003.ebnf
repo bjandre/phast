@@ -824,8 +824,7 @@ significand = (digit_string "." digit_string)
             ;
 
 (* R419 *)
-exponent_letter = "E" | "e"
-                | "D" | "d"
+exponent_letter = "e" | "d"
                 ;
 
 (* R420 *)
