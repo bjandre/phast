@@ -1531,9 +1531,13 @@ common_block_object = ( variable_name [ lparen explicit_shape_spec_list rparen ]
  * section 6
  *
  * ************************************************************************** *)
- (* R601 : C601 *)
- variable = designator
-          ;
+
+(* R601 : C601 *)
+scalar_variable = variable
+                ;
+
+variable = designator
+         ;
 
 (* R602 : C602 *)
 variable_name = name
@@ -1548,15 +1552,15 @@ designator = object_name
            ;
 
 (* R604 : C603 *)
+scalar_logical_variable = logical_variable
+                 ;
+
 logical_variable = variable
                  ;
 
-(* R605 : C604 *)
-scalar_default_logical_variable = default_logical_variable
-;
-
-default_logical_variable = variable
-                         ;
+(* R605 : C604 - removed by F03/0114 corrigenda *)
+(* scalar_default_logical_variable = default_logical_variable ;
+default_logical_variable = variable ; *)
 
 (* R606 : C605 *)
 char_variable = variable
@@ -1931,7 +1935,7 @@ pointer_assignment_stmt = ( data_pointer_object [ lparen bounds_spec_list rparen
 
 (* R736 : C721 C722 *)
 data_pointer_object = variable_name
-                    | ( variable percent data_pointer_component_name )
+                    | ( scalar_variable percent data_pointer_component_name )
                     ;
 
 data_pointer_component_name = name
@@ -1962,7 +1966,7 @@ proc_pointer_object = proc_pointer_name
                     ;
 
 (* R741 : C725 *)
-proc_component_ref = variable percent procedure_component_name
+proc_component_ref = scalar_variable percent procedure_component_name
                    ;
 
 procedure_component_name = name
@@ -2215,7 +2219,7 @@ select_type_stmt = [ select_construct_name colon ] select_type_keyword lparen [ 
 
 (* R823 :  C814 C815 C816 C817 C818 *)
 type_guard_stmt = ( type_keyword is_keyword lparen type_spec rparen [ select_construct_name ] )
-                | ( class_keyword is_keyword lparen type_spec rparen [ select_construct_name ] )
+                | ( class_keyword is_keyword lparen derived_type_spec rparen [ select_construct_name ] )
                 | ( class_keyword default_keyword [ select_construct_name ] )
                 ;
 
@@ -2450,7 +2454,7 @@ io_control_spec = ( [ unit_keyword equal ] io_unit )
                 | ( end_keyword equal label )
                 | ( eor_keyword equal label )
                 | ( err_keyword equal label )
-                | ( id_keyword equal scalar_int_variable )
+                | ( id_keyword equal id_variable )
                 | ( iomsg_keyword equal iomsg_variable )
                 | ( iostat_keyword equal scalar_int_variable )
                 | ( pad_keyword equal scalar_default_char_expr )
@@ -2460,6 +2464,10 @@ io_control_spec = ( [ unit_keyword equal ] io_unit )
                 | ( sign_keyword equal scalar_default_char_expr )
                 | ( size_keyword equal scalar_int_variable )
                 ;
+
+(* R913a: C908a *)
+id_variable = scalar_int_variable
+            ;
 
 (* R914 : C930 *)
 format = default_char_expr
@@ -2585,19 +2593,19 @@ inquire_spec = ( [ unit_keyword equal ] file_unit_number )
              | ( direct_keyword equal scalar_default_char_variable )
              | ( encoding_keyword equal scalar_default_char_variable )
              | ( err_keyword equal label )
-             | ( exist_keyword equal scalar_default_logical_variable )
+             | ( exist_keyword equal scalar_logical_variable )
              | ( form_keyword equal scalar_default_char_variable )
              | ( formatted_keyword equal scalar_default_char_variable )
              | ( id_keyword equal scalar_int_variable )
              | ( iomsg_keyword equal iomsg_variable )
              | ( iostat_keyword equal scalar_int_variable )
              | ( name_keyword equal scalar_default_char_variable )
-             | ( named_keyword equal scalar_default_logical_variable )
+             | ( named_keyword equal scalar_logical_variable )
              | ( nextrec_keyword equal scalar_int_variable )
              | ( number_keyword equal scalar_int_variable )
-             | ( opened_keyword equal scalar_default_logical_variable )
+             | ( opened_keyword equal scalar_logical_variable )
              | ( pad_keyword equal scalar_default_char_variable )
-             | ( pending_keyword equal scalar_default_logical_variable )
+             | ( pending_keyword equal scalar_logical_variable )
              | ( pos_keyword equal scalar_int_variable )
              | ( position_keyword equal scalar_default_char_variable )
              | ( read_keyword equal scalar_default_char_variable )
