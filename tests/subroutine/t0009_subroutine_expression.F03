@@ -1,9 +1,6 @@
-subroutine foo(bar, baz)
-  ! some function
-  integer, intent(in) :: bar ! some input
-  real, intent(out) :: baz ! some output
+subroutine foo()
 
-  real :: alice, eve
+  real :: alice
 
   alice = 0.0
   
