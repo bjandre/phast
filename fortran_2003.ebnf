@@ -42,7 +42,7 @@ lines...? *)
 
 rparen       = ")"      (continuation | eos);
 lparen       = "(" !"/" continuation ;
-forwardslash = "/"      continuation ;
+forwardslash = "/" !")" continuation ;
 comma        = ","      continuation ;
 colon        = ":" !":" continuation ;
 coloncolon   = "::"     continuation ;
@@ -575,20 +575,25 @@ space = /[ \t]/ ;
 (* R303 *)
 underscore = /_/ ;
 
-(* table 3.1 *)
+(* table 3.1 
+
+NOTE(bja, 201501) add '=', ':', '/', '(/' here manualy because rule includes a
+check for invalid combanitions in statements that are valid in
+comments!
+ *)
 special_character = space
-                  | equal
+                  | "="
                   | plus
                   | minus
                   | asterisk
-                  | forwardslash
+                  | "/"
                   | backslash
-                  | lparen | rparen
+                  | "(" | rparen
                   | lsquare | rsquare
                   | lcurly | rcurly
                   | comma
                   | decimal_point
-                  | colon
+                  | ":"
                   ! semicolon
                   | exclamation_point
                   | quote

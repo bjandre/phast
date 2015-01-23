@@ -38,6 +38,11 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNone(ast)
 
+    def test_subroutine_comment_special_chars(self):
+        filename = "{0}/subroutine_comment_special_chars.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
     def test_subroutine_initialization_expression(self):
         filename = "{0}/subroutine_initialization_expression.F03".format(self.test_dir)
         ast = self.generate_ast(filename)

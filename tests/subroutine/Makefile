@@ -1,5 +1,6 @@
 FC=gfortran
 TEST_SRCS = \
+	./subroutine_comment_special_chars.F03 \
 	./subroutine_initialization_expression.F03 \
 	./subroutine_parameter.F03 \
 	./subroutine_assignment_statement.F03 \
