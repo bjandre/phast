@@ -1728,7 +1728,7 @@ pointer_object = variable_name
                ;
 
 (* R635 : C635 *)
-deallocate_stmt = deallocate_keyword lparen allocate_object_list [ comma dealloc_opt_list ] rparen
+deallocate_stmt = deallocate_keyword lparen allocate_object_list [ comma dealloc_opt_list ] rparen eos
                 ;
 
 
@@ -1937,9 +1937,9 @@ assignment_stmt = variable equal expr eos
                 ;
 
 (* R735 : C716 C717 C718 C719 C720 *)
-pointer_assignment_stmt = ( data_pointer_object [ lparen bounds_spec_list rparen ] arrow data_target )
+pointer_assignment_stmt = ( ( data_pointer_object [ lparen bounds_spec_list rparen ] arrow data_target )
                         | ( data_pointer_object lparen bounds_remapping_list rparen arrow data_target )
-                        | ( proc_pointer_object arrow proc_target )
+                        | ( proc_pointer_object arrow proc_target ) ) eos
                         ;
 
 (* R736 : C721 C722 *)
@@ -1990,7 +1990,7 @@ proc_target = expr
 
 
 (* R743 : *)
-where_stmt = where_keyword lparen mask_expr rparen where_assignment_stmt
+where_stmt = where_keyword lparen mask_expr rparen where_assignment_stmt eos
            ;
 
 (* R744 : C730 *)
@@ -2005,7 +2005,7 @@ where_construct = where_construct_stmt
 where_construct_name = name
                      ;
 
-where_construct_stmt = [ where_construct_name colon ] where_keyword lparen mask_expr rparen
+where_construct_stmt = [ where_construct_name colon ] where_keyword lparen mask_expr rparen eos
                      ;
 
 (* R746 : C731 *)
@@ -2111,24 +2111,24 @@ if_construct = if_then_stmt
              ;
 
 (* R803 : *)
-if_then_stmt = [ if_construct_name colon ] if_keyword lparen scalar_logical_expr rparen then_keyword
+if_then_stmt = [ if_construct_name colon ] if_keyword lparen scalar_logical_expr rparen then_keyword eos
              ;
 
 (* R804 : *)
-else_if_stmt = else_if_keyword lparen scalar_logical_expr rparen then_keyword [ if_construct_name ]
+else_if_stmt = else_if_keyword lparen scalar_logical_expr rparen then_keyword [ if_construct_name ] eos
              ;
 
 (* R805 : *)
-else_stmt = else_keyword [ if_construct_name ]
+else_stmt = else_keyword [ if_construct_name ] eos
           ;
 
 (* R806 : *)
-end_if_stmt = end_if_keyword [ if_construct_name ]
+end_if_stmt = end_if_keyword [ if_construct_name ] eos
             ;
 
 
 (* R807 : C802 *)
-if_stmt = if_keyword lparen scalar_logical_expr rparen action_stmt
+if_stmt = if_keyword lparen scalar_logical_expr rparen action_stmt eos
         ;
 
 
@@ -2996,7 +2996,7 @@ call_stmt = call_keyword procedure_designator [ lparen [ actual_arg_spec_list ] 
 (* R1219 : C1223 C1224 *)
 procedure_designator = procedure_name
                      | proc_component_ref
-                     | data_ref percent binding_name
+                     | ( data_ref percent binding_name )
                      ;
 
 procedure_name_list =  procedure_name { comma procedure_name }*
