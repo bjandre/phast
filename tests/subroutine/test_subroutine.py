@@ -43,8 +43,28 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
-    def test_0009(self):
-        filename = "{0}/t0009_subroutine_expression.F03".format(self.test_dir)
+    def test_subroutine_initialization_expression(self):
+        filename = "{0}/subroutine_initialization_expression.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subroutine_parameter(self):
+        filename = "{0}/subroutine_initialization_expression.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subroutine_assignment_statement(self):
+        filename = "{0}/subroutine_assignment_statement.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subroutine_implicit_none_assignment(self):
+        filename = "{0}/subroutine_implicit_none_assignment.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subroutine_implicit_none_assignment_comments(self):
+        filename = "{0}/subroutine_implicit_none_assignment_comments.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 

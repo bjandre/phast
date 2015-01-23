@@ -1,7 +1,11 @@
 FC=gfortran
 TEST_SRCS = \
 	./t0008_subroutine_dummy_args.F03 \
-	./t0009_subroutine_expression.F03
+	./subroutine_initialization_expression.F03 \
+	./subroutine_parameter.F03 \
+	./subroutine_assignment_statement.F03 \
+	./subroutine_implicit_none_assignment.F03 \
+	./subroutine_implicit_none_assignment_comments.F03 \
 
 TEST_OBJS = \
 	$(TEST_SRCS:%.F03=%.o)

@@ -639,9 +639,9 @@ constant = literal_constant
          ;
 
 (* R306 *)
-literal_constant = int_literal_constant
+literal_constant = complex_literal_constant
                  | real_literal_constant
-                 | complex_literal_constant
+                 | int_literal_constant
                  | logical_literal_constant
                  | char_literal_constant
                  | boz_literal_constant
@@ -1746,14 +1746,14 @@ dealloc_opt = stat_opt
  *
  * ************************************************************************** *)
 (* R701 : C701 C702 *)
-primary = constant
+primary = function_reference
         | designator
         | array_constructor
         | structure_constructor
-        | function_reference
+        | constant
         | type_param_inquiry
         | type_param_name
-        | lparen expr rparen
+        | (lparen expr rparen)
         ;
 
 (* R702 *)
@@ -1933,7 +1933,7 @@ logical_initialization_expr = logical_expr
                             ;
 
 (* R734 : C715 *)
-assignment_stmt = variable equal expr
+assignment_stmt = variable equal expr eos
                 ;
 
 (* R735 : C716 C717 C718 C719 C720 *)
