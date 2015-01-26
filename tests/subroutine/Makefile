@@ -6,7 +6,8 @@ TEST_SRCS = \
 	./subroutine_assignment_statement.F03 \
 	./subroutine_implicit_none_assignment.F03 \
 	./subroutine_implicit_none_assignment_comments.F03 \
-	./subroutine_dummy_args.F03 
+	./subroutine_dummy_args.F03 \
+	./subroutine_call_dummy_args.F03
 
 TEST_OBJS = \
 	$(TEST_SRCS:%.F03=%.o)
