@@ -13,7 +13,7 @@ class phast_module(unittest.TestCase):
         self.parser = fortran_2003Parser(parseinfo=False, ignorecase=True, trace_length=512)
         self.text = None
         self.ast = None
-        self.test_dir = "subroutine"
+        self.test_dir = "subprogram"
 
     def tearDown(self):
         pass
@@ -38,68 +38,51 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNone(ast)
 
-    def test_subroutine_comment_special_chars(self):
-        filename = "{0}/subroutine_comment_special_chars.F03".format(self.test_dir)
+    def test_subprogram_comment_special_chars(self):
+        filename = "{0}/subprogram_comment_special_chars.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    def test_subroutine_initialization_expression(self):
-        filename = "{0}/subroutine_initialization_expression.F03".format(self.test_dir)
+    def test_subprogram_initialization_expression(self):
+        filename = "{0}/subprogram_initialization_expression.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    def test_subroutine_parameter(self):
-        filename = "{0}/subroutine_initialization_expression.F03".format(self.test_dir)
+    def test_subprogram_parameter(self):
+        filename = "{0}/subprogram_initialization_expression.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    def test_subroutine_assignment_statement(self):
-        filename = "{0}/subroutine_assignment_statement.F03".format(self.test_dir)
+    def test_subprogram_assignment_statement(self):
+        filename = "{0}/subprogram_assignment_statement.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    def test_subroutine_implicit_none_assignment(self):
-        filename = "{0}/subroutine_implicit_none_assignment.F03".format(self.test_dir)
+    def test_subprogram_implicit_none_assignment(self):
+        filename = "{0}/subprogram_implicit_none_assignment.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    def test_subroutine_implicit_none_assignment_comments(self):
-        filename = "{0}/subroutine_implicit_none_assignment_comments.F03".format(self.test_dir)
+    def test_subprogram_implicit_none_assignment_comments(self):
+        filename = "{0}/subprogram_implicit_none_assignment_comments.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    def test_subroutine_dummy_args(self):
-        filename = "{0}/subroutine_dummy_args.F03".format(self.test_dir)
+    def test_subprogram_dummy_args(self):
+        filename = "{0}/subprogram_dummy_args.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
-    def test_subroutine_3statements(self):
-        filename = "{0}/subroutine_3statements.F03".format(self.test_dir)
+    def test_subprogram_3statements(self):
+        filename = "{0}/subprogram_3statements.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
-    def test_subroutine_function(self):
-        filename = "{0}/subroutine_function.F03".format(self.test_dir)
+    def test_subprogram_function(self):
+        filename = "{0}/subprogram_function.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-# NOTE(bja, 2015-02) these are invalid tests for subroutine, need to be moved to module
-#    def test_subroutine_call_function(self):
-#        filename = "{0}/subroutine_call_function.F03".format(self.test_dir)
-#        ast = self.generate_ast(filename)
-#        self.assertIsNotNone(ast)
-#
-#    def test_subroutine_call_dummy_args(self):
-#        filename = "{0}/subroutine_call_dummy_args.F03".format(self.test_dir)
-#        ast = self.generate_ast(filename)
-#        self.assertIsNotNone(ast)
-#
-#    def test_subroutine_call_function_call_procedure(self):
-#        filename = "{0}/subroutine_call_function_call_procedure.F03".format(self.test_dir)
-#        ast = self.generate_ast(filename)
-#        self.assertIsNotNone(ast)
-
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,5 +1,5 @@
 SUBDIRS = \
-	subroutine \
+	subprogram \
 	module
 
 # MAKECMDGOALS is the make option: make 'clobber' or 'all'
