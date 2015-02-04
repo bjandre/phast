@@ -527,7 +527,7 @@ executable_construct = action_stmt
 (* R214 : NOTE(bja, 201412) per C201, end_function_stmt,
 end_program_stmt and end_subroutine_stmt removed. *)
 
-action_stmt = allocate_stmt
+action_stmt = ( allocate_stmt
             | assignment_stmt
             | backspace_stmt
             | call_stmt
@@ -557,7 +557,7 @@ action_stmt = allocate_stmt
             | where_stmt
             | write_stmt
             | arithmetic_if_stmt
-            | computed_goto_stmt
+            | computed_goto_stmt ) eos
             ;
 
 
@@ -1733,7 +1733,7 @@ pointer_object = variable_name
                ;
 
 (* R635 : C635 *)
-deallocate_stmt = deallocate_keyword lparen allocate_object_list [ comma dealloc_opt_list ] rparen eos
+deallocate_stmt = deallocate_keyword lparen allocate_object_list [ comma dealloc_opt_list ] rparen
                 ;
 
 
@@ -1942,9 +1942,9 @@ assignment_stmt = variable equal expr eos
                 ;
 
 (* R735 : C716 C717 C718 C719 C720 *)
-pointer_assignment_stmt = ( ( data_pointer_object [ lparen bounds_spec_list rparen ] arrow data_target )
+pointer_assignment_stmt = ( data_pointer_object [ lparen bounds_spec_list rparen ] arrow data_target )
                         | ( data_pointer_object lparen bounds_remapping_list rparen arrow data_target )
-                        | ( proc_pointer_object arrow proc_target ) ) eos
+                        | ( proc_pointer_object arrow proc_target ) 
                         ;
 
 (* R736 : C721 C722 *)
@@ -1995,7 +1995,7 @@ proc_target = expr
 
 
 (* R743 : *)
-where_stmt = where_keyword lparen mask_expr rparen where_assignment_stmt eos
+where_stmt = where_keyword lparen mask_expr rparen where_assignment_stmt
            ;
 
 (* R744 : C730 *)
@@ -2133,7 +2133,7 @@ end_if_stmt = end_if_keyword [ if_construct_name ] eos
 
 
 (* R807 : C802 *)
-if_stmt = if_keyword lparen scalar_logical_expr rparen action_stmt eos
+if_stmt = if_keyword lparen scalar_logical_expr rparen action_stmt
         ;
 
 
@@ -3122,7 +3122,7 @@ entry_name = name
            ;
 
 (* R1236 : C1258 C1259 *)
-return_stmt = return_keyword [ scalar_int_expr ] eos
+return_stmt = return_keyword [ scalar_int_expr ]
             ;
 
 (* R1237 *)
