@@ -7,7 +7,14 @@ TEST_SRCS = \
 	./subroutine_implicit_none_assignment.F03 \
 	./subroutine_implicit_none_assignment_comments.F03 \
 	./subroutine_dummy_args.F03 \
-	./subroutine_call_dummy_args.F03
+	./subroutine_3statements.F03 
+#	./subroutine_function.F03 \
+
+# NOTE(bja, 2015-02) these are invalid tests for subroutine, need to be moved to module
+#	./subroutine_call_dummy_args.F03 \
+#	./subroutine_call_function.F03 \
+#	./subroutine_call_function_call_procedure.F03 
+
 
 TEST_OBJS = \
 	$(TEST_SRCS:%.F03=%.o)

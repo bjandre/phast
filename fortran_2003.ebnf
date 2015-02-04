@@ -472,7 +472,7 @@ declaration_construct = derived_type_def
 
 (* R208 *)
 execution_part = executable_construct
-                [ execution_part_construct ]
+                { execution_part_construct }*
                 ;
 
 (* R209 *)

@@ -73,10 +73,31 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
-    def test_subroutine_call_dummy_args(self):
-        filename = "{0}/subroutine_call_dummy_args.F03".format(self.test_dir)
+    def test_subroutine_3statements(self):
+        filename = "{0}/subroutine_3statements.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
+
+#    def test_subroutine_function(self):
+#        filename = "{0}/subroutine_function.F03".format(self.test_dir)
+#        ast = self.generate_ast(filename)
+#        self.assertIsNotNone(ast)
+#
+# NOTE(bja, 2015-02) these are invalid tests for subroutine, need to be moved to module
+#    def test_subroutine_call_function(self):
+#        filename = "{0}/subroutine_call_function.F03".format(self.test_dir)
+#        ast = self.generate_ast(filename)
+#        self.assertIsNotNone(ast)
+#
+#    def test_subroutine_call_dummy_args(self):
+#        filename = "{0}/subroutine_call_dummy_args.F03".format(self.test_dir)
+#        ast = self.generate_ast(filename)
+#        self.assertIsNotNone(ast)
+#
+#    def test_subroutine_call_function_call_procedure(self):
+#        filename = "{0}/subroutine_call_function_call_procedure.F03".format(self.test_dir)
+#        ast = self.generate_ast(filename)
+#        self.assertIsNotNone(ast)
 
 
 
