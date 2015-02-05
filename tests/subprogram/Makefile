@@ -8,7 +8,13 @@ TEST_SRCS = \
 	./subprogram_implicit_none_assignment_comments.F03 \
 	./subprogram_dummy_args.F03 \
 	./subprogram_3statements.F03 \
-	./subprogram_function.F03
+	./subprogram_function.F03 \
+	./subprogram_if.F03 \
+	./subprogram_if_then.F03 \
+	./subprogram_if_logical_and.F03 \
+	./subprogram_if_nested.F03 \
+	./subprogram_if_elseif_else.F03 \
+	./subprogram_if_named.F03
 
 
 TEST_OBJS = \
