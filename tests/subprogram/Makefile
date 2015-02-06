@@ -4,6 +4,7 @@ TEST_SRCS = \
 	./subprogram_initialization_expression.F03 \
 	./subprogram_parameter.F03 \
 	./subprogram_assignment_statement.F03 \
+	./subprogram_assign_string_literal.F03 \
 	./subprogram_implicit_none_assignment.F03 \
 	./subprogram_implicit_none_assignment_comments.F03 \
 	./subprogram_dummy_args.F03 \

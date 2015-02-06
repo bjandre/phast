@@ -76,6 +76,12 @@ currency_symbol   = "$"  ;
 number_sign       = "#"  ;
 commercial_at      = "@"  ;
 
+(*NOTE(bja, 201502) need for escaping in string literals. *)
+double_quote = '""'
+             ;
+
+double_apostrophe = "''"
+                  ;
 
 (* section 3.3.1.1 *)
 comment_char = exclamation_point ;
@@ -580,7 +586,12 @@ underscore = /_/ ;
 NOTE(bja, 201501) add '=', ':', '/', '(/' here manualy because rule includes a
 check for invalid combanitions in statements that are valid in
 comments!
- *)
+
+NOTE(bja, 201502) remove quote and apostrophe because they can't be in
+double quoted or single quoted string literals respectively.
+
+*)
+
 special_character = space
                   | "="
                   | plus
@@ -596,14 +607,12 @@ special_character = space
                   | ":"
                   ! semicolon
                   | exclamation_point
-                  | quote
                   | percent
                   | ampersand
                   | tilde
                   | less_than
                   | greater_than
                   | question_mark
-                  | apostrophe
                   | grave_accent
                   | circumflex_accent
                   | vertical_line
@@ -612,10 +621,26 @@ special_character = space
                   | commercial_at
                   ;
 
-(* R301 *)
+(* R301 : NOTE(bja, 201502) moved quote and apsotrophe here from special character. *)
 character = alphanumeric_character
           | special_character
+          | quote
+          | apostrophe
           ;
+
+(* NOTE(bja, 201502) created to handle single quoted string literals *)
+single_quote_character = alphanumeric_character
+             | special_character
+             | quote
+             | double_apostrophe
+             ;
+
+(* NOTE(bja, 201502) created to handle double quoted string literals *)
+double_quote_character = alphanumeric_character
+             | special_character
+             | apostrophe
+             | double_quote
+             ;
 
 (* R302 *)
 alphanumeric_character = letter
@@ -873,8 +898,14 @@ char_length = lparen type_param_value rparen
             ;
 
 (* R427 : C422 *)
-char_literal_constant = ( [ kind_param underscore] apostrophe [ rep_char ] apostrophe )
-                      | ( [ kind_param underscore] quote [ rep_char ] quote )
+char_literal_constant = ( [ kind_param underscore] apostrophe { single_quote_rep_char }* apostrophe )
+                      | ( [ kind_param underscore] quote { double_quote_rep_char }* quote )
+                      ;
+
+single_quote_rep_char = single_quote_character
+                      ;
+
+double_quote_rep_char = double_quote_character
                       ;
 
 rep_char = character

@@ -58,6 +58,11 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
+    def test_subprogram_assign_string_literal(self):
+        filename = "{0}/subprogram_assign_string_literal.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast)
+ 
     def test_subprogram_implicit_none_assignment(self):
         filename = "{0}/subprogram_implicit_none_assignment.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
