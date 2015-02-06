@@ -1938,7 +1938,7 @@ logical_initialization_expr = logical_expr
                             ;
 
 (* R734 : C715 *)
-assignment_stmt = variable equal expr eos
+assignment_stmt = variable equal expr
                 ;
 
 (* R735 : C716 C717 C718 C719 C720 *)
