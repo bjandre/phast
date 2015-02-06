@@ -74,7 +74,7 @@ circumflex_accent = "^"  ;
 vertical_line     = "|"  ;
 currency_symbol   = "$"  ;
 number_sign       = "#"  ;
-commercial_at      = "@"  ;
+commercial_at     = "@"  ;
 
 (*NOTE(bja, 201502) need for escaping in string literals. *)
 double_quote = '""'
@@ -581,7 +581,7 @@ space = /[ \t]/ ;
 (* R303 *)
 underscore = /_/ ;
 
-(* table 3.1 
+(* table 3.1
 
 NOTE(bja, 201501) add '=', ':', '/', '(/' here manualy because rule includes a
 check for invalid combanitions in statements that are valid in
@@ -654,7 +654,7 @@ alphanumeric_character = letter
  *
  * ************************************************************************** *)
 (* R304, FIXME(bja, 201412) C301 for R304 - max name length is 64 characters *)
-name = 
+name =
      letter
      { alphanumeric_character }*
      ;
@@ -1806,7 +1806,7 @@ mult_operand = level_1_expr [ power_op mult_operand ]
 
 (* NOTE(bja, 2015-01) R705, R706, R710 use left recursion, which doesn't work
 with peg parsers. we need to convert it to some combination of
-iteration/right recursion. 
+iteration/right recursion.
 FIXME(bja, 2015-01) Pure right recursion will not get the
 operator precidence correct! see
 http://www.dalnefre.com/wp/2011/05/parsing-expression-grammars-part-4/
@@ -1975,7 +1975,7 @@ assignment_stmt = variable equal expr
 (* R735 : C716 C717 C718 C719 C720 *)
 pointer_assignment_stmt = ( data_pointer_object [ lparen bounds_spec_list rparen ] arrow data_target )
                         | ( data_pointer_object lparen bounds_remapping_list rparen arrow data_target )
-                        | ( proc_pointer_object arrow proc_target ) 
+                        | ( proc_pointer_object arrow proc_target )
                         ;
 
 (* R736 : C721 C722 *)
