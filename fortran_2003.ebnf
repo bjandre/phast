@@ -752,7 +752,7 @@ signed_int_literal_constant = [ sign ] int_literal_constant
 scalar_int_literal_constant = int_literal_constant
 ;
 
-int_literal_constant = digit_string [ "_" kind_constant ]
+int_literal_constant = digit_string [ underscore kind_constant ]
                      ;
 
 (* R407 C405 - scalar_int_constant_name shall be a named constant of type int; C406 - kind_param sholl be nonnegative *)
@@ -763,7 +763,7 @@ kind_param = digit_string
            | scalar_int_constant_name
            ;
 
-kind_constant = "_" kind_param
+kind_constant = underscore kind_param
               ;
 
 (* R408 *)
@@ -787,21 +787,21 @@ boz_literal_constant = binary_constant
 (* R412 : C *)
 binary_digit = "0" | "1"
              ;
-binary_constant = ("b'" { binary_digit }+ "'")
-                | ('b"' { binary_digit }+ '"')
+binary_constant = ("b" apostrophe { binary_digit }+ apostrophe)
+                | ("b" quote { binary_digit }+ quote)
                 ;
 
 (* R413 : C *)
 octal_digit = "0" | "1" | "2" | "3"
             | "4" | "5" | "6" | "7"
             ;
-octal_constant = ("o'" { octal_digit }+ "'")
-                | ('o"' { octal_digit }+ '"')
+octal_constant = ("o" apostrophe { octal_digit }+ apostrophe)
+                | ("o" quote { octal_digit }+ quote)
                 ;
 
 (* R414 *)
-hex_constant = ("z'" { hex_digit }+ "'")
-                | ('z"' { hex_digit }+ '"')
+hex_constant = ("z" apostrophe { hex_digit }+ apostrophe)
+                | ("z" quote { hex_digit }+ quote)
                 ;
 
 (* R415 *)
@@ -824,8 +824,8 @@ real_literal_constant = (significand [ exponent_letter exponent ] [ kind_constan
                       ;
 
 (* R418 *)
-significand = (digit_string "." digit_string)
-            | ("." digit_string)
+significand = (digit_string decimal_point digit_string)
+            | (decimal_point digit_string)
             ;
 
 (* R419 *)
@@ -873,22 +873,22 @@ char_length = lparen type_param_value rparen
             ;
 
 (* R427 : C422 *)
-char_literal_constant = ( [ kind_param "_"] "'" [ rep_char ] "'" )
-                      | ( [ kind_param "_"] '"' [ rep_char ] '"' )
+char_literal_constant = ( [ kind_param underscore] apostrophe [ rep_char ] apostrophe )
+                      | ( [ kind_param underscore] quote [ rep_char ] quote )
                       ;
 
 rep_char = character
          ;
 
 (* R428 *)
-true_str = ".TRUE." | ".true."
+true_str = ".true."
          ;
 
-false_str = ".FALSE." | ".false."
+false_str = ".false."
           ;
 
-logical_literal_constant = (true_str [ "_" kind_param ])
-                         | (false_str [ "_" kind_param ])
+logical_literal_constant = (true_str [ underscore kind_param ])
+                         | (false_str [ underscore kind_param ])
                          ;
 
 (* R429 : C427 C428 C429 *)
