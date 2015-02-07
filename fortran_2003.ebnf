@@ -130,7 +130,7 @@ end_subroutine_keyword   = ( "end subroutine"   | "endsubroutine"   ) ws_req con
 end_type_keyword         = ( "end type"         | "endtype"         ) ws_req continuation;
 end_where_keyword        = ( "end where"        | "endwhere"        ) ws_req continuation;
 go_to_keyword            = ( "go to"            | "goto"            ) ws_req continuation;
-in_out_keyword           = ( "in out"           | "inout"           ) ws_req continuation;
+in_out_keyword           = ( "in out"           | "inout"           ) ws_opt continuation;
 select_case_keyword      = ( "select case"      | "selectcase"      ) ws_req continuation;
 select_type_keyword      = ( "select type"      | "select type"     ) ws_req continuation;
 
@@ -197,7 +197,7 @@ id_keyword              = "id"              ws_req continuation;
 if_keyword              = "if"              ws_req continuation;
 implicit_keyword        = "implicit"        ws_opt continuation;
 import_keyword          = "import"          ws_req continuation;
-in_keyword              = "in"              ws_req continuation;
+in_keyword              = "in"              ws_opt continuation;
 inquire_keyword         = "inquire"         ws_req continuation;
 integer_keyword         = "integer"         ws_opt continuation;
 intent_keyword          = "intent"          ws_opt continuation;
@@ -227,7 +227,7 @@ open_keyword            = "open"            ws_req continuation;
 opened_keyword          = "opened"          ws_req continuation;
 operator_keyword        = "operator"        ws_req continuation;
 optional_keyword        = "optional"        ws_req continuation;
-out_keyword             = "out"             ws_req continuation;
+out_keyword             = "out"             ws_opt continuation;
 pad_keyword             = "pad"             ws_req continuation;
 parameter_keyword       = "parameter"       ws_opt continuation;
 pass_keyword            = "pass"            ws_req continuation;
@@ -1325,7 +1325,7 @@ assumed_size_spec = [ explicit_shape_spec_list comma ] [lower_bound colon ] aste
                   ;
 
 (* R517 : C545 C546 *)
-intent_spec = in_keyword | out_keyword | in_out_keyword
+intent_spec = in_out_keyword | in_keyword | out_keyword
             ;
 
 (* R518 : C548 *)

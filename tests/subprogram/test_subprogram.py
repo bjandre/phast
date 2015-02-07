@@ -127,7 +127,6 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    @unittest.expectedFailure
     def test_subprogram_dummy_args(self):
         filename = "{0}/subprogram_dummy_args.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
