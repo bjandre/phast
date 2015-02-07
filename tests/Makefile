@@ -29,7 +29,7 @@ all : $(SUBDIRS)
 test : $(SUBDIRS) py-unit
 
 py-unit : FORCE
-	PYTHONPATH="${PYTHONPATH}:.." python -m unittest discover
+	PYTHONPATH="${PYTHONPATH}:.." python -m unittest discover -v
 
 py3-unit : FORCE
 	PYTHONPATH="${PYTHONPATH}:.." python3 -m unittest discover

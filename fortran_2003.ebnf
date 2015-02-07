@@ -32,26 +32,39 @@ Notes:
  *
  * ************************************************************************** *)
 
-(* we want the parser to ignore all whitespace except end of lines. *)
+(* free form whitespace rules are contained in section 3.3.1:
 
+Blank characters shall not appear within lexical tokens other than in
+a character context or in a format specification.... A blank shall be
+used to separate names, constants, or labels from adjacent keywords,
+names, constants, or labels.
 
-end_of_line = { "\n" | "\r" | "\n\r" }+ ;
+A sequence of blank characters outside of a character context is
+equivalent to a single blank character.
+
+*)
+
+whitespace = " " | "\t";
+opt_ws = { whitespace }*;
+req_ws = { whitespace }+;
+
+end_of_line = opt_ws { "\n" | "\r" | "\n\r" }+ ;
 
 (* FIXME(bja, 201412 ) should account for continuation
 lines...? *)
 
-rparen       = ")"      (continuation | eos);
-lparen       = "(" !"/" continuation ;
-forwardslash = "/" !")" continuation ;
-comma        = ","      continuation ;
-colon        = ":" !":" continuation ;
-coloncolon   = "::"     continuation ;
-asterisk     = "*"      continuation ;
-percent      = "%"      continuation ;
-equal        = "=" !">" continuation ;
-arrow        = "=>"     continuation ;
-plus         = "+"      continuation ;
-minus        = "-"      continuation ;
+rparen       = ")"      opt_ws (continuation | eos);
+lparen       = "(" !"/" opt_ws continuation ;
+forwardslash = "/" !")" opt_ws continuation ;
+comma        = ","      opt_ws continuation ;
+colon        = ":" !":" opt_ws continuation ;
+coloncolon   = "::"     opt_ws continuation ;
+asterisk     = "*"      opt_ws continuation ;
+percent      = "%"      opt_ws continuation ;
+equal        = "=" !">" opt_ws continuation ;
+arrow        = "=>"     opt_ws continuation ;
+plus         = "+"      opt_ws continuation ;
+minus        = "-"      opt_ws continuation ;
 
 (* only used in special characters, don't want continuation? *)
 backslash         = "\\" ;
@@ -86,7 +99,7 @@ double_apostrophe = "''"
 (* section 3.3.1.1 *)
 comment_char = exclamation_point ;
 
-comment = { { comment_char {character}* }* end_of_line }* ;
+comment = { { { opt_ws }* comment_char {character | opt_ws}* }* end_of_line }* ;
 
 (* section 3.3.1.2 *)
 continuation_char = ampersand ;
@@ -664,8 +677,8 @@ name =
 scalar_constant = constant
 ;
 
-constant = literal_constant
-         | named_constant
+constant = ( literal_constant
+         | named_constant) req_ws
          ;
 
 (* R306 *)
@@ -3131,11 +3144,11 @@ subroutine_subprogram = subroutine_stmt
                       end_subroutine_stmt
                       ;
 (* R1232 : C1247 *)
-subroutine_stmt = [ prefix ] subroutine_keyword subroutine_name
+subroutine_stmt = [ prefix ] subroutine_keyword req_ws subroutine_name
                 [ lparen [ dummy_arg_list ] rparen [ proc_language_binding_spec ] ]  eos
                 ;
 
-subroutine_name = name
+subroutine_name = name opt_ws
                 ;
 
 (* R1231 : C1249 C1250 *)

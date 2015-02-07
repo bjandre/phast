@@ -1,5 +1,8 @@
 FC=gfortran
 TEST_SRCS = \
+	./subprogram_empty_subroutine.F03 \
+	./subprogram_empty_subroutine_paren.F03 \
+	./subprogram_empty_subroutine_whitespace_paren.F03 \
 	./subprogram_comment_special_chars.F03 \
 	./subprogram_initialization_expression.F03 \
 	./subprogram_parameter.F03 \
@@ -20,7 +23,8 @@ TEST_SRCS = \
 	./subprogram_relational_op.F03 \
 	./subprogram_logical_op.F03 \
 	./subprogram_equivalence_op.F03 \
-	./subprogram_paren_expression.F03
+	./subprogram_paren_expression.F03 \
+	./subprogram_do_loop.F03
 
 
 TEST_OBJS = \

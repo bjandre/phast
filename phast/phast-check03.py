@@ -98,7 +98,7 @@ class ListRules(argparse.Action):
 # -------------------------------------------------------------------------------
 
 def main(options):
-    whitespace = " \t"
+    whitespace = ""
 
     with open(options.file) as f:
         text = f.read()
