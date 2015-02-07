@@ -45,26 +45,26 @@ equivalent to a single blank character.
 *)
 
 whitespace = " " | "\t";
-opt_ws = { whitespace }*;
-req_ws = { whitespace }+;
+ws_opt = { whitespace }*;
+ws_req = { whitespace }+;
 
-end_of_line = opt_ws { "\n" | "\r" | "\n\r" }+ ;
+end_of_line = ws_opt { "\n" | "\r" | "\n\r" }+ ;
 
 (* FIXME(bja, 201412 ) should account for continuation
 lines...? *)
 
-rparen       = ")"      opt_ws (continuation | eos);
-lparen       = "(" !"/" opt_ws continuation ;
-forwardslash = "/" !")" opt_ws continuation ;
-comma        = ","      opt_ws continuation ;
-colon        = ":" !":" opt_ws continuation ;
-coloncolon   = "::"     opt_ws continuation ;
-asterisk     = "*"      opt_ws continuation ;
-percent      = "%"      opt_ws continuation ;
-equal        = "=" !">" opt_ws continuation ;
-arrow        = "=>"     opt_ws continuation ;
-plus         = "+"      opt_ws continuation ;
-minus        = "-"      opt_ws continuation ;
+rparen       = ")"      ws_opt (continuation | eos);
+lparen       = "(" !"/" ws_opt continuation ;
+forwardslash = "/" !")" ws_opt continuation ;
+comma        = ","      ws_opt continuation ;
+colon        = ":" !":" ws_opt continuation ;
+coloncolon   = "::"     ws_opt continuation ;
+asterisk     = "*"      ws_opt continuation ;
+percent      = "%"      ws_opt continuation ;
+equal        = "=" !">" ws_opt continuation ;
+arrow        = "=>"     ws_opt continuation ;
+plus         = "+"      ws_opt continuation ;
+minus        = "-"      ws_opt continuation ;
 
 (* only used in special characters, don't want continuation? *)
 backslash         = "\\" ;
@@ -99,7 +99,7 @@ double_apostrophe = "''"
 (* section 3.3.1.1 *)
 comment_char = exclamation_point ;
 
-comment = { { { opt_ws }* comment_char {character | opt_ws}* }* end_of_line }* ;
+comment = { { { ws_opt }* comment_char {character | ws_opt}* }* end_of_line }* ;
 
 (* section 3.3.1.2 *)
 continuation_char = ampersand ;
@@ -136,146 +136,146 @@ select_type_keyword      = ( "select type"      | "select type"     ) continuati
 
 double_keyword          = double_precision_keyword continuation;
 
-abstract_keyword        = "abstract"        continuation;
-access_keyword          = "access"          continuation;
-action_keyword          = "action"          continuation;
-advance_keyword         = "advance"         continuation;
-allocatable_keyword     = "allocatable"     continuation;
-allocate_keyword        = "allocate"        continuation;
-assignment_keyword      = "assignment"      continuation;
-associate_keyword       = "associate"       continuation;
-asynchronous_keyword    = "asynchronous"    continuation;
-backspace_keyword       = "backspace"       continuation;
-bind_keyword            = "bind"            continuation;
-blank_keyword           = "blank"           continuation;
-c_keyword               = "c"               continuation;
-call_keyword            = "call"            continuation;
-case_keyword            = "case"            continuation;
-character_keyword       = "character"       continuation;
-class_keyword           = "class"           continuation;
-close_keyword           = "close"           continuation;
-common_keyword          = "common"          continuation;
-complex_keyword         = "complex"         continuation;
-contains_keyword        = "contains"                    ; (* NOTE(bja, 201501) : can't have a continuation...? *)
-continue_keyword        = "continue"        continuation;
-cycle_keyword           = "cycle"           continuation;
-data_keyword            = "data"            continuation;
-deallocate_keyword      = "deallocate"      continuation;
-decimal_keyword         = "decimal"         continuation;
-default_keyword         = "default"         continuation;
-deffered_keyword        = "deferred"        continuation;
-delim_keyword           = "delim"           continuation;
-dimension_keyword       = "dimension"       continuation;
-direct_keyword          = "direct"          continuation;
-do_keyword              = "do"              continuation;
-elemental_keyword       = "elemental"       continuation;
-else_keyword            = "else"            continuation;
-encoding_keyword        = "encoding"        continuation;
-end_keyword             = "end"             continuation;
-entry_keyword           = "entry"           continuation;
-enum_keyword            = "enum"            continuation;
-enumerator_keyword      = "enumerator"      continuation;
-eor_keyword             = "eor"             continuation;
-equivalence_keyword     = "equivalence"     continuation;
-err_keyword             = "err"             continuation;
-errmsg_keyword          = "errmsg"          continuation;
-exist_keyword           = "exist"           continuation;
-exit_keyword            = "exit"            continuation;
-extends_keyword         = "extends"         continuation;
-external_keyword        = "external"        continuation;
-file_keyword            = "file"            continuation;
-final_keyword           = "final"           continuation;
-flush_keyword           = "flush"           continuation;
-fmt_keyword             = "fmt"             continuation;
-forall_keyword          = "forall"          continuation;
-form_keyword            = "form"            continuation;
-format_keyword          = "format"          continuation;
-formatted_keyword       = "formatted"       continuation;
-function_keyword        = "function"        continuation;
-generic_keyword         = "generic"         continuation;
-id_keyword              = "id"              continuation;
-if_keyword              = "if"              continuation;
-implicit_keyword        = "implicit"        continuation;
-import_keyword          = "import"          continuation;
-in_keyword              = "in"              continuation;
-inquire_keyword         = "inquire"         continuation;
-integer_keyword         = "integer"         continuation;
-intent_keyword          = "intent"          continuation;
-interface_keyword       = "interface"       continuation;
-intrinsic_keyword       = "intrinsic"       continuation;
-iolength_keyword        = "iolength"        continuation;
-iomsg_keyword           = "iomsg"           continuation;
-iostat_keyword          = "iostat"          continuation;
-is_keyword              = "is"              continuation;
-kind_keyword            = "kind"            continuation;
-length_keyword          = "len"             continuation;
-logical_keyword         = "logical"         continuation;
-module_keyword          = "module"          continuation;
-name_keyword            = "name"            continuation;
-named_keyword           = "named"           continuation;
-namelist_keyword        = "namelist"        continuation;
-nextrec_keyword         = "nextrec"         continuation;
-nml_keyword             = "nml"             continuation;
-non_intrinsic_keyword   = "non intrinsic"   continuation;
-non_overridable_keyword = "non_overridable" continuation;
-none_keyword            = "none"            continuation;
-nopass_keyword          = "nopass"          continuation;
-nullify_keyword         = "nullify"         continuation;
-number_keyword          = "number"          continuation;
-only_keyword            = "only"            continuation;
-open_keyword            = "open"            continuation;
-opened_keyword          = "opened"          continuation;
-operator_keyword        = "operator"        continuation;
-optional_keyword        = "optional"        continuation;
-out_keyword             = "out"             continuation;
-pad_keyword             = "pad"             continuation;
-parameter_keyword       = "parameter"       continuation;
-pass_keyword            = "pass"            continuation;
-pending_keyword         = "pending"         continuation;
-pointer_keyword         = "pointer"         continuation;
-pos_keyword             = "pos"             continuation;
-position_keyword        = "position"        continuation;
-print_keyword           = "print"           continuation;
-private_keyword         = "private"         continuation;
-procedure_keyword       = "procedure"       continuation;
-program_keyword         = "program"         continuation;
-protected_keyword       = "protected"       continuation;
-public_keyword          = "public"          continuation;
-pure_keyword            = "pure"            continuation;
-read_keyword            = "read"            continuation;
-readwrite_keyword       = "readwrite"       continuation;
-real_keyword            = "real"            continuation;
-rec_keyword             = "rec"             continuation;
-recl_keyword            = "recl"            continuation;
-recursive_keyword       = "recursive"       continuation;
-result_keyword          = "result"          continuation;
-return_keyword          = "return"          continuation;
-rewind_keyword          = "rewind"          continuation;
-round_keyword           = "round"           continuation;
-save_keyword            = "save"            continuation;
-select_keyword          = "select"          continuation;
-sequence_keyword        = "sequence"        continuation;
-sequential_keyword      = "sequential"      continuation;
-sign_keyword            = "sign"            continuation;
-size_keyword            = "size"            continuation;
-source_keyword          = "source"          continuation;
-stat_keyword            = "stat"            continuation;
-status_keyword          = "status"          continuation;
-stop_keyword            = "stop"            continuation;
-stream_keyword          = "stream"          continuation;
-subroutine_keyword      = "subroutine"      continuation;
-target_keyword          = "target"          continuation;
-then_keyword            = "then"            continuation;
-type_keyword            = "type"            continuation;
-unformatted_keyword     = "unformatted"     continuation;
-unit_keyword            = "unit"            continuation;
-use_keyword             = "use"             continuation;
-value_keyword           = "value"           continuation;
-volatile_keyword        = "volatile"        continuation;
-wait_keyword            = "wait"            continuation;
-where_keyword           = "where"           continuation;
-while_keyword           = "while"           continuation;
-write_keyword           = "write"           continuation;
+abstract_keyword        = "abstract"        ws_req continuation;
+access_keyword          = "access"          ws_req continuation;
+action_keyword          = "action"          ws_req continuation;
+advance_keyword         = "advance"         ws_req continuation;
+allocatable_keyword     = "allocatable"     ws_req continuation;
+allocate_keyword        = "allocate"        ws_req continuation;
+assignment_keyword      = "assignment"      ws_req continuation;
+associate_keyword       = "associate"       ws_req continuation;
+asynchronous_keyword    = "asynchronous"    ws_req continuation;
+backspace_keyword       = "backspace"       ws_req continuation;
+bind_keyword            = "bind"            ws_req continuation;
+blank_keyword           = "blank"           ws_req continuation;
+c_keyword               = "c"               ws_req continuation;
+call_keyword            = "call"            ws_req continuation;
+case_keyword            = "case"            ws_req continuation;
+character_keyword       = "character"       ws_req continuation;
+class_keyword           = "class"           ws_req continuation;
+close_keyword           = "close"           ws_req continuation;
+common_keyword          = "common"          ws_req continuation;
+complex_keyword         = "complex"         ws_req continuation;
+contains_keyword        = "contains"        ws_opt             ; (* NOTE(bja, 201501) : can't have a continuation...? *)
+continue_keyword        = "continue"        ws_req continuation;
+cycle_keyword           = "cycle"           ws_req continuation;
+data_keyword            = "data"            ws_req continuation;
+deallocate_keyword      = "deallocate"      ws_req continuation;
+decimal_keyword         = "decimal"         ws_req continuation;
+default_keyword         = "default"         ws_req continuation;
+deffered_keyword        = "deferred"        ws_req continuation;
+delim_keyword           = "delim"           ws_req continuation;
+dimension_keyword       = "dimension"       ws_req continuation;
+direct_keyword          = "direct"          ws_req continuation;
+do_keyword              = "do"              ws_req continuation;
+elemental_keyword       = "elemental"       ws_req continuation;
+else_keyword            = "else"            ws_req continuation;
+encoding_keyword        = "encoding"        ws_req continuation;
+end_keyword             = "end"             ws_req continuation;
+entry_keyword           = "entry"           ws_req continuation;
+enum_keyword            = "enum"            ws_req continuation;
+enumerator_keyword      = "enumerator"      ws_req continuation;
+eor_keyword             = "eor"             ws_req continuation;
+equivalence_keyword     = "equivalence"     ws_req continuation;
+err_keyword             = "err"             ws_req continuation;
+errmsg_keyword          = "errmsg"          ws_req continuation;
+exist_keyword           = "exist"           ws_req continuation;
+exit_keyword            = "exit"            ws_req continuation;
+extends_keyword         = "extends"         ws_req continuation;
+external_keyword        = "external"        ws_req continuation;
+file_keyword            = "file"            ws_req continuation;
+final_keyword           = "final"           ws_req continuation;
+flush_keyword           = "flush"           ws_req continuation;
+fmt_keyword             = "fmt"             ws_req continuation;
+forall_keyword          = "forall"          ws_req continuation;
+form_keyword            = "form"            ws_req continuation;
+format_keyword          = "format"          ws_req continuation;
+formatted_keyword       = "formatted"       ws_req continuation;
+function_keyword        = "function"        ws_req continuation;
+generic_keyword         = "generic"         ws_req continuation;
+id_keyword              = "id"              ws_req continuation;
+if_keyword              = "if"              ws_req continuation;
+implicit_keyword        = "implicit"        ws_opt continuation;
+import_keyword          = "import"          ws_req continuation;
+in_keyword              = "in"              ws_req continuation;
+inquire_keyword         = "inquire"         ws_req continuation;
+integer_keyword         = "integer"         ws_req continuation;
+intent_keyword          = "intent"          ws_req continuation;
+interface_keyword       = "interface"       ws_req continuation;
+intrinsic_keyword       = "intrinsic"       ws_req continuation;
+iolength_keyword        = "iolength"        ws_req continuation;
+iomsg_keyword           = "iomsg"           ws_req continuation;
+iostat_keyword          = "iostat"          ws_req continuation;
+is_keyword              = "is"              ws_req continuation;
+kind_keyword            = "kind"            ws_req continuation;
+length_keyword          = "len"             ws_req continuation;
+logical_keyword         = "logical"         ws_req continuation;
+module_keyword          = "module"          ws_req continuation;
+name_keyword            = "name"            ws_req continuation;
+named_keyword           = "named"           ws_req continuation;
+namelist_keyword        = "namelist"        ws_req continuation;
+nextrec_keyword         = "nextrec"         ws_req continuation;
+nml_keyword             = "nml"             ws_req continuation;
+non_intrinsic_keyword   = "non intrinsic"   ws_req continuation;
+non_overridable_keyword = "non_overridable" ws_req continuation;
+none_keyword            = "none"            ws_opt continuation;
+nopass_keyword          = "nopass"          ws_req continuation;
+nullify_keyword         = "nullify"         ws_req continuation;
+number_keyword          = "number"          ws_req continuation;
+only_keyword            = "only"            ws_req continuation;
+open_keyword            = "open"            ws_req continuation;
+opened_keyword          = "opened"          ws_req continuation;
+operator_keyword        = "operator"        ws_req continuation;
+optional_keyword        = "optional"        ws_req continuation;
+out_keyword             = "out"             ws_req continuation;
+pad_keyword             = "pad"             ws_req continuation;
+parameter_keyword       = "parameter"       ws_req continuation;
+pass_keyword            = "pass"            ws_req continuation;
+pending_keyword         = "pending"         ws_req continuation;
+pointer_keyword         = "pointer"         ws_req continuation;
+pos_keyword             = "pos"             ws_req continuation;
+position_keyword        = "position"        ws_req continuation;
+print_keyword           = "print"           ws_req continuation;
+private_keyword         = "private"         ws_req continuation;
+procedure_keyword       = "procedure"       ws_req continuation;
+program_keyword         = "program"         ws_req continuation;
+protected_keyword       = "protected"       ws_req continuation;
+public_keyword          = "public"          ws_req continuation;
+pure_keyword            = "pure"            ws_req continuation;
+read_keyword            = "read"            ws_req continuation;
+readwrite_keyword       = "readwrite"       ws_req continuation;
+real_keyword            = "real"            ws_req continuation;
+rec_keyword             = "rec"             ws_req continuation;
+recl_keyword            = "recl"            ws_req continuation;
+recursive_keyword       = "recursive"       ws_req continuation;
+result_keyword          = "result"          ws_opt continuation;
+return_keyword          = "return"          ws_req continuation;
+rewind_keyword          = "rewind"          ws_req continuation;
+round_keyword           = "round"           ws_req continuation;
+save_keyword            = "save"            ws_req continuation;
+select_keyword          = "select"          ws_req continuation;
+sequence_keyword        = "sequence"        ws_req continuation;
+sequential_keyword      = "sequential"      ws_req continuation;
+sign_keyword            = "sign"            ws_req continuation;
+size_keyword            = "size"            ws_req continuation;
+source_keyword          = "source"          ws_req continuation;
+stat_keyword            = "stat"            ws_req continuation;
+status_keyword          = "status"          ws_req continuation;
+stop_keyword            = "stop"            ws_req continuation;
+stream_keyword          = "stream"          ws_req continuation;
+subroutine_keyword      = "subroutine"      ws_req continuation;
+target_keyword          = "target"          ws_req continuation;
+then_keyword            = "then"            ws_req continuation;
+type_keyword            = "type"            ws_req continuation;
+unformatted_keyword     = "unformatted"     ws_req continuation;
+unit_keyword            = "unit"            ws_req continuation;
+use_keyword             = "use"             ws_req continuation;
+value_keyword           = "value"           ws_req continuation;
+volatile_keyword        = "volatile"        ws_req continuation;
+wait_keyword            = "wait"            ws_req continuation;
+where_keyword           = "where"           ws_req continuation;
+while_keyword           = "while"           ws_req continuation;
+write_keyword           = "write"           ws_req continuation;
 
 keywords =
            "abstract"
@@ -467,7 +467,7 @@ specification_part = { use_stmt }*
                    ;
 
 (* R205 : NOTE(bja, 201501) R205 and R206 as stated in standard doesn't allow a single implicit stmt (e.g. implicit none). *)
-implicit_part = { implicit_part_stmt }* { implicit_stmt }+
+implicit_part = ws_opt { implicit_part_stmt }* { implicit_stmt }+
                ;
 
 (* R206 : *)
@@ -678,7 +678,7 @@ scalar_constant = constant
 ;
 
 constant = ( literal_constant
-         | named_constant) req_ws
+         | named_constant) ws_req
          ;
 
 (* R306 *)
@@ -2868,7 +2868,7 @@ module_subprogram = function_subprogram |
 
 (* R1109 : C1108 C1109 C1110 *)
 use_stmt =
-         use_keyword [ [ comma module_nature ] coloncolon ] module_name [
+         ws_opt use_keyword [ [ comma module_nature ] coloncolon ] module_name [
              ( comma rename_list )
              | ( comma only_keyword colon [ only_list ] )
          ] eos
@@ -3095,7 +3095,7 @@ function_stmt = [ prefix ] function_keyword function_name
               lparen [ dummy_arg_name_list ] rparen [ suffix ] eos
               ;
 
-function_name = name
+function_name = name ws_opt
               ;
 
 (* R1225 : C1236 C1237 C1238 *)
@@ -3106,7 +3106,7 @@ proc_language_binding_spec = language_binding_spec
 dummy_arg_name_list =  dummy_arg_name { comma dummy_arg_name }*
                     ;
 
-dummy_arg_name = name
+dummy_arg_name = name ws_opt
                ;
 
 (* R1227 : C1240 C1241 C1242 *)
@@ -3144,11 +3144,11 @@ subroutine_subprogram = subroutine_stmt
                       end_subroutine_stmt
                       ;
 (* R1232 : C1247 *)
-subroutine_stmt = [ prefix ] subroutine_keyword req_ws subroutine_name
+subroutine_stmt = [ prefix ] subroutine_keyword subroutine_name
                 [ lparen [ dummy_arg_list ] rparen [ proc_language_binding_spec ] ]  eos
                 ;
 
-subroutine_name = name opt_ws
+subroutine_name = name ws_opt
                 ;
 
 (* R1231 : C1249 C1250 *)

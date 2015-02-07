@@ -53,6 +53,26 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
+    def test_subprogram_empty_function_paren(self):
+        filename = "{0}/subprogram_empty_function_paren.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_empty_function_whitespace_paren(self):
+        filename = "{0}/subprogram_empty_function_whitespace_paren.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_empty_function_paren_result(self):
+        filename = "{0}/subprogram_empty_function_paren_result.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_empty_function_whitespace_paren_whitespace_result(self):
+        filename = "{0}/subprogram_empty_function_whitespace_paren_whitespace_result.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
     def test_subprogram_comment_special_chars(self):
         filename = "{0}/subprogram_comment_special_chars.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
