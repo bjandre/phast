@@ -78,13 +78,26 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    @unittest.expectedFailure
+    def test_subprogram_intrinsic_types(self):
+        filename = "{0}/subprogram_intrinsic_types.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_intrinsic_types_kinds(self):
+        filename = "{0}/subprogram_intrinsic_types_kinds.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_function(self):
+        filename = "{0}/subprogram_function.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast)
+ 
     def test_subprogram_initialization_expression(self):
         filename = "{0}/subprogram_initialization_expression.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    @unittest.expectedFailure
     def test_subprogram_parameter(self):
         filename = "{0}/subprogram_initialization_expression.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
@@ -126,12 +139,6 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
-    @unittest.expectedFailure
-    def test_subprogram_function(self):
-        filename = "{0}/subprogram_function.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
- 
     @unittest.expectedFailure
     def test_subprogram_if(self):
         filename = "{0}/subprogram_if.F03".format(self.test_dir)

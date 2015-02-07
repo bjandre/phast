@@ -110,52 +110,52 @@ continuation = { continuation_char ( end_of_line | comment) }*;
 (* end of statement *)
 eos = semicolon | comment | end_of_line ;
 
-block_data_keyword       = ( "block data"       | "blockdata"       ) continuation;
-double_precision_keyword = ( "double precision" | "doubleprecision" ) continuation;
-else_if_keyword          = ( "else if"          | "elseif"          ) continuation;
-else_where_keyword       = ( "else where"       | "elsewhere"       ) continuation;
-end_associate_keyword    = ( "end associate"    | "endassociate"    ) continuation;
-end_block_data_keyword   = ( "end block data"   | "endblockdata"    ) continuation;
-end_do_keyword           = ( "end do"           | "enddo"           ) continuation;
-end_enum_keyword         = ( "end enum"         | "endenum"         ) continuation;
-end_file_keyword         = ( "end file"         | "endfile"         ) continuation;
-end_forall_keyword       = ( "end forall"       | "endforall"       ) continuation;
-end_function_keyword     = ( "end function"     | "endfunction"     ) continuation;
-end_if_keyword           = ( "end if"           | "endif"           ) continuation;
-end_interface_keyword    = ( "end interface"    | "end_interface"   ) continuation;
-end_module_keyword       = ( "end module"       | "endmodule"       ) continuation;
-end_program_keyword      = ( "end program"      | "endprogram"      ) continuation;
-end_select_keyword       = ( "end select"       | "endselect"       ) continuation;
-end_subroutine_keyword   = ( "end subroutine"   | "end subroutine"  ) continuation;
-end_type_keyword         = ( "end type"         | "endtype"         ) continuation;
-end_where_keyword        = ( "end where"        | "endwhere"        ) continuation;
-go_to_keyword            = ( "go to"            | "goto"            ) continuation;
-in_out_keyword           = ( "in out"           | "inout"           ) continuation;
-select_case_keyword      = ( "select case"      | "selectcase"      ) continuation;
-select_type_keyword      = ( "select type"      | "select type"     ) continuation;
+block_data_keyword       = ( "block data"       | "blockdata"       ) ws_req continuation;
+double_precision_keyword = ( "double precision" | "doubleprecision" ) ws_req continuation;
+else_if_keyword          = ( "else if"          | "elseif"          ) ws_req continuation;
+else_where_keyword       = ( "else where"       | "elsewhere"       ) ws_req continuation;
+end_associate_keyword    = ( "end associate"    | "endassociate"    ) ws_req continuation;
+end_block_data_keyword   = ( "end block data"   | "endblockdata"    ) ws_req continuation;
+end_do_keyword           = ( "end do"           | "enddo"           ) ws_req continuation;
+end_enum_keyword         = ( "end enum"         | "endenum"         ) ws_req continuation;
+end_file_keyword         = ( "end file"         | "endfile"         ) ws_req continuation;
+end_forall_keyword       = ( "end forall"       | "endforall"       ) ws_req continuation;
+end_function_keyword     = ( "end function"     | "endfunction"     ) ws_req continuation;
+end_if_keyword           = ( "end if"           | "endif"           ) ws_req continuation;
+end_interface_keyword    = ( "end interface"    | "end_interface"   ) ws_req continuation;
+end_module_keyword       = ( "end module"       | "endmodule"       ) ws_req continuation;
+end_program_keyword      = ( "end program"      | "endprogram"      ) ws_req continuation;
+end_select_keyword       = ( "end select"       | "endselect"       ) ws_req continuation;
+end_subroutine_keyword   = ( "end subroutine"   | "endsubroutine"   ) ws_req continuation;
+end_type_keyword         = ( "end type"         | "endtype"         ) ws_req continuation;
+end_where_keyword        = ( "end where"        | "endwhere"        ) ws_req continuation;
+go_to_keyword            = ( "go to"            | "goto"            ) ws_req continuation;
+in_out_keyword           = ( "in out"           | "inout"           ) ws_req continuation;
+select_case_keyword      = ( "select case"      | "selectcase"      ) ws_req continuation;
+select_type_keyword      = ( "select type"      | "select type"     ) ws_req continuation;
 
-double_keyword          = double_precision_keyword continuation;
+double_keyword          = double_precision_keyword ws_opt continuation;
 
 abstract_keyword        = "abstract"        ws_req continuation;
 access_keyword          = "access"          ws_req continuation;
 action_keyword          = "action"          ws_req continuation;
 advance_keyword         = "advance"         ws_req continuation;
-allocatable_keyword     = "allocatable"     ws_req continuation;
+allocatable_keyword     = "allocatable"     ws_opt continuation;
 allocate_keyword        = "allocate"        ws_req continuation;
 assignment_keyword      = "assignment"      ws_req continuation;
 associate_keyword       = "associate"       ws_req continuation;
-asynchronous_keyword    = "asynchronous"    ws_req continuation;
+asynchronous_keyword    = "asynchronous"    ws_opt continuation;
 backspace_keyword       = "backspace"       ws_req continuation;
-bind_keyword            = "bind"            ws_req continuation;
+bind_keyword            = "bind"            ws_opt continuation;
 blank_keyword           = "blank"           ws_req continuation;
-c_keyword               = "c"               ws_req continuation;
+c_keyword               = "c"               ws_opt continuation;
 call_keyword            = "call"            ws_req continuation;
 case_keyword            = "case"            ws_req continuation;
-character_keyword       = "character"       ws_req continuation;
+character_keyword       = "character"       ws_opt continuation;
 class_keyword           = "class"           ws_req continuation;
 close_keyword           = "close"           ws_req continuation;
 common_keyword          = "common"          ws_req continuation;
-complex_keyword         = "complex"         ws_req continuation;
+complex_keyword         = "complex"         ws_opt continuation;
 contains_keyword        = "contains"        ws_opt             ; (* NOTE(bja, 201501) : can't have a continuation...? *)
 continue_keyword        = "continue"        ws_req continuation;
 cycle_keyword           = "cycle"           ws_req continuation;
@@ -165,7 +165,7 @@ decimal_keyword         = "decimal"         ws_req continuation;
 default_keyword         = "default"         ws_req continuation;
 deffered_keyword        = "deferred"        ws_req continuation;
 delim_keyword           = "delim"           ws_req continuation;
-dimension_keyword       = "dimension"       ws_req continuation;
+dimension_keyword       = "dimension"       ws_opt continuation;
 direct_keyword          = "direct"          ws_req continuation;
 do_keyword              = "do"              ws_req continuation;
 elemental_keyword       = "elemental"       ws_req continuation;
@@ -182,7 +182,7 @@ errmsg_keyword          = "errmsg"          ws_req continuation;
 exist_keyword           = "exist"           ws_req continuation;
 exit_keyword            = "exit"            ws_req continuation;
 extends_keyword         = "extends"         ws_req continuation;
-external_keyword        = "external"        ws_req continuation;
+external_keyword        = "external"        ws_opt continuation;
 file_keyword            = "file"            ws_req continuation;
 final_keyword           = "final"           ws_req continuation;
 flush_keyword           = "flush"           ws_req continuation;
@@ -199,17 +199,17 @@ implicit_keyword        = "implicit"        ws_opt continuation;
 import_keyword          = "import"          ws_req continuation;
 in_keyword              = "in"              ws_req continuation;
 inquire_keyword         = "inquire"         ws_req continuation;
-integer_keyword         = "integer"         ws_req continuation;
-intent_keyword          = "intent"          ws_req continuation;
+integer_keyword         = "integer"         ws_opt continuation;
+intent_keyword          = "intent"          ws_opt continuation;
 interface_keyword       = "interface"       ws_req continuation;
-intrinsic_keyword       = "intrinsic"       ws_req continuation;
+intrinsic_keyword       = "intrinsic"       ws_opt continuation;
 iolength_keyword        = "iolength"        ws_req continuation;
 iomsg_keyword           = "iomsg"           ws_req continuation;
 iostat_keyword          = "iostat"          ws_req continuation;
 is_keyword              = "is"              ws_req continuation;
-kind_keyword            = "kind"            ws_req continuation;
-length_keyword          = "len"             ws_req continuation;
-logical_keyword         = "logical"         ws_req continuation;
+kind_keyword            = "kind"            ws_opt continuation;
+length_keyword          = "len"             ws_opt continuation;
+logical_keyword         = "logical"         ws_opt continuation;
 module_keyword          = "module"          ws_req continuation;
 name_keyword            = "name"            ws_req continuation;
 named_keyword           = "named"           ws_req continuation;
@@ -229,22 +229,22 @@ operator_keyword        = "operator"        ws_req continuation;
 optional_keyword        = "optional"        ws_req continuation;
 out_keyword             = "out"             ws_req continuation;
 pad_keyword             = "pad"             ws_req continuation;
-parameter_keyword       = "parameter"       ws_req continuation;
+parameter_keyword       = "parameter"       ws_opt continuation;
 pass_keyword            = "pass"            ws_req continuation;
 pending_keyword         = "pending"         ws_req continuation;
 pointer_keyword         = "pointer"         ws_req continuation;
 pos_keyword             = "pos"             ws_req continuation;
 position_keyword        = "position"        ws_req continuation;
 print_keyword           = "print"           ws_req continuation;
-private_keyword         = "private"         ws_req continuation;
+private_keyword         = "private"         ws_opt continuation;
 procedure_keyword       = "procedure"       ws_req continuation;
 program_keyword         = "program"         ws_req continuation;
 protected_keyword       = "protected"       ws_req continuation;
-public_keyword          = "public"          ws_req continuation;
+public_keyword          = "public"          ws_opt continuation;
 pure_keyword            = "pure"            ws_req continuation;
 read_keyword            = "read"            ws_req continuation;
 readwrite_keyword       = "readwrite"       ws_req continuation;
-real_keyword            = "real"            ws_req continuation;
+real_keyword            = "real"            ws_opt continuation;
 rec_keyword             = "rec"             ws_req continuation;
 recl_keyword            = "recl"            ws_req continuation;
 recursive_keyword       = "recursive"       ws_req continuation;
@@ -678,7 +678,7 @@ scalar_constant = constant
 ;
 
 constant = ( literal_constant
-         | named_constant) ws_req
+         | named_constant)
          ;
 
 (* R306 *)
@@ -754,8 +754,8 @@ include_line = "include" char_literal_constant end_of_line
  *
  * ************************************************************************** *)
 (* R401 *)
-type_spec = intrinsic_type_spec
-          | derived_type_spec
+type_spec = ws_opt (intrinsic_type_spec
+          | derived_type_spec)
           ;
 
 (* R402 : FIXME(bja, 2014_12) C402 and C403 (":" deferred type
@@ -1220,10 +1220,11 @@ ac_do_variable = scalar_int_variable
 type_declaration_stmt = declaration_type_spec [ { comma attr_spec }* coloncolon ] entity_decl_list eos
                       ;
 (* R502 : C501 C502 C503 *)
-declaration_type_spec = intrinsic_type_spec
+declaration_type_spec = ws_opt (intrinsic_type_spec
                       | ( type_keyword lparen derived_type_spec rparen )
                       | ( class_keyword lparen derived_type_spec rparen )
                       | ( class_keyword lparen asterisk rparen )
+                      )
                       ;
 
 (* R503 : C531 C534 C547 *)
@@ -1255,7 +1256,7 @@ entity_name = name
 entity_decl_list = entity_decl { comma entity_decl }*
 ;
 
-entity_decl = ( object_name [ lparen array_spec rparen ] [ asterisk char_length ] [ initialization ] )
+entity_decl = ( object_name ws_opt [ lparen array_spec rparen ] [ asterisk char_length ] [ initialization ] )
             | ( function_name [ asterisk char_length ] )
             ;
 

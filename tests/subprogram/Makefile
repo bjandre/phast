@@ -8,6 +8,8 @@ TEST_SRCS = \
 	./subprogram_empty_function_paren_result.F03 \
 	./subprogram_empty_function_whitespace_paren_whitespace_result.F03 \
 	./subprogram_comment_special_chars.F03 \
+	./subprogram_intrinsic_types.F03 \
+	./subprogram_intrinsic_types_kinds.F03 \
 	./subprogram_initialization_expression.F03 \
 	./subprogram_parameter.F03 \
 	./subprogram_assignment_statement.F03 \
