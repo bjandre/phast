@@ -13,9 +13,13 @@ TEST_SRCS = \
 	./subprogram_if.F03 \
 	./subprogram_if_then.F03 \
 	./subprogram_if_logical_and.F03 \
+	./subprogram_if_logical_paren.F03 \
 	./subprogram_if_nested.F03 \
 	./subprogram_if_elseif_else.F03 \
-	./subprogram_if_named.F03
+	./subprogram_if_named.F03 \
+	./subprogram_relational_op.F03 
+#	./subprogram_logical_op.F03 \
+#	./subprogram_equivalence_op.F03
 
 
 TEST_OBJS = \

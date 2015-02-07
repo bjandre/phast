@@ -103,6 +103,11 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
+    def test_subprogram_if_logical_paren(self):
+        filename = "{0}/subprogram_if_logical_paren.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast)
+ 
     def test_subprogram_if_nested(self):
         filename = "{0}/subprogram_if_nested.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
@@ -117,6 +122,21 @@ class phast_module(unittest.TestCase):
         filename = "{0}/subprogram_if_named.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
+ 
+    def test_subprogram_relational_op(self):
+        filename = "{0}/subprogram_relational_op.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast)
+ 
+#    def test_subprogram_logical_op(self):
+#        filename = "{0}/subprogram_logical_op.F03".format(self.test_dir)
+#        ast = self.generate_ast(filename)
+#        self.assertIsNotNone(ast)
+# 
+#    def test_subprogram_equivalence_op(self):
+#        filename = "{0}/subprogram_equivalence_op.F03".format(self.test_dir)
+#        ast = self.generate_ast(filename)
+#        self.assertIsNotNone(ast)
  
 
 if __name__ == "__main__":
