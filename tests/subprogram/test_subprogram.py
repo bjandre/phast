@@ -103,25 +103,26 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    @unittest.expectedFailure
     def test_subprogram_assignment_statement(self):
         filename = "{0}/subprogram_assignment_statement.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    @unittest.expectedFailure
     def test_subprogram_assign_string_literal(self):
         filename = "{0}/subprogram_assign_string_literal.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-    @unittest.expectedFailure
+    def test_subprogram_implicit_none(self):
+        filename = "{0}/subprogram_implicit_none.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
     def test_subprogram_implicit_none_assignment(self):
         filename = "{0}/subprogram_implicit_none_assignment.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
-    @unittest.expectedFailure
     def test_subprogram_implicit_none_assignment_comments(self):
         filename = "{0}/subprogram_implicit_none_assignment_comments.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
@@ -132,79 +133,66 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
-    @unittest.expectedFailure
     def test_subprogram_3statements(self):
         filename = "{0}/subprogram_3statements.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
-    @unittest.expectedFailure
     def test_subprogram_if(self):
         filename = "{0}/subprogram_if.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-    @unittest.expectedFailure
     def test_subprogram_if_then(self):
         filename = "{0}/subprogram_if_then.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-    @unittest.expectedFailure
     def test_subprogram_if_logical_and(self):
         filename = "{0}/subprogram_if_logical_and.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-    @unittest.expectedFailure
     def test_subprogram_if_logical_paren(self):
         filename = "{0}/subprogram_if_logical_paren.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-    @unittest.expectedFailure
     def test_subprogram_if_nested(self):
         filename = "{0}/subprogram_if_nested.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-    @unittest.expectedFailure
     def test_subprogram_if_elseif_else(self):
         filename = "{0}/subprogram_if_elseif_else.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-    @unittest.expectedFailure
     def test_subprogram_if_named(self):
         filename = "{0}/subprogram_if_named.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-    @unittest.expectedFailure
     def test_subprogram_relational_op(self):
         filename = "{0}/subprogram_relational_op.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-    @unittest.expectedFailure
     def test_subprogram_logical_op(self):
         filename = "{0}/subprogram_logical_op.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-    @unittest.expectedFailure
     def test_subprogram_equivalence_op(self):
         filename = "{0}/subprogram_equivalence_op.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
-    @unittest.expectedFailure
     def test_subprogram_paren_expression(self):
         filename = "{0}/subprogram_paren_expression.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
-    @unittest.expectedFailure
     def test_subprogram_do_loop(self):
         filename = "{0}/subprogram_do_loop.F03".format(self.test_dir)
         ast = self.generate_ast(filename)

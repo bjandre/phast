@@ -53,18 +53,18 @@ end_of_line = ws_opt { "\n" | "\r" | "\n\r" }+ ;
 (* FIXME(bja, 201412 ) should account for continuation
 lines...? *)
 
-rparen       = ")"      ws_opt (continuation | eos);
-lparen       = "(" !"/" ws_opt continuation ;
-forwardslash = "/" !")" ws_opt continuation ;
-comma        = ","      ws_opt continuation ;
-colon        = ":" !":" ws_opt continuation ;
-coloncolon   = "::"     ws_opt continuation ;
-asterisk     = "*"      ws_opt continuation ;
-percent      = "%"      ws_opt continuation ;
-equal        = "=" !">" ws_opt continuation ;
-arrow        = "=>"     ws_opt continuation ;
-plus         = "+"      ws_opt continuation ;
-minus        = "-"      ws_opt continuation ;
+rparen       = ws_opt ")"      ws_opt (continuation | eos);
+lparen       = ws_opt "(" !"/" ws_opt continuation ;
+forwardslash = ws_opt "/" !")" ws_opt continuation ;
+comma        = ws_opt ","      ws_opt continuation ;
+colon        = ws_opt ":" !":" ws_opt continuation ;
+coloncolon   = ws_opt "::"     ws_opt continuation ;
+asterisk     = ws_opt "*"      ws_opt continuation ;
+percent      = ws_opt "%"      ws_opt continuation ;
+equal        = ws_opt "=" !">" ws_opt continuation ;
+arrow        = ws_opt "=>"     ws_opt continuation ;
+plus         = ws_opt "+"      ws_opt continuation ;
+minus        = ws_opt "-"      ws_opt continuation ;
 
 (* only used in special characters, don't want continuation? *)
 backslash         = "\\" ;
@@ -111,24 +111,24 @@ continuation = { continuation_char ( end_of_line | comment) }*;
 eos = semicolon | comment | end_of_line ;
 
 block_data_keyword       = ( "block data"       | "blockdata"       ) ws_req continuation;
-double_precision_keyword = ( "double precision" | "doubleprecision" ) ws_req continuation;
-else_if_keyword          = ( "else if"          | "elseif"          ) ws_req continuation;
+double_precision_keyword = ( "double precision" | "doubleprecision" ) ws_opt continuation;
+else_if_keyword          = ( "else if"          | "elseif"          ) ws_opt continuation;
 else_where_keyword       = ( "else where"       | "elsewhere"       ) ws_req continuation;
-end_associate_keyword    = ( "end associate"    | "endassociate"    ) ws_req continuation;
+end_associate_keyword    = ( "end associate"    | "endassociate"    ) ws_opt continuation;
 end_block_data_keyword   = ( "end block data"   | "endblockdata"    ) ws_req continuation;
-end_do_keyword           = ( "end do"           | "enddo"           ) ws_req continuation;
+end_do_keyword           = ( "end do"           | "enddo"           ) ws_opt continuation;
 end_enum_keyword         = ( "end enum"         | "endenum"         ) ws_req continuation;
 end_file_keyword         = ( "end file"         | "endfile"         ) ws_req continuation;
 end_forall_keyword       = ( "end forall"       | "endforall"       ) ws_req continuation;
-end_function_keyword     = ( "end function"     | "endfunction"     ) ws_req continuation;
-end_if_keyword           = ( "end if"           | "endif"           ) ws_req continuation;
+end_function_keyword     = ( "end function"     | "endfunction"     ) ws_opt continuation;
+end_if_keyword           = ( "end if"           | "endif"           ) ws_opt continuation;
 end_interface_keyword    = ( "end interface"    | "end_interface"   ) ws_req continuation;
-end_module_keyword       = ( "end module"       | "endmodule"       ) ws_req continuation;
-end_program_keyword      = ( "end program"      | "endprogram"      ) ws_req continuation;
-end_select_keyword       = ( "end select"       | "endselect"       ) ws_req continuation;
-end_subroutine_keyword   = ( "end subroutine"   | "endsubroutine"   ) ws_req continuation;
-end_type_keyword         = ( "end type"         | "endtype"         ) ws_req continuation;
-end_where_keyword        = ( "end where"        | "endwhere"        ) ws_req continuation;
+end_module_keyword       = ( "end module"       | "endmodule"       ) ws_opt continuation;
+end_program_keyword      = ( "end program"      | "endprogram"      ) ws_opt continuation;
+end_select_keyword       = ( "end select"       | "endselect"       ) ws_opt continuation;
+end_subroutine_keyword   = ( "end subroutine"   | "endsubroutine"   ) ws_opt continuation;
+end_type_keyword         = ( "end type"         | "endtype"         ) ws_opt continuation;
+end_where_keyword        = ( "end where"        | "endwhere"        ) ws_opt continuation;
 go_to_keyword            = ( "go to"            | "goto"            ) ws_req continuation;
 in_out_keyword           = ( "in out"           | "inout"           ) ws_opt continuation;
 select_case_keyword      = ( "select case"      | "selectcase"      ) ws_req continuation;
@@ -169,7 +169,7 @@ dimension_keyword       = "dimension"       ws_opt continuation;
 direct_keyword          = "direct"          ws_req continuation;
 do_keyword              = "do"              ws_req continuation;
 elemental_keyword       = "elemental"       ws_req continuation;
-else_keyword            = "else"            ws_req continuation;
+else_keyword            = "else"            ws_opt continuation;
 encoding_keyword        = "encoding"        ws_req continuation;
 end_keyword             = "end"             ws_req continuation;
 entry_keyword           = "entry"           ws_req continuation;
@@ -194,7 +194,7 @@ formatted_keyword       = "formatted"       ws_req continuation;
 function_keyword        = "function"        ws_req continuation;
 generic_keyword         = "generic"         ws_req continuation;
 id_keyword              = "id"              ws_req continuation;
-if_keyword              = "if"              ws_req continuation;
+if_keyword              = "if"              ws_opt continuation;
 implicit_keyword        = "implicit"        ws_opt continuation;
 import_keyword          = "import"          ws_req continuation;
 in_keyword              = "in"              ws_opt continuation;
@@ -265,7 +265,7 @@ stop_keyword            = "stop"            ws_req continuation;
 stream_keyword          = "stream"          ws_req continuation;
 subroutine_keyword      = "subroutine"      ws_req continuation;
 target_keyword          = "target"          ws_req continuation;
-then_keyword            = "then"            ws_req continuation;
+then_keyword            = "then"            ws_opt continuation;
 type_keyword            = "type"            ws_req continuation;
 unformatted_keyword     = "unformatted"     ws_req continuation;
 unit_keyword            = "unit"            ws_req continuation;
@@ -546,7 +546,7 @@ executable_construct = action_stmt
 (* R214 : NOTE(bja, 201412) per C201, end_function_stmt,
 end_program_stmt and end_subroutine_stmt removed. *)
 
-action_stmt = ( allocate_stmt
+action_stmt = ws_opt ( allocate_stmt
             | assignment_stmt
             | backspace_stmt
             | call_stmt
@@ -1811,7 +1811,7 @@ level_1_expr = [ defined_unary_op ] primary
              ;
 
 (* R703 : C703 *)
-defined_unary_op = "." { letter }+ "."
+defined_unary_op = ws_opt "." { letter }+ "." ws_opt
                  ;
 
 (* R704 : *)
@@ -1863,12 +1863,12 @@ level_4_expr = [ level_3_expr rel_op ] level_3_expr
              ;
 
 (* R713 *)
-rel_op = ".eq." | "=="
+rel_op = ws_opt (".eq." | "=="
        | ".ne." | "/="
        | ".lt." | ("<" !"=")
        | ".le." | "<="
        | ".gt." | (">" !"=")
-       | ".ge." | ">="
+       | ".ge." | ">=") ws_opt
        ;
 
 (* R714 : *)
@@ -1895,19 +1895,19 @@ level_5_expr = equiv_operand [ equiv_op level_5_expr equiv_op ]
 
 
 (* R718 *)
-not_op = ".not."
+not_op = ws_opt ".not." ws_opt
        ;
 
 (* R719 *)
-and_op = ".and."
+and_op = ws_opt ".and." ws_opt
        ;
 
 (* R720 *)
-or_op = ".or."
+or_op = ws_opt ".or." ws_opt
       ;
 
 (* R721 *)
-equiv_op = ".eqv." | ".neqv."
+equiv_op = ws_opt (".eqv." | ".neqv.") ws_opt
          ;
 
 
@@ -1922,7 +1922,7 @@ expr = level_5_expr [ defined_binary_op expr ]
      ;
 
 (* R723 : C704 *)
-defined_binary_op = "." { letter }+ "."
+defined_binary_op = ws_opt ("." { letter }+ ".") ws_opt
                   ;
 
 
@@ -2170,24 +2170,24 @@ if_construct = if_then_stmt
              ;
 
 (* R803 : *)
-if_then_stmt = [ if_construct_name colon ] if_keyword lparen scalar_logical_expr rparen then_keyword eos
+if_then_stmt = ws_opt [ if_construct_name colon ] if_keyword lparen scalar_logical_expr rparen then_keyword eos
              ;
 
 (* R804 : *)
-else_if_stmt = else_if_keyword lparen scalar_logical_expr rparen then_keyword [ if_construct_name ] eos
+else_if_stmt = ws_opt else_if_keyword lparen scalar_logical_expr rparen then_keyword [ if_construct_name ] eos
              ;
 
 (* R805 : *)
-else_stmt = else_keyword [ if_construct_name ] eos
+else_stmt = ws_opt else_keyword [ if_construct_name ] eos
           ;
 
 (* R806 : *)
-end_if_stmt = end_if_keyword [ if_construct_name ] eos
+end_if_stmt = ws_opt end_if_keyword [ if_construct_name ] eos
             ;
 
 
 (* R807 : C802 *)
-if_stmt = if_keyword lparen scalar_logical_expr rparen action_stmt
+if_stmt = ws_opt if_keyword lparen scalar_logical_expr rparen action_stmt
         ;
 
 
@@ -2311,8 +2311,8 @@ block_do_construct = do_stmt
                    ;
 
 (* R827 : *)
-do_stmt = label_do_stmt
-        | nonlabel_do_stmt
+do_stmt = ws_opt (label_do_stmt
+        | nonlabel_do_stmt) eos
         ;
 
 (* R828 : *)
@@ -2338,12 +2338,12 @@ do_block = block
          ;
 
 (* R833 : *)
-end_do = end_do_stmt
-       | continue_stmt
+end_do = ws_opt (end_do_stmt
+       | continue_stmt)
        ;
 
 (* R834 : *)
-end_do_stmt = end_do_keyword [ do_construct_name ]
+end_do_stmt = end_do_keyword [ do_construct_name ] eos
             ;
 
 

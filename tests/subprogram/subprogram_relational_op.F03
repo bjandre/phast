@@ -4,6 +4,8 @@ subroutine foo_relational_op()
 
   bar = 1.0 == 2.0
   bar = 1.0 .eq. 2.0
+  bar = 1.0==2.0
+  bar = 1.0.eq.2.0
   bar = 1.0 /= 2.0
   bar = 1.0 .ne. 2.0
   bar = 1.0 < 2.0

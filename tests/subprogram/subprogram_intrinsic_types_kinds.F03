@@ -6,6 +6,7 @@ subroutine foo_intrinsic_types_kinds
   character(:), allocatable :: aaaa
   complex(kind=8) :: b
   doubleprecision :: c
+  doubleprecision::cc
   integer(kind(0)) :: d
   integer(kind=8), dimension(:), allocatable :: dd
   integer(kind=8), dimension(:,:), allocatable :: ddee
