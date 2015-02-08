@@ -266,7 +266,7 @@ stream_keyword          = "stream"          ws_req continuation;
 subroutine_keyword      = "subroutine"      ws_req continuation;
 target_keyword          = "target"          ws_req continuation;
 then_keyword            = "then"            ws_opt continuation;
-type_keyword            = "type"            ws_req continuation;
+type_keyword            = "type"            ws_opt continuation;
 unformatted_keyword     = "unformatted"     ws_req continuation;
 unit_keyword            = "unit"            ws_req continuation;
 use_keyword             = "use"             ws_req continuation;
@@ -948,7 +948,7 @@ derived_type_def = derived_type_stmt
 type_name = name
 ;
 
-derived_type_stmt = type_keyword [ [ comma type_attr_spec_list ] coloncolon ] type_name [ lparen type_param_name_list rparen ] eos
+derived_type_stmt = ws_opt type_keyword [ [ comma type_attr_spec_list ] coloncolon ] type_name [ lparen type_param_name_list rparen ] eos
                   ;
 
 (* R431 : C426 *)
@@ -970,7 +970,7 @@ private_or_sequence = ws_opt (private_components_stmt
                     ;
 
 (* R433 : C431 - if typename, then it much match the name in derived type *)
-end_type_stmt = end_type_keyword [ type_name ] eos
+end_type_stmt = ws_opt end_type_keyword [ type_name ] eos
                    ;
 
 (* R434 : C432 C433 *)
@@ -1592,11 +1592,14 @@ variable = designator
 variable_name = name
               ;
 
-(* R603 *)
-designator = object_name
+(* R603 : NOTE(bja, 201502) moved structure_component first, otherwise
+object name always catches the struct name... does just using data ref
+for object name and structure_component work...? *)
+designator =
+             structure_component
+           | object_name
            | array_element
            | array_section
-           | structure_component
            | substring
            ;
 
