@@ -104,7 +104,7 @@ comment = { { { ws_opt }* comment_char {character | ws_opt}* }* end_of_line }* ;
 (* section 3.3.1.2 *)
 continuation_char = ampersand ;
 
-continuation = { continuation_char ( end_of_line | comment) }*;
+continuation = { continuation_char ( end_of_line | comment) ws_opt }*;
 
 (* section 3.3.1.3 *)
 (* end of statement *)
@@ -249,7 +249,7 @@ rec_keyword             = "rec"             ws_req continuation;
 recl_keyword            = "recl"            ws_req continuation;
 recursive_keyword       = "recursive"       ws_req continuation;
 result_keyword          = "result"          ws_opt continuation;
-return_keyword          = "return"          ws_req continuation;
+return_keyword          = "return"          ws_opt continuation;
 rewind_keyword          = "rewind"          ws_req continuation;
 round_keyword           = "round"           ws_req continuation;
 save_keyword            = "save"            ws_req continuation;
@@ -511,7 +511,7 @@ internal_subprogram = function_subprogram
                     ;
 
 (* R212  *)
-specification_stmt = access_stmt
+specification_stmt = ws_opt (access_stmt
                    | allocatable_stmt
                    | asynchronous_stmt
                    | bind_stmt
@@ -529,7 +529,7 @@ specification_stmt = access_stmt
                    | save_stmt
                    | target_stmt
                    | volatile_stmt
-                   | value_stmt
+                   | value_stmt ) eos
                    ;
 
 (* R213 *)
@@ -965,8 +965,8 @@ type_attr_spec = access_spec
                ;
 
 (* R432 *)
-private_or_sequence = private_components_stmt
-                    | sequence_stmt
+private_or_sequence = ws_opt (private_components_stmt
+                    | sequence_stmt) eos
                     ;
 
 (* R433 : C431 - if typename, then it much match the name in derived type *)
@@ -974,7 +974,7 @@ end_type_stmt = end_type_keyword [ type_name ] eos
                    ;
 
 (* R434 : C432 C433 *)
-sequence_stmt = sequence_keyword eos
+sequence_stmt = sequence_keyword
               ;
 
 (* R435 : C434 C435 *)
@@ -1063,7 +1063,7 @@ arg_name = name
 
 
 (* R447 : C454 *)
-private_components_stmt = private_keyword eos
+private_components_stmt = private_keyword
                         ;
 
 
@@ -1329,7 +1329,7 @@ intent_spec = in_out_keyword | in_keyword | out_keyword
             ;
 
 (* R518 : C548 *)
-access_stmt = access_spec [ [ coloncolon ] access_id_list ] eos
+access_stmt = access_spec [ [ coloncolon ] access_id_list ]
             ;
 (* R519 : C549 *)
 access_id_list = access_id { comma access_id }*
@@ -3092,7 +3092,7 @@ function_subprogram = function_stmt
                     ;
 
 (* R1224 : C1234 C1235 *)
-function_stmt = [ prefix ] function_keyword function_name
+function_stmt = ws_opt [ prefix ] function_keyword function_name
               lparen [ dummy_arg_name_list ] rparen [ suffix ] eos
               ;
 
@@ -3130,7 +3130,7 @@ result_name = name
             ;
 
 (* R1230 : C1243 C1246 *)
-end_function_stmt =
+end_function_stmt = ws_opt
                   (
                       ( end_function_keyword [ function_name ] )
                       | ( end_keyword [ function_name ] )
@@ -3145,7 +3145,7 @@ subroutine_subprogram = subroutine_stmt
                       end_subroutine_stmt
                       ;
 (* R1232 : C1247 *)
-subroutine_stmt = [ prefix ] subroutine_keyword subroutine_name
+subroutine_stmt = ws_opt [ prefix ] subroutine_keyword subroutine_name
                 [ lparen [ dummy_arg_list ] rparen [ proc_language_binding_spec ] ]  eos
                 ;
 
@@ -3161,7 +3161,7 @@ dummy_arg = dummy_arg_name
           ;
 
 (* R1234 : C1348 C1251 *)
-end_subroutine_stmt =
+end_subroutine_stmt = ws_opt
                     (
                         ( end_subroutine_keyword [ subroutine_name ] )
                         | ( end_keyword [ subroutine_name ] )
