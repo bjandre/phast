@@ -618,7 +618,7 @@ special_character = space
                   | comma
                   | decimal_point
                   | ":"
-                  ! semicolon
+                  | semicolon
                   | exclamation_point
                   | percent
                   | ampersand
