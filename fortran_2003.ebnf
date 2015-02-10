@@ -1595,13 +1595,31 @@ variable_name = name
 (* R603 : NOTE(bja, 201502) moved structure_component first, otherwise
 object name always catches the struct name... does just using data ref
 for object name and structure_component work...? *)
-designator =
+(* designator =
              structure_component
            | object_name
            | array_element
            | array_section
            | substring
            ;
+*)
+(* based on open fortran parser, they have noted that object-name, array-element, array-section, structure-component are all data-ref. *)
+designator = data_ref
+           | substring
+           ;
+
+designator_or_function_reference = ( data_ref [ lparen substring_range_or_arg_list rparen] )
+                                 | substring
+                                 ;
+
+substring_range_or_arg_list = ( colon [expr])
+                            | ( expr substring_range_or_arg_list_suffix )
+                            | [ actual_arg_spec_list ]
+                            ;
+
+substring_range_or_arg_list_suffix = ( colon [expr])
+                                   | [ actual_arg_spec_list ]
+                                   ;
 
 (* R604 : C603 *)
 scalar_logical_variable = logical_variable
@@ -1799,11 +1817,21 @@ dealloc_opt = stat_opt
  *
  * ************************************************************************** *)
 (* R701 : C701 C702 *)
-primary = function_reference
+(* primary = function_reference
         | designator
         | array_constructor
         | structure_constructor
         | constant
+        | type_param_inquiry
+        | type_param_name
+        | (lparen expr rparen)
+        ; *)
+
+(* NOTE(bja, 201502) ambiguitiy between designator and function reference. based on open fortran parser, replaced with designator_or_function_reference *) 
+primary = designator_or_function_reference
+        | constant
+        | array_constructor
+        | structure_constructor
         | type_param_inquiry
         | type_param_name
         | (lparen expr rparen)

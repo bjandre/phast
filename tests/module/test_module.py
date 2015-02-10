@@ -87,6 +87,11 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
+    def test_module_call_arg_array_derived_type(self):
+        filename = "{0}/module_call_arg_array_derived_type.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast)
+ 
     def test_module_call_function(self):
         filename = "{0}/module_call_function.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
