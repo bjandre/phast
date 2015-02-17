@@ -10,6 +10,7 @@ TEST_SRCS = \
 	./subprogram_comment_special_chars.F03 \
 	./subprogram_intrinsic_types.F03 \
 	./subprogram_intrinsic_types_kinds.F03 \
+	./subprogram_array.F03 \
 	./subprogram_derived_type.F03 \
 	./subprogram_initialization_expression.F03 \
 	./subprogram_parameter.F03 \

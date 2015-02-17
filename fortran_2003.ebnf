@@ -19,7 +19,8 @@ Notes:
 
  - ignoring fixed-format rules.
 
- - many rule constraints are not implemented(able?) in the EBNF but will be implemented as checks to the parsed code. Search for FIXME.
+ - many rule constraints are not implemented(able?) in the EBNF but will be 
+   implemented as checks to the parsed code. Search for FIXME.
 
  * ************************************************************************** *)
 
@@ -69,8 +70,8 @@ minus        = ws_opt "-"      ws_opt continuation ;
 (* only used in special characters, don't want continuation? *)
 backslash         = "\\" ;
 quote             = '"'  ; (* " fix broken syntax highlighting *)
-lsquare           = "["  ;
-rsquare           = "]"  ;
+lsquare           = "["  ; (* R467 *)
+rsquare           = "]"  ; (* R468 *)
 lcurly            = "{"  ;
 rcurly            = "}"  ;
 decimal_point     = "."  ;
@@ -1174,8 +1175,10 @@ end_enum_stmt = end_enum_keyword eos
               ;
 
 (* R465 *)
-array_constructor = ( "(/" ac_spec "/)" )
-                  | ( left_square_bracket ac_spec right_square_bracket )
+lac = ws_opt "(/" ws_opt ;
+rac = ws_opt "/)" ws_opt ;
+array_constructor = ( lac ac_spec rac )
+                  | ( lsquare ac_spec rsquare )
                   ;
 
 (* R466 : C494 C495 C496 *)
@@ -1183,17 +1186,17 @@ ac_spec = ( type_spec coloncolon )
         | ( [ type_spec coloncolon ] ac_value_list )
         ;
 
-(* R467 *)
+(* R467 : grouped above with other symbols.
 left_square_bracket = "["
-                    ;
+                    ; *)
 
-(* R468 *)
+(* R468 : grouped above with other symbols.
 right_square_bracket = "]"
-                     ;
+                     ; *)
 
 (* R469 *)
 ac_value_list = ac_value { comma ac_value }*
-;
+              ;
 
 ac_value = expr
          | ac_implied_do
@@ -1707,8 +1710,9 @@ subscript = scalar_int_expr
 section_subscript_list = section_subscript { comma section_subscript }*
                        ;
 
-section_subscript = subscript
-                  | subscript_triplet
+(* NOTE(bja, 201502) subscript is a part of subscript_triplet, so it needs to come after the triplet. *)
+section_subscript = subscript_triplet
+                  | subscript
                   | vector_subscript
                   ;
 

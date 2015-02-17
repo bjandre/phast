@@ -88,6 +88,11 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
+    def test_subprogram_array(self):
+        filename = "{0}/subprogram_array.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
     def test_subprogram_derived_type(self):
         filename = "{0}/subprogram_derived_type.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
