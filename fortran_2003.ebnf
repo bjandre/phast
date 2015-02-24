@@ -873,7 +873,7 @@ real_literal_constant = (significand [ exponent_letter exponent ] [ kind_constan
                       ;
 
 (* R418 *)
-significand = (digit_string decimal_point digit_string)
+significand = (digit_string decimal_point [ digit_string ])
             | (decimal_point digit_string)
             ;
 
