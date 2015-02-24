@@ -1841,7 +1841,10 @@ dealloc_opt = stat_opt
         | (lparen expr rparen)
         ; *)
 
-(* NOTE(bja, 201502) ambiguitiy between designator and function reference. based on open fortran parser, replaced with designator_or_function_reference *) 
+(* NOTE(bja, 201502) ambiguitiy between designator and function
+reference. based on open fortran parser, replaced with
+designator_or_function_reference *)
+
 primary = designator_or_function_reference
         | constant
         | array_constructor
@@ -1859,26 +1862,26 @@ level_1_expr = [ defined_unary_op ] primary
 defined_unary_op = ws_opt "." { letter }+ "." ws_opt
                  ;
 
-(* R704 : *)
-mult_operand = level_1_expr [ power_op mult_operand ]
-             ;
-
-(* NOTE(bja, 2015-01) R705, R706, R710 use left recursion, which doesn't work
-with peg parsers. we need to convert it to some combination of
-iteration/right recursion.
-FIXME(bja, 2015-01) Pure right recursion will not get the
-operator precidence correct! see
+(* NOTE(bja, 201501) R704, R705, R706, R710, R715, R716, R717, R722
+use left recursion, which doesn't work with peg parsers. We need to
+convert it to some combination of iteration/right recursion. See:
 http://www.dalnefre.com/wp/2011/05/parsing-expression-grammars-part-4/
 *)
 
-(* R705 : FIXME(bja, 2015-01) Pure right recursion will not get the
-operator precidence correct! *)
-add_operand = mult_operand [ mult_op add_operand ] ;
+(* R704 : NOTE(bja, 201501) Left recursion does not work with PEG parsers,
+ need to convert to iteration. *)
+(* mult_operand = level_1_expr [ power_op mult_operand ] ; *)
+mult_operand = level_1_expr { power_op level_1_expr }* ;
 
-(* R706 : FIXME(bja, 2015-01) Pure right recursion will not get the
-operator precidence correct! *)
-level_2_expr = add_operand [ add_op [ level_2_expr ] ]
-             ;
+(* R705 : NOTE(bja, 201501) Left recursion does not work with PEG parsers,
+ need to convert to iteration. *)
+(* add_operand = [ add_operand mult_op ] mult_operand ; *)
+add_operand = mult_operand { mult_op mult_operand }* ;
+
+(* R706 : NOTE(bja, 201501) Left recursion does not work with PEG parsers,
+ need to convert to iteration. *)
+(* level_2_expr = [ [ level_2_expr ] add_op ] add_operand ; *)
+level_2_expr = add_operand { add_op add_operand }* ;
 
 (* R707 *)
 power_op = "**"
@@ -1894,17 +1897,17 @@ add_op = plus
        | minus
        ;
 
-(* R710 : FIXME(bja, 2015-01) Pure right recursion will not get the
-operator precidence correct! *)
-level_3_expr = level_2_expr [ concat_op level_3_expr ]
-             ;
+(* R710 : NOTE(bja, 201501) Left recursion does not work with PEG parsers,
+ need to convert to iteration. *)
+(* level_3_expr = [ level_3_expr concat_op ] level_2_expr ; *)
+level_3_expr = level_2_expr { concat_op level_2_expr }* ;
 
 (* R711 *)
 concat_op = "//"
           ;
 
 (* R712 : *)
-level_4_expr = [ level_3_expr rel_op ] level_3_expr
+level_4_expr = level_3_expr { rel_op level_3_expr }*
              ;
 
 (* R713 *)
@@ -1920,22 +1923,21 @@ rel_op = ws_opt (".eq." | "=="
 and_operand = [ not_op ] level_4_expr
             ;
 
-(* R715 : FIXME(bja, 201502) Pure right recursion will not get the
-operator precidence correct! *)
+(* R715 : NOTE(bja, 201501) Left recursion does not work with PEG parsers,
+ need to convert to iteration. *)
 (* or_operand = [ or_operand and_op ] and_operand *)
-or_operand = and_operand [ and_op or_operand ]
-           ;
+or_operand = and_operand { and_op and_operand }* ;
 
-(* R716 : FIXME(bja, 201502) Pure right recursion will not get the
-operator precidence correct! *)
+(* R716 : NOTE(bja, 201501) Left recursion does not work with PEG parsers,
+ need to convert to iteration. *)
 (* equiv_operand = [ equiv_operand or_op ] or_operand *)
-equiv_operand = or_operand [ or_op equiv_operand ]
+equiv_operand = or_operand { or_op or_operand }*
               ;
 
-(* R717 : FIXME(bja, 201502) Pure right recursion will not get the
-operator precidence correct! *)
+(* R717 : NOTE(bja, 201501) Left recursion does not work with PEG parsers,
+ need to convert to iteration. *)
 (* level_5_expr = [ level_5_expr equiv_op ] equiv_operand *)
-level_5_expr = equiv_operand [ equiv_op level_5_expr equiv_op ]
+level_5_expr = equiv_operand { equiv_op equiv_operand }*
              ;
 
 
@@ -1960,10 +1962,10 @@ equiv_op = ws_opt (".eqv." | ".neqv.") ws_opt
 scalar_expr = expr
 ;
 
-(* FIXME(bja, 201502) Pure right recursion will not get the
-operator precidence correct! *)
+(* NOTE(bja, 201501) Left recursion does not work with PEG parsers,
+ need to convert to iteration. *)
 (* expr = [ expr defined_binary_op ] level_5_expr *)
-expr = level_5_expr [ defined_binary_op expr ]
+expr = level_5_expr { defined_binary_op level_5_expr }*
      ;
 
 (* R723 : C704 *)
