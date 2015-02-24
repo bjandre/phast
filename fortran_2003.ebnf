@@ -1881,7 +1881,7 @@ add_operand = mult_operand { mult_op mult_operand }* ;
 (* R706 : NOTE(bja, 201501) Left recursion does not work with PEG parsers,
  need to convert to iteration. *)
 (* level_2_expr = [ [ level_2_expr ] add_op ] add_operand ; *)
-level_2_expr = add_operand { add_op add_operand }* ;
+level_2_expr = [ add_op ] add_operand { add_op add_operand }* ;
 
 (* R707 *)
 power_op = "**"
