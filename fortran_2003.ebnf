@@ -3264,167 +3264,167 @@ intrinsic_procedure_name = intrinsic_numeric_function_name
                          ;
 
 
-intrinsic_numeric_function_name = ( "ABS" | "abs" )
-                                | ( "AIMAG" | "aimag" )
-                                | ( "AINT" | "aint" )
-                                | ( "ANINT" | "anint" )
-                                | ( "CEILING" | "ceiling" )
-                                | ( "CMPLX" | "cmplx" )
-                                | ( "CONJG" | "conjg" )
-                                | ( "DBLE" | "dble" )
-                                | ( "DIM" | "dim" )
-                                | ( "DPROD" | "dprod" )
-                                | ( "FLOOR" | "floor" )
-                                | ( "INT" | "int" )
-                                | ( "MAX" | "max" )
-                                | ( "MIN" | "min" )
-                                | ( "MOD" | "mod" )
-                                | ( "MODULO" | "modulo" )
-                                | ( "NINT" | "nint" )
-                                | ( "REAL" | "real" )
-                                | ( "SIGN" | "sign" )
+intrinsic_numeric_function_name = "abs"
+                                | "aimag"
+                                | "aint"
+                                | "anint"
+                                | "ceiling"
+                                | "cmplx"
+                                | "conjg"
+                                | "dble"
+                                | "dim"
+                                | "dprod"
+                                | "floor"
+                                | "int"
+                                | "max"
+                                | "min"
+                                | "mod"
+                                | "modulo"
+                                | "nint"
+                                | "real"
+                                | "sign"
                                 ;
 
-intrinsic_mathematical_function_name =  ( "ACOS" | "acos" )
-                                     | ( "ASIN" | "asin" )
-                                     | ( "ATAN" | "atan" )
-                                     | ( "ATAN2" | "atan2" )
-                                     | ( "COS" | "cos" )
-                                     | ( "COSH" | "cosh" )
-                                     | ( "EXP" | "exp" )
-                                     | ( "LOG" | "log" )
-                                     | ( "LOG10" | "log10" )
-                                     | ( "SIN" | "sin" )
-                                     | ( "SINH" | "sinh" )
-                                     | ( "SQRT" | "sqrt" )
-                                     | ( "TAN" | "tan" )
-                                     | ( "TANH" | "tanh" )
+intrinsic_mathematical_function_name =  "acos"
+                                     | "asin"
+                                     | "atan"
+                                     | "atan2"
+                                     | "cos"
+                                     | "cosh"
+                                     | "exp"
+                                     | "log"
+                                     | "log10"
+                                     | "sin"
+                                     | "sinh"
+                                     | "sqrt"
+                                     | "tan"
+                                     | "tanh"
                                      ;
 
-intrinsic_character_function_name = ( "ACHAR" | "achar" )
-                                  | ( "ADJUSTL" | "adjustl" )
-                                  | ( "ADJUSTR" | "adjustr" )
-                                  | ( "CHAR" | "char" )
-                                  | ( "IACHAR" | "iachar" )
-                                  | ( "ICHAR" | "ichar" )
-                                  | ( "INDEX" | "index" )
-                                  | ( "LEN_TRIM" | "len_trim" )
-                                  | ( "LGE" | "lge" )
-                                  | ( "LGT" | "lgt" )
-                                  | ( "LLE" | "lle" )
-                                  | ( "LLT" | "llt" )
-                                  | ( "MAX" | "max" )
-                                  | ( "MIN" | "min" )
-                                  | ( "REPEAT" | "repeat" )
-                                  | ( "SCAN" | "scan" )
-                                  | ( "TRIM" | "trim" )
-                                  | ( "VERIFY" | "verify" )
+intrinsic_character_function_name = "achar"
+                                  | "adjustl"
+                                  | "adjustr"
+                                  | "char"
+                                  | "iachar"
+                                  | "ichar"
+                                  | "index"
+                                  | "len_trim"
+                                  | "lge"
+                                  | "lgt"
+                                  | "lle"
+                                  | "llt"
+                                  | "max"
+                                  | "min"
+                                  | "repeat"
+                                  | "scan"
+                                  | "trim"
+                                  | "verify"
                                   ;
 
-intrinsic_kind_function_name = ( "KIND" | "kind" )
-                             | ( "SELECTED_CHAR_KIND" | "selected_char_kind" )
-                             | ( "SELECTED_INT_KIND" | "selected_int_kind" )
-                             | ( "SELECTED_REAL_KIND" | "selected_real_kind" )
+intrinsic_kind_function_name = "kind"
+                             | "selected_char_kind"
+                             | "selected_int_kind"
+                             | "selected_real_kind"
                              ;
 
 
-intrinsic_type_conversion_function_name = ( "LOGICAL" | "logical" )
-                                        | ( "TRANSFER" | "transfer" )
+intrinsic_type_conversion_function_name = "logical"
+                                        | "transfer"
                                         ;
 
-intrinsic_numeric_inquiry_function_name = ( "DIGITS" | "digits" )
-                                        | ( "EPSILON" | "epsilon" )
-                                        | ( "HUGE" | "huge" )
-                                        | ( "MAXEXPONENT" | "maxexponent" )
-                                        | ( "MINEXPONENT" | "minexponent" )
-                                        | ( "PRECISION" | "precision" )
-                                        | ( "RADIX" | "radix" )
-                                        | ( "RANGE" | "range" )
-                                        | ( "TINY" | "tiny" )
+intrinsic_numeric_inquiry_function_name = "digits"
+                                        | "epsilon"
+                                        | "huge"
+                                        | "maxexponent"
+                                        | "minexponent"
+                                        | "precision"
+                                        | "radix"
+                                        | "range"
+                                        | "tiny"
                                         ;
 
-intrinsic_array_inquiry_function_name = ( "LBOUND" | "lbound" )
-                                      | ( "SHAPE" | "shape" )
-                                      | ( "SIZE" | "SIZE" )
-                                      | ( "UBOUND" | "ubound" )
+intrinsic_array_inquiry_function_name = "lbound"
+                                      | "shape"
+                                      | "size"
+                                      | "ubound"
                                       ;
 
-intrinsic_other_inquiry_function_name = ( "ALLOCATED" | "allocated" )
-                                      | ( "ASSOCIATED" | "associated" )
-                                      | ( "BIT_SIZE" | "bit_size" )
-                                      | ( "EXTENDS_TYPE_OF" | "extends_type_of" )
-                                      | ( "LEN" | "len" )
-                                      | ( "NEW LINE" | "new line" )
-                                      | ( "PRESENT" | "present" )
-                                      | ( "SAME_TYPE_AS" | "same_type_as" )
+intrinsic_other_inquiry_function_name = "allocated"
+                                      | "associated"
+                                      | "bit_size"
+                                      | "extends_type_of"
+                                      | "len"
+                                      | "new_line"
+                                      | "present"
+                                      | "same_type_as"
                                       ;
 
-intrinsic_bit_manipulation_function_name = ( "BTEST" | "btest" )
-                                         | ( "IAND" | "iand" )
-                                         | ( "IBCLR" | "ibclr" )
-                                         | ( "IBITS" | "ibits" )
-                                         | ( "IBSET" | "ibset" )
-                                         | ( "IEOR" | "ieor" )
-                                         | ( "IOR" | "ior" )
-                                         | ( "ISHFT" | "ishft" )
-                                         | ( "ISHFTC" | "ishftc" )
-                                         | ( "MVBITS" | "mvbits" )
-                                         | ( "NOT" | "not" )
+intrinsic_bit_manipulation_function_name = "btest"
+                                         | "iand"
+                                         | "ibclr"
+                                         | "ibits"
+                                         | "ibset"
+                                         | "ieor"
+                                         | "ior"
+                                         | "ishft"
+                                         | "ishftc"
+                                         | "mvbits"
+                                         | "not"
                                          ;
 
-intrinsic_floating_point_function_name = ( "EXPONENT" | "exponent" )
-                                       | ( "FRACTION" | "fraction" )
-                                       | ( "NEAREST" | "nearest" )
-                                       | ( "RRSPACING" | "rrspacing" )
-                                       | ( "SCALE" | "scale" )
-                                       | ( "SET_EXPONENT" | "set_exponent" )
-                                       | ( "SPACING" | "spacing" )
+intrinsic_floating_point_function_name = "exponent"
+                                       | "fraction"
+                                       | "nearest"
+                                       | "rrspacing"
+                                       | "scale"
+                                       | "set_exponent"
+                                       | "spacing"
                                        ;
 
-intrinsic_vector_matrix_function_name = ( "DOT_PRODUCT" | "dot_product" )
-                                      | ( "MATMUL" | "matmul" )
+intrinsic_vector_matrix_function_name = "dot_product"
+                                      | "matmul"
                                       ;
 
-intrinsic_array_reduction_function_name = ( "ALL" | "all" )
-                                        | ( "ANY" | "any" )
-                                        | ( "COUNT" | "count" )
-                                        | ( "MAXVAL" | "maxval" )
-                                        | ( "MINVAL" | "minval" )
-                                        | ( "PRODUCT" | "product" )
-                                        | ( "SUM" | "sum" )
+intrinsic_array_reduction_function_name = "all"
+                                        | "any"
+                                        | "count"
+                                        | "maxval"
+                                        | "minval"
+                                        | "product"
+                                        | "sum"
                                         ;
 
-intrinsic_array_construction_function_name = ( "CSHIFT" | "cshift" )
-                                           | ( "EOSHIFT" | "eoshift" )
-                                           | ( "MERGE" | "merge" )
-                                           | ( "PACK" | "pack" )
-                                           | ( "RESHAPE" | "reshape" )
-                                           | ( "SPREAD" | "spread" )
-                                           | ( "TRANSPOSE" | "transpose" )
-                                           | ( "UNPACK" | "unpack" )
+intrinsic_array_construction_function_name = "cshift"
+                                           | "eoshift"
+                                           | "merge"
+                                           | "pack"
+                                           | "reshape"
+                                           | "spread"
+                                           | "transpose"
+                                           | "unpack"
                                            ;
 
-intrinsic_array_location_function_name = ( "MAXLOC" | "maxloc" )
-                                       | ( "MINLOC" | "minloc" )
+intrinsic_array_location_function_name = "maxloc"
+                                       | "minloc"
                                        ;
 
-intrinsic_null_function_name = ( "NULL" | "null" )
+intrinsic_null_function_name = "null"
                              ;
 
-intrinsic_allocation_transfer_function_name = ( "MOVE_ALLOC" | "move_alloc" )
+intrinsic_allocation_transfer_function_name = "move_alloc"
                                             ;
 
-intrinsic_random_number_function_name = ( "RANDOM_NUMBER" | "random_number" )
-                                      | ( "RANDOM_SEED" | "random_seed" )
+intrinsic_random_number_function_name = "random_number"
+                                      | "random_seed"
 ;
 
-intrinsic_system_environment_function_name = ( "COMMAND_ARGUMENT_COUNT" | "command_argument_count" )
-                                           | ( "CPU_TIME" | "cpu_time" )
-                                           | ( "DATE_AND_TIME" | "date_and_time" )
-                                           | ( "GET_COMMAND" | "get_command" )
-                                           | ( "GET_COMMAND_ARGUMENT" | "get_command_argument" )
-                                           | ( "GET_ENVIRONMENT_VARIABLE" | "get_environment_variable" )
-                                           | ( "IS_IOSTAT_END" | "is_iostat_end" )
-                                           | ( "IS_IOSTAT_EOR" | "is_iostat_eor" )
-                                           | ( "SYSTEM_CLOCK" | "system_clock" )
+intrinsic_system_environment_function_name = "command_argument_count"
+                                           | "cpu_time"
+                                           | "date_and_time"
+                                           | "get_command"
+                                           | "get_command_argument"
+                                           | "get_environment_variable"
+                                           | "is_iostat_end"
+                                           | "is_iostat_eor"
+                                           | "system_clock"
                                            ;
