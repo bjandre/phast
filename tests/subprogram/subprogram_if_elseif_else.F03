@@ -7,7 +7,7 @@ subroutine foo_if_elseif_else()
      cde = 0
   else if (abc == 0) then
      cde = 1
-  else if (abc < 0) then
+  elseif(abc < 0)then
      cde = 2
   else
      ! should never be here!

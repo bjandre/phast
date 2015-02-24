@@ -8,7 +8,7 @@ class phast_module(unittest.TestCase):
     """
 
     def setUp(self):
-        self.whitespace = " \t"
+        self.whitespace = ""
         self.startrule = "external_subprogram"
         self.parser = fortran_2003Parser(parseinfo=False, ignorecase=True, trace_length=512)
         self.text = None
@@ -38,11 +38,71 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNone(ast)
 
+    def test_subprogram_empty_subroutine(self):
+        filename = "{0}/subprogram_empty_subroutine.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_empty_subroutine_paren(self):
+        filename = "{0}/subprogram_empty_subroutine_paren.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_empty_subroutine_whitespace_paren(self):
+        filename = "{0}/subprogram_empty_subroutine_whitespace_paren.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_empty_function_paren(self):
+        filename = "{0}/subprogram_empty_function_paren.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_empty_function_whitespace_paren(self):
+        filename = "{0}/subprogram_empty_function_whitespace_paren.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_empty_function_paren_result(self):
+        filename = "{0}/subprogram_empty_function_paren_result.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_empty_function_whitespace_paren_whitespace_result(self):
+        filename = "{0}/subprogram_empty_function_whitespace_paren_whitespace_result.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
     def test_subprogram_comment_special_chars(self):
         filename = "{0}/subprogram_comment_special_chars.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
+    def test_subprogram_intrinsic_types(self):
+        filename = "{0}/subprogram_intrinsic_types.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_intrinsic_types_kinds(self):
+        filename = "{0}/subprogram_intrinsic_types_kinds.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_array(self):
+        filename = "{0}/subprogram_array.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_derived_type(self):
+        filename = "{0}/subprogram_derived_type.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
+    def test_subprogram_function(self):
+        filename = "{0}/subprogram_function.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast)
+ 
     def test_subprogram_initialization_expression(self):
         filename = "{0}/subprogram_initialization_expression.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
@@ -63,6 +123,11 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
  
+    def test_subprogram_implicit_none(self):
+        filename = "{0}/subprogram_implicit_none.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
     def test_subprogram_implicit_none_assignment(self):
         filename = "{0}/subprogram_implicit_none_assignment.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
@@ -83,11 +148,6 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
-    def test_subprogram_function(self):
-        filename = "{0}/subprogram_function.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
- 
     def test_subprogram_if(self):
         filename = "{0}/subprogram_if.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
@@ -142,7 +202,12 @@ class phast_module(unittest.TestCase):
         filename = "{0}/subprogram_paren_expression.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
- 
+
+    def test_subprogram_do_loop(self):
+        filename = "{0}/subprogram_do_loop.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast)
+
 
 if __name__ == "__main__":
     unittest.main()

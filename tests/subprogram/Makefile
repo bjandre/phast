@@ -1,10 +1,22 @@
 FC=gfortran
 TEST_SRCS = \
+	./subprogram_empty_subroutine.F03 \
+	./subprogram_empty_subroutine_paren.F03 \
+	./subprogram_empty_subroutine_whitespace_paren.F03 \
+	./subprogram_empty_function_paren.F03 \
+	./subprogram_empty_function_whitespace_paren.F03 \
+	./subprogram_empty_function_paren_result.F03 \
+	./subprogram_empty_function_whitespace_paren_whitespace_result.F03 \
 	./subprogram_comment_special_chars.F03 \
+	./subprogram_intrinsic_types.F03 \
+	./subprogram_intrinsic_types_kinds.F03 \
+	./subprogram_array.F03 \
+	./subprogram_derived_type.F03 \
 	./subprogram_initialization_expression.F03 \
 	./subprogram_parameter.F03 \
 	./subprogram_assignment_statement.F03 \
 	./subprogram_assign_string_literal.F03 \
+	./subprogram_implicit_none.F03 \
 	./subprogram_implicit_none_assignment.F03 \
 	./subprogram_implicit_none_assignment_comments.F03 \
 	./subprogram_dummy_args.F03 \
@@ -20,7 +32,8 @@ TEST_SRCS = \
 	./subprogram_relational_op.F03 \
 	./subprogram_logical_op.F03 \
 	./subprogram_equivalence_op.F03 \
-	./subprogram_paren_expression.F03
+	./subprogram_paren_expression.F03 \
+	./subprogram_do_loop.F03
 
 
 TEST_OBJS = \

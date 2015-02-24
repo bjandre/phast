@@ -4,6 +4,10 @@ module call_dummy_args
   
 contains
 
+  subroutine foo_dummy()
+
+  end subroutine foo_dummy
+  
   subroutine foo_dummy_args(bar, baz)
     ! some function
     implicit none
@@ -19,6 +23,9 @@ contains
     integer :: bar ! some input
     real :: baz ! some output
 
+    call foo_dummy
+    call foo_dummy()
+    call foo_dummy ( )
     call foo_dummy_args(bar, baz)
   
   end subroutine foo_call_dummy_args
