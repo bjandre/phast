@@ -286,7 +286,7 @@ volatile_keyword        = "volatile"        ws_req continuation;
 wait_keyword            = "wait"            ws_req continuation;
 where_keyword           = "where"           ws_req continuation;
 while_keyword           = "while"           ws_req continuation;
-write_keyword           = "write"           ws_req continuation;
+write_keyword           = "write"           ws_opt continuation;
 
 keywords =
            "abstract"

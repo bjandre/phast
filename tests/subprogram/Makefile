@@ -34,7 +34,8 @@ TEST_SRCS = \
 	./subprogram_logical_op.F03 \
 	./subprogram_equivalence_op.F03 \
 	./subprogram_paren_expression.F03 \
-	./subprogram_do_loop.F03
+	./subprogram_do_loop.F03 \
+	./subprogram_write.F03
 
 
 TEST_OBJS = \
