@@ -15,6 +15,7 @@ TEST_SRCS = \
 	./subprogram_initialization_expression.F03 \
 	./subprogram_parameter.F03 \
 	./subprogram_assignment_statement.F03 \
+	./subprogram_assignment_logical.F03 \
 	./subprogram_real_literal_constant.F03 \
 	./subprogram_assign_string_literal.F03 \
 	./subprogram_implicit_none.F03 \

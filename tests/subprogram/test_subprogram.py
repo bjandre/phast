@@ -118,6 +118,11 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
 
+    def test_subprogram_assignment_logical(self):
+        filename = "{0}/subprogram_assignment_logical.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast, msg=ast.__repr__())
+
     def test_subprogram_real_literal_constant(self):
         filename = "{0}/subprogram_real_literal_constant.F03".format(self.test_dir)
         ast = self.generate_ast(filename)

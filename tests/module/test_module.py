@@ -97,11 +97,10 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
-# NOTE(bja, 2015-02) these are invalid tests for subprogram, need to be moved to module
-#    def test_module_call_function_call_procedure(self):
-#        filename = "{0}/module_call_function_call_procedure.F03".format(self.test_dir)
-#        ast = self.generate_ast(filename)
-#        self.assertIsNotNone(ast)
+    def test_module_call_procedure(self):
+        filename = "{0}/module_call_procedure.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast)
 
 
 

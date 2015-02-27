@@ -9,7 +9,8 @@ TEST_SRCS = \
 	./t0007_minimal_module_fail.F03 \
 	./module_call_dummy_args.F03 \
 	./module_call_arg_array_derived_type.F03 \
-	./module_call_function.F03
+	./module_call_function.F03 \
+	./module_call_procedure.F03
 
 # NOTE(bja, 2015-02) these are invalid tests for subprogram, need to be moved to module
 #	./subprogram_call_function_call_procedure.F03 
