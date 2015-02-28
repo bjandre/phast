@@ -200,7 +200,7 @@ flush_keyword           = "flush"           ws_req continuation;
 fmt_keyword             = "fmt"             ws_req continuation;
 forall_keyword          = "forall"          ws_req continuation;
 form_keyword            = "form"            ws_req continuation;
-format_keyword          = "format"          ws_req continuation;
+format_keyword          = "format"          ws_opt continuation;
 formatted_keyword       = "formatted"       ws_req continuation;
 function_keyword        = "function"        ws_req continuation;
 generic_keyword         = "generic"         ws_req continuation;
@@ -505,11 +505,11 @@ execution_part = executable_construct
                 { execution_part_construct }*
                 ;
 
-(* R209 *)
-execution_part_construct = executable_construct |
-                          format_stmt |
-                          entry_stmt |
-                          data_stmt
+(* R209 : NOTE(bja, 201502) format must have a label, C1001, so it must come before executable construct, which only may have a label, Section 3.2.4. *)
+execution_part_construct = format_stmt
+                         | executable_construct
+                         | entry_stmt
+                         | data_stmt
                           ;
 
 (* R210  *)
@@ -543,8 +543,8 @@ specification_stmt = ws_opt (access_stmt
                    | value_stmt ) eos
                    ;
 
-(* R213 *)
-executable_construct = action_stmt
+(* R213 : NOTE(bja, 201502) Section 3.2.4, any statement may have a label. *)
+executable_construct = [ label ] action_stmt
                      | associate_construct
                      | case_construct
                      | do_construct
@@ -2738,8 +2738,8 @@ inquire_spec = ( [ unit_keyword equal ] file_unit_number )
  *
  * ************************************************************************** *)
 
-(* R1001 : C1001 *)
-format_stmt = format_keyword format_specification eos
+(* R1001 : C1001 (format statement shall be labeled) *)
+format_stmt = label ws_req format_keyword format_specification eos
             ;
 
 (* R1002 : C1002 *)

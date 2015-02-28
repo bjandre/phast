@@ -218,10 +218,20 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
+    def test_subprogram_labeled_stmt(self):
+        filename = "{0}/subprogram_labeled_stmt.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast)
+
     def test_subprogram_write(self):
         filename = "{0}/subprogram_write.F03".format(self.test_dir)
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
+
+#    def test_subprogram_format_stmt(self):
+#        filename = "{0}/subprogram_format_stmt.F03".format(self.test_dir)
+#        ast = self.generate_ast(filename)
+#        self.assertIsNotNone(ast)
 
     def test_subprogram_cpp_predefined(self):
         filename = "{0}/subprogram_cpp_predefined.F03".format(self.test_dir)
