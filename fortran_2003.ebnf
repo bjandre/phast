@@ -1621,18 +1621,13 @@ designator = data_ref
            | substring
            ;
 
-designator_or_function_reference = ( data_ref [ lparen substring_range_or_arg_list rparen] )
+designator_or_function_reference = ( data_ref [ lparen [ substring_range_or_arg_list ]  rparen] )
                                  | substring
                                  ;
 
-substring_range_or_arg_list = ( colon [expr])
-                            | ( expr substring_range_or_arg_list_suffix )
-                            | [ actual_arg_spec_list ]
+substring_range_or_arg_list = actual_arg_spec_list
+                            | substring_range
                             ;
-
-substring_range_or_arg_list_suffix = ( colon [expr])
-                                   | [ actual_arg_spec_list ]
-                                   ;
 
 (* R604 : C603 *)
 scalar_logical_variable = logical_variable
