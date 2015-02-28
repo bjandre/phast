@@ -9,6 +9,7 @@ class phast_module(unittest.TestCase):
 
     def setUp(self):
         self.whitespace = ""
+        self.nameguard = False
         self.startrule = "external_subprogram"
         self.parser = fortran_2003Parser(parseinfo=False, ignorecase=True, trace_length=512)
         self.text = None
@@ -28,7 +29,9 @@ class phast_module(unittest.TestCase):
         except Exception:
             pass
         else:
-            ast = self.parser.parse(self.text, self.startrule, filename, whitespace=self.whitespace)
+            ast = self.parser.parse(self.text, self.startrule, filename,
+                                    whitespace=self.whitespace,
+                                    nameguard=self.nameguard)
         return ast
 
     def test_bad_filename(self):
@@ -228,10 +231,10 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
-#    def test_subprogram_format_stmt(self):
-#        filename = "{0}/subprogram_format_stmt.F03".format(self.test_dir)
-#        ast = self.generate_ast(filename)
-#        self.assertIsNotNone(ast)
+    def test_subprogram_format_stmt(self):
+        filename = "{0}/subprogram_format_stmt.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast)
 
     def test_subprogram_cpp_predefined(self):
         filename = "{0}/subprogram_cpp_predefined.F03".format(self.test_dir)

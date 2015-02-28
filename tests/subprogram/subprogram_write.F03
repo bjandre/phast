@@ -4,6 +4,7 @@ subroutine foo_write()
 
   write(out, *) 'This is a test!',' It is only a test.'
   write ( out, * ) 'This is a test!' , ' It is only a test.'
+  write(*, '(a, i5)') "int = ", out
 
 end subroutine foo_write
 

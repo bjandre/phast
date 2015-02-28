@@ -64,9 +64,6 @@ def commandline_options():
     parser.add_argument('-l', '--list', action=ListRules, nargs=0,
                         help="list all rules and exit")
 
-    parser.add_argument('-n', '--no-nameguard', action='store_true',
-                        dest='no_nameguard',
-                        help="disable the 'nameguard' feature")
     parser.add_argument('-t', '--trace', action='store_true',
                         help="output trace information")
     
@@ -116,7 +113,7 @@ def main(options):
         filename=options.file,
         trace=options.trace,
         whitespace=whitespace,
-        nameguard=not options.no_nameguard)
+        nameguard=False)
     print('AST:')
     print(ast)
     print()

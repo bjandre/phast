@@ -38,8 +38,8 @@ TEST_SRCS = \
 	./subprogram_do_loop.F03 \
 	./subprogram_labeled_stmt.F03 \
 	./subprogram_write.F03 \
+	./subprogram_format_stmt.F03 \
 	./subprogram_cpp_predefined.F03
-#	./subprogram_format_stmt.F03 \
 
 
 TEST_OBJS = \
