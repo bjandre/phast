@@ -702,7 +702,7 @@ literal_constant = complex_literal_constant
                  ;
 
 (* R307 *)
-named_constant = name
+named_constant = name | cpp_predefined
                ;
 
 (* R308, FIXME(bja, 2014_12) C302 int constant shall be of type integer *)
@@ -757,7 +757,8 @@ label = digit [digit [digit [digit [digit ]]]]
 include_line = "include" char_literal_constant end_of_line
              ;
 
-
+cpp_predefined = underscore { alphanumeric_character }+
+               ;
 
 (* **************************************************************************
  *

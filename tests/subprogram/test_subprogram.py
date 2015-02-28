@@ -223,6 +223,11 @@ class phast_module(unittest.TestCase):
         ast = self.generate_ast(filename)
         self.assertIsNotNone(ast)
 
+    def test_subprogram_cpp_predefined(self):
+        filename = "{0}/subprogram_cpp_predefined.F03".format(self.test_dir)
+        ast = self.generate_ast(filename)
+        self.assertIsNotNone(ast)
+
 
 if __name__ == "__main__":
     unittest.main()
