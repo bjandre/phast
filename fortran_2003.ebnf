@@ -2761,19 +2761,19 @@ r = int_literal_constant
   ;
 
 (* R1005 : C1007 C1008 *)
-data_edit_desc = ( "I" w [ "." m ] )
-               | ( "B" w [ "." m ] )
-               | ( "O" w [ "." m ] )
-               | ( "Z" w [ "." m ] )
-               | ( "F" w "." d     )
-               | ( "E" w "." d [ "E" e ] )
-               | ( "EN" w "." d [ "E" e ] )
-               | ( "ES" w "." d [ "E" e ] )
-               | ( "G" w "." d [ "E" e ] )
-               | ( "L" w )
-               | ( "A" [ w ] )
-               | ( "D" w "." d )
-               | ( "DT" [ char_literal_constant ] [ lparen v_list rparen ] )
+data_edit_desc = ( "i" w [ "." m ] )
+               | ( "b" w [ "." m ] )
+               | ( "o" w [ "." m ] )
+               | ( "z" w [ "." m ] )
+               | ( "f" w "." d     )
+               | ( "e" w "." d [ "e" e ] )
+               | ( "en" w "." d [ "e" e ] )
+               | ( "es" w "." d [ "e" e ] )
+               | ( "g" w "." d [ "e" e ] )
+               | ( "l" w )
+               | ( "a" [ w ] )
+               | ( "d" w "." d )
+               | ( "dt" [ char_literal_constant ] [ lparen v_list rparen ] )
                ;
 
 (* R1006 : C1006 *)
@@ -2803,7 +2803,7 @@ control_edit_desc = position_edit_desc
                   | ( [ r ] forwardslash )
                   | colon
                   | sign_edit_desc
-                  | ( k "P" )
+                  | ( k "p" )
                   | blank_interp_edit_desc
                   | round_edit_desc
                   | decimal_edit_desc
@@ -2814,39 +2814,39 @@ k = signed_int_literal_constant
   ;
 
 (* R1013 : *)
-position_edit_desc = ( "T" n )
-                   | ( "TL" n )
-                   | ( "TR" n )
-                   | ( n "X" )
+position_edit_desc = ( "t" n )
+                   | ( "tl" n )
+                   | ( "tr" n )
+                   | ( n "x" )
                    ;
 
-(* R1014 : C1010 C1011 *)
+(* r1014 : c1010 c1011 *)
 n = int_literal_constant
   ;
 
-(* R1015 : *)
-sign_edit_desc = "SS"
-               | "SP"
-               | "S"
+(* r1015 : *)
+sign_edit_desc = "ss"
+               | "sp"
+               | "s"
                ;
 
-(* R1016 : *)
-blank_interp_edit_desc = "BN"
-                       | "BZ"
+(* r1016 : *)
+blank_interp_edit_desc = "bn"
+                       | "bz"
                        ;
 
-(* R1017 : *)
-round_edit_desc = "RU"
-                | "RD"
-                | "RZ"
-                | "RN"
-                | "RC"
-                | "RP"
+(* r1017 : *)
+round_edit_desc = "ru"
+                | "rd"
+                | "rz"
+                | "rn"
+                | "rc"
+                | "rp"
                 ;
 
-(* R1018 : *)
-decimal_edit_desc = "DC"
-                  | "DP"
+(* r1018 : *)
+decimal_edit_desc = "dc"
+                  | "dp"
                   ;
 
 (* R1019 : C1012 *)
