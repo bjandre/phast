@@ -38,7 +38,8 @@ else:
 
 
 from fortran_2003 import fortran_2003Parser
-
+from fortran_2003_semantics import Fortran2003SemanticActions
+from phast_utils import PhastWriter
 
     
 # -------------------------------------------------------------------------------
@@ -105,13 +106,15 @@ def main(options):
 
     with open(options.file) as f:
         text = f.read()
-    parser = fortran_2003Parser(parseinfo=False, ignorecase=True, trace_length=512)
+    parser = fortran_2003Parser(parseinfo=True, ignorecase=True, trace_length=512)
     print("--> parser.trace_length = {0}".format(parser.trace_length))
+    semantic_actions = Fortran2003SemanticActions()
     ast = parser.parse(
         text,
         options.startrule,
         filename=options.file,
         trace=options.trace,
+        semantics=semantic_actions,
         whitespace=whitespace,
         nameguard=False)
     print('AST:')
@@ -120,6 +123,10 @@ def main(options):
     print('JSON:')
     print(json.dumps(ast, indent=2))
     print()
+    print("source: ")
+    phast_writer = PhastWriter()
+    phast_writer.write(ast)
+    phast_writer.finalize()
 
 
 if __name__ == "__main__":

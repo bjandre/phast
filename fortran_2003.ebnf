@@ -110,7 +110,10 @@ double_apostrophe = "''"
 (* section 3.3.1.1 *)
 comment_char = exclamation_point ;
 
-comment = { { { ws_opt }* comment_char {character | ws_opt}* }* end_of_line }* ;
+comment_text = comment_char {character | whitespace}*
+             ;
+
+comment = comment:{ ws_opt { comment_text }* end_of_line }* ;
 
 (* section 3.3.1.2 *)
 continuation_char = ampersand ;
