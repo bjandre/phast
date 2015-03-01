@@ -65,7 +65,7 @@ class TestPhastBase(unittest.TestCase):
         filename = "{0}/{1}".format(self.test_dir, filename)
         ast = self._generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
-        #self._write_ast(filename, ast)
+        self._write_ast(filename, ast)
 
     
     def test_bad_filename(self):

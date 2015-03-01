@@ -2879,8 +2879,10 @@ program_name = name
              ;
 
 (* R1103 *)
-end_program_stmt = ( end_keyword )
-                 | ( end_program_keyword [ program_name ] )
+end_program_stmt = ws_opt (
+                   ( end_program_keyword [ program_name ] )
+                 | ( end_keyword [ program_name ] ))
+                 eos
                  ;
 
 (* R1104 : C1104 C1105 C1106 C1107 *)
@@ -2898,8 +2900,9 @@ module_name = name
             ;
 
 (* R1106 *)
-end_module_stmt = ( end_keyword
-                | ( end_module_keyword [ module_name ] ))
+end_module_stmt = ws_opt (
+                  ( end_module_keyword [ module_name ] )
+                | ( end_keyword [ module_name ]))
                 eos
                 ;
 
