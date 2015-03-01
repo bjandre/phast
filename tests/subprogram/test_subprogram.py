@@ -1,246 +1,181 @@
 #!/usr/bin/env python
 
 import unittest
-from phast.fortran_2003 import fortran_2003Parser
 
-class phast_module(unittest.TestCase):
+from tests.test_phast_base import TestPhastBase
+
+class TestPhastSubprogram(TestPhastBase):
     """unittest suite for phast's ability to process fortran 2003 modules
     """
 
     def setUp(self):
-        self.whitespace = ""
-        self.nameguard = False
+        super(TestPhastSubprogram, self).setUp()
         self.startrule = "external_subprogram"
-        self.parser = fortran_2003Parser(parseinfo=False, ignorecase=True, trace_length=512)
-        self.text = None
-        self.ast = None
         self.test_dir = "subprogram"
 
     def tearDown(self):
-        pass
+        super(TestPhastSubprogram, self).tearDown()
 
-    def generate_ast(self, filename):
-        #import os.path
-        #self.assertTrue(os.path.exists(filename))
-        ast = None
-        try:
-            with open(filename) as f:
-                self.text = f.read()
-        except Exception:
-            pass
-        else:
-            ast = self.parser.parse(self.text, self.startrule, filename,
-                                    whitespace=self.whitespace,
-                                    nameguard=self.nameguard)
-        return ast
-
-    def test_bad_filename(self):
-        """Test that the generate_ast function returns None for a bad filename
-        """
-        filename = "bad-filename"
-        ast = self.generate_ast(filename)
-        self.assertIsNone(ast)
 
     def test_subprogram_empty_subroutine(self):
-        filename = "{0}/subprogram_empty_subroutine.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_empty_subroutine.F03"
+        self.generate_write(filename)
 
     def test_subprogram_empty_subroutine_paren(self):
-        filename = "{0}/subprogram_empty_subroutine_paren.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_empty_subroutine_paren.F03"
+        self.generate_write(filename)
 
     def test_subprogram_empty_subroutine_whitespace_paren(self):
-        filename = "{0}/subprogram_empty_subroutine_whitespace_paren.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_empty_subroutine_whitespace_paren.F03"
+        self.generate_write(filename)
 
     def test_subprogram_empty_function_paren(self):
-        filename = "{0}/subprogram_empty_function_paren.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_empty_function_paren.F03"
+        self.generate_write(filename)
 
     def test_subprogram_empty_function_whitespace_paren(self):
-        filename = "{0}/subprogram_empty_function_whitespace_paren.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_empty_function_whitespace_paren.F03"
+        self.generate_write(filename)
 
     def test_subprogram_empty_function_paren_result(self):
-        filename = "{0}/subprogram_empty_function_paren_result.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_empty_function_paren_result.F03"
+        self.generate_write(filename)
 
     def test_subprogram_empty_function_whitespace_paren_whitespace_result(self):
-        filename = "{0}/subprogram_empty_function_whitespace_paren_whitespace_result.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_empty_function_whitespace_paren_whitespace_result.F03"
+        self.generate_write(filename)
 
     def test_subprogram_comment_special_chars(self):
-        filename = "{0}/subprogram_comment_special_chars.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_comment_special_chars.F03"
+        self.generate_write(filename)
 
     def test_subprogram_intrinsic_types(self):
-        filename = "{0}/subprogram_intrinsic_types.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_intrinsic_types.F03"
+        self.generate_write(filename)
 
     def test_subprogram_intrinsic_types_kinds(self):
-        filename = "{0}/subprogram_intrinsic_types_kinds.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_intrinsic_types_kinds.F03"
+        self.generate_write(filename)
 
     def test_subprogram_array(self):
-        filename = "{0}/subprogram_array.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_array.F03"
+        self.generate_write(filename)
 
     def test_subprogram_derived_type(self):
-        filename = "{0}/subprogram_derived_type.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_derived_type.F03"
+        self.generate_write(filename)
 
     def test_subprogram_function(self):
-        filename = "{0}/subprogram_function.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_function.F03"
+        self.generate_write(filename)
  
     def test_subprogram_initialization_expression(self):
-        filename = "{0}/subprogram_initialization_expression.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_initialization_expression.F03"
+        self.generate_write(filename)
 
     def test_subprogram_parameter(self):
-        filename = "{0}/subprogram_initialization_expression.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_initialization_expression.F03"
+        self.generate_write(filename)
 
     def test_subprogram_assignment_statement(self):
-        filename = "{0}/subprogram_assignment_statement.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_assignment_statement.F03"
+        self.generate_write(filename)
 
     def test_subprogram_assignment_logical(self):
-        filename = "{0}/subprogram_assignment_logical.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_assignment_logical.F03"
+        self.generate_write(filename)
 
     def test_subprogram_real_literal_constant(self):
-        filename = "{0}/subprogram_real_literal_constant.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_real_literal_constant.F03"
+        self.generate_write(filename)
 
     def test_subprogram_assign_string_literal(self):
-        filename = "{0}/subprogram_assign_string_literal.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_assign_string_literal.F03"
+        self.generate_write(filename)
  
     def test_subprogram_implicit_none(self):
-        filename = "{0}/subprogram_implicit_none.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_implicit_none.F03"
+        self.generate_write(filename)
 
     def test_subprogram_implicit_none_assignment(self):
-        filename = "{0}/subprogram_implicit_none_assignment.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_implicit_none_assignment.F03"
+        self.generate_write(filename)
 
     def test_subprogram_implicit_none_assignment_comments(self):
-        filename = "{0}/subprogram_implicit_none_assignment_comments.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
+        filename = "subprogram_implicit_none_assignment_comments.F03"
+        self.generate_write(filename)
 
     def test_subprogram_dummy_args(self):
-        filename = "{0}/subprogram_dummy_args.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_dummy_args.F03"
+        self.generate_write(filename)
 
     def test_subprogram_3statements(self):
-        filename = "{0}/subprogram_3statements.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_3statements.F03"
+        self.generate_write(filename)
 
     def test_subprogram_if(self):
-        filename = "{0}/subprogram_if.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_if.F03"
+        self.generate_write(filename)
  
     def test_subprogram_if_then(self):
-        filename = "{0}/subprogram_if_then.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_if_then.F03"
+        self.generate_write(filename)
  
     def test_subprogram_if_logical_and(self):
-        filename = "{0}/subprogram_if_logical_and.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_if_logical_and.F03"
+        self.generate_write(filename)
  
     def test_subprogram_if_logical_paren(self):
-        filename = "{0}/subprogram_if_logical_paren.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_if_logical_paren.F03"
+        self.generate_write(filename)
  
     def test_subprogram_if_nested(self):
-        filename = "{0}/subprogram_if_nested.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_if_nested.F03"
+        self.generate_write(filename)
  
     def test_subprogram_if_elseif_else(self):
-        filename = "{0}/subprogram_if_elseif_else.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_if_elseif_else.F03"
+        self.generate_write(filename)
  
     def test_subprogram_if_named(self):
-        filename = "{0}/subprogram_if_named.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_if_named.F03"
+        self.generate_write(filename)
  
     def test_subprogram_relational_op(self):
-        filename = "{0}/subprogram_relational_op.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_relational_op.F03"
+        self.generate_write(filename)
  
     def test_subprogram_logical_op(self):
-        filename = "{0}/subprogram_logical_op.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_logical_op.F03"
+        self.generate_write(filename)
  
     def test_subprogram_equivalence_op(self):
-        filename = "{0}/subprogram_equivalence_op.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_equivalence_op.F03"
+        self.generate_write(filename)
  
     def test_subprogram_paren_expression(self):
-        filename = "{0}/subprogram_paren_expression.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_paren_expression.F03"
+        self.generate_write(filename)
 
     def test_subprogram_do_loop(self):
-        filename = "{0}/subprogram_do_loop.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_do_loop.F03"
+        self.generate_write(filename)
 
     def test_subprogram_labeled_stmt(self):
-        filename = "{0}/subprogram_labeled_stmt.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_labeled_stmt.F03"
+        self.generate_write(filename)
 
     def test_subprogram_write(self):
-        filename = "{0}/subprogram_write.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_write.F03"
+        self.generate_write(filename)
 
     def test_subprogram_format_stmt(self):
-        filename = "{0}/subprogram_format_stmt.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
+        filename = "subprogram_format_stmt.F03"
+        self.generate_write(filename)
 
     def test_subprogram_cpp_predefined(self):
-        filename = "{0}/subprogram_cpp_predefined.F03".format(self.test_dir)
-        ast = self.generate_ast(filename)
-        self.assertIsNotNone(ast)
-
+        filename = "subprogram_cpp_predefined.F03"
+        self.generate_write(filename)
 
 if __name__ == "__main__":
     unittest.main()

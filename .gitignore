@@ -8,3 +8,7 @@
 *.o
 *.mod
 *.a
+
+# test files
+*.tmp
+tmp.txt

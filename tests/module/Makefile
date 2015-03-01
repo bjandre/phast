@@ -12,9 +12,6 @@ TEST_SRCS = \
 	./module_call_function.F03 \
 	./module_call_procedure.F03
 
-# NOTE(bja, 2015-02) these are invalid tests for subprogram, need to be moved to module
-#	./subprogram_call_function_call_procedure.F03 
-
 
 TEST_OBJS = \
 	$(TEST_SRCS:%.F03=%.o)
