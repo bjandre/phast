@@ -46,7 +46,8 @@ clean : $(SRC_SUBDIRS) $(TEST_SUBDIRS)
 		core errs \
 		,* .emacs_* \
 		tags TAGS \
-		make.log MakeOut
+		make.log MakeOut \
+		*.tmp 
 
 #
 # clobber - Really clean up the directory.
