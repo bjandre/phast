@@ -29,18 +29,23 @@ import traceback
 
 # -------------------------------------------------------------------------------
 #
-# FIXME: work functions
+# Writing utilities
 #
 # -------------------------------------------------------------------------------
 class PhastWriter(object):
     """
     """
 
-    def __init__(self, filename):
-        self._file = open(filename, 'w')
+    def __init__(self, filename=None):
+        self._filename = filename
+        if self._filename is not None:
+            self._file = open(self._filename, 'w')
+        else:
+            self._file = sys.stdout
 
     def close(self):
-        self._file.close()
+        if self._filename is not None:
+            self._file.close()
         
     def write(self, ast):
         """
@@ -51,6 +56,12 @@ class PhastWriter(object):
             else:
                 self.write(a)
     
+
+# -------------------------------------------------------------------------------
+#
+# Whitespace utilities
+#
+# -------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     try:

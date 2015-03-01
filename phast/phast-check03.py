@@ -124,9 +124,10 @@ def main(options):
     print(json.dumps(ast, indent=2))
     print()
     print("source: ")
-    phast_writer = PhastWriter("{0}.tmp".format(options.file))
+    #phast_writer = PhastWriter("{0}.tmp".format(options.file))
+    phast_writer = PhastWriter()
     phast_writer.write(ast)
-    phast_writer.finalize()
+    phast_writer.close()
 
 
 if __name__ == "__main__":

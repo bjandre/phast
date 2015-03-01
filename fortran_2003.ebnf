@@ -680,7 +680,7 @@ alphanumeric_character = letter
  * section 3.2 - low level syntax
  *
  * ************************************************************************** *)
-(* R304, FIXME(bja, 201412) C301 for R304 - max name length is 64 characters *)
+(* R304 : C301 enforced by semantic action *)
 name =
      letter
      { alphanumeric_character }*
@@ -808,7 +808,7 @@ scalar_int_literal_constant = int_literal_constant
 int_literal_constant = digit_string [ underscore kind_constant ]
                      ;
 
-(* R407 C405 - scalar_int_constant_name shall be a named constant of type int; C406 - kind_param sholl be nonnegative *)
+(* R407 C405 - scalar_int_constant_name shall be a named constant of type int; C406 - kind_param shall be nonnegative *)
 scalar_int_constant_name = name
 ;
 
@@ -871,7 +871,7 @@ hex_digit = digit
 signed_real_literal_constant = [ sign ] real_literal_constant
                              ;
 
-(* R417 FIXME(bja, 2014_12) if both kind_constant and exponent_letter, exponent letter sh all be 'E' *)
+(* R417 : C411 enforced by semantic action *)
 real_literal_constant = (significand [ exponent_letter exponent ] [ kind_constant ])
                       | (digit_string exponent_letter exponent [ kind_constant ])
                       ;

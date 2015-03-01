@@ -9,6 +9,8 @@ subroutine foo_real_kinds()
   x = 1._r8
   x = .1_r8
   x = -.1_r8
+  x = 1.2345
+  x = 1234.5
+  x = 1234e-3
   
 end subroutine foo_real_kinds
-
