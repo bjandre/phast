@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-"""Python class containing the semantic actions for the grako based fortran 2003 parser.
+"""Python class containing the semantic actions for the grako based
+fortran 2003 parser.
 
 Author: Ben Andre <bjande@gmail.com>
 
@@ -27,13 +28,15 @@ from collections import OrderedDict
 import os
 import traceback
 
+# external dependencies
 import grako
 
-# -------------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
 #
 # FIXME: work functions
 #
-# -------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 class Fortran2003SemanticActions(object):
     """
     """
@@ -67,7 +70,9 @@ class Fortran2003SemanticActions(object):
             if len(ast) > 0:
                 ast_str += self._ast_list_to_str(ast)
         else:
-            raise RuntimeError("Unknown AST element type '{0}' for: {1}".format(type(ast), ast))
+            msg = "Unknown AST element type '{0}' for: {1}".format(
+                type(ast), ast)
+            raise RuntimeError(msg)
         return ast_str
 
     def _ast_list_to_str(self, ast):
@@ -86,7 +91,6 @@ class Fortran2003SemanticActions(object):
             ast_str += self._ast_to_str(ast[e])
         return ast_str
 
-    
     # -------------------------------------------------------------------------
     #
     # semantic actions for grammar rules
@@ -102,7 +106,8 @@ class Fortran2003SemanticActions(object):
         max_length = 64
         ast_str = self._ast_to_str(ast)
         if len(ast_str) > max_length:
-            raise RuntimeError("R304 - name : {0} : len(name) == {1}.".format(c301, len(ast_str)))
+            raise RuntimeError("R304 - name : {0} : len(name) == {1}.".format(
+                c301, len(ast_str)))
         return ast_str
 
     def ws_opt(self, ast):
@@ -121,7 +126,6 @@ class Fortran2003SemanticActions(object):
         """join all the comment text back into a single string
         """
         comment_str = self._ast_to_str(ast)
-        
         return comment_str
 
     def comment(self, ast):
@@ -153,13 +157,13 @@ class Fortran2003SemanticActions(object):
         """
         kind_const = {'kind_constant': u''.join(ast)}
         return kind_const
-        
+
     def sign(self, ast):
         """
         """
         s = u''.join(ast)
         return(s)
-        
+
     def digit_string(self, ast):
         """join individual digits into a string
         """
@@ -171,7 +175,7 @@ class Fortran2003SemanticActions(object):
         """
         signed_digit_str = self._ast_to_str(ast)
         return signed_digit_str
-    
+
     def significand(self, ast):
         """convert the significand into a single unified string
         """
@@ -185,7 +189,7 @@ class Fortran2003SemanticActions(object):
     def exponent(self, ast):
         exp = {'exponent': ast}
         return exp
-    
+
     def real_literal_constant(self, ast):
         """convert real literal constant into a single string, enforce rule
         constraints.
@@ -209,10 +213,10 @@ class Fortran2003SemanticActions(object):
                 raise RuntimeError(
                     "R417 real_literal_constant : {0}".format(c411))
 
-        ast_str = self._ast_to_str(ast)    
+        ast_str = self._ast_to_str(ast)
         return ast_str
 
-    
+
 if __name__ == "__main__":
     try:
         sys.exit(0)

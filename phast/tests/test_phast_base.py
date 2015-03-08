@@ -8,6 +8,7 @@ from phast.fortran_2003 import fortran_2003Parser
 from phast.fortran_2003_semantics import Fortran2003SemanticActions
 from phast.phast_utils import PhastWriter
 
+
 class TestPhastBase(unittest.TestCase):
     """unittest suite for phast's ability to process fortran 2003 modules
     """
@@ -28,8 +29,6 @@ class TestPhastBase(unittest.TestCase):
         pass
 
     def _generate_ast(self, filename):
-        #import os.path
-        #self.assertTrue(os.path.exists(filename))
         ast = None
         try:
             with open(filename) as f:
@@ -49,7 +48,7 @@ class TestPhastBase(unittest.TestCase):
             for s in src.readlines():
                 h.update(s)
         return h.digest()
-    
+
     def _write_ast(self, filename, ast):
         hash_orig = self._hash_file(filename)
         tmp = "{0}.tmp".format(filename)
@@ -63,12 +62,13 @@ class TestPhastBase(unittest.TestCase):
 
     def generate_write(self, filename):
         filename = "{0}/{1}".format(self.test_dir, filename)
-        self.assertTrue(os.path.isfile(filename), msg="Could not find fortran file '{0}'. cwd = {1}".format(filename, os.getcwd()))
+        err_msg = "Could not find fortran file '{0}'. cwd = {1}".format(
+            filename, os.getcwd())
+        self.assertTrue(os.path.isfile(filename), msg=err_msg)
         ast = self._generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
         self._write_ast(filename, ast)
 
-    
     def test_bad_filename(self):
         """Test that the generate_ast function returns None for a bad filename
         """

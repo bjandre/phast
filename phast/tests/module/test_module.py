@@ -4,6 +4,7 @@ import unittest
 
 from phast.tests.test_phast_base import TestPhastBase
 
+
 class TestPhastModule(TestPhastBase):
     """unittest suite for phast's ability to process fortran 2003 modules
     """
@@ -58,11 +59,11 @@ class TestPhastModule(TestPhastBase):
     def test_module_call_dummy_args(self):
         filename = "module_call_dummy_args.F03"
         self.generate_write(filename)
- 
+
     def test_module_call_arg_array_derived_type(self):
         filename = "module_call_arg_array_derived_type.F03"
         self.generate_write(filename)
- 
+
     def test_module_call_function(self):
         filename = "module_call_function.F03"
         self.generate_write(filename)
@@ -70,7 +71,6 @@ class TestPhastModule(TestPhastBase):
     def test_module_call_procedure(self):
         filename = "module_call_procedure.F03"
         self.generate_write(filename)
-
 
 
 if __name__ == "__main__":

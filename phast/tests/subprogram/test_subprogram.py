@@ -4,6 +4,7 @@ import unittest
 
 from phast.tests.test_phast_base import TestPhastBase
 
+
 class TestPhastSubprogram(TestPhastBase):
     """unittest suite for phast's ability to process fortran 2003 modules
     """
@@ -68,7 +69,7 @@ class TestPhastSubprogram(TestPhastBase):
     def test_subprogram_function(self):
         filename = "subprogram_function.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_initialization_expression(self):
         filename = "subprogram_initialization_expression.F03"
         self.generate_write(filename)
@@ -92,7 +93,7 @@ class TestPhastSubprogram(TestPhastBase):
     def test_subprogram_assign_string_literal(self):
         filename = "subprogram_assign_string_literal.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_implicit_none(self):
         filename = "subprogram_implicit_none.F03"
         self.generate_write(filename)
@@ -116,43 +117,43 @@ class TestPhastSubprogram(TestPhastBase):
     def test_subprogram_if(self):
         filename = "subprogram_if.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_if_then(self):
         filename = "subprogram_if_then.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_if_logical_and(self):
         filename = "subprogram_if_logical_and.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_if_logical_paren(self):
         filename = "subprogram_if_logical_paren.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_if_nested(self):
         filename = "subprogram_if_nested.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_if_elseif_else(self):
         filename = "subprogram_if_elseif_else.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_if_named(self):
         filename = "subprogram_if_named.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_relational_op(self):
         filename = "subprogram_relational_op.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_logical_op(self):
         filename = "subprogram_logical_op.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_equivalence_op(self):
         filename = "subprogram_equivalence_op.F03"
         self.generate_write(filename)
- 
+
     def test_subprogram_paren_expression(self):
         filename = "subprogram_paren_expression.F03"
         self.generate_write(filename)
@@ -176,6 +177,7 @@ class TestPhastSubprogram(TestPhastBase):
     def test_subprogram_cpp_predefined(self):
         filename = "subprogram_cpp_predefined.F03"
         self.generate_write(filename)
+
 
 if __name__ == "__main__":
     unittest.main()

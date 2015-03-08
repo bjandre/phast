@@ -41,13 +41,12 @@ from phast.fortran_2003 import fortran_2003Parser
 from phast.fortran_2003_semantics import Fortran2003SemanticActions
 from phast.phast_utils import PhastWriter
 
-    
-# -------------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
 #
 # User input
 #
-# -------------------------------------------------------------------------------
-
+# -----------------------------------------------------------------------------
 def commandline_options():
     """Process the command line arguments.
 
@@ -67,7 +66,7 @@ def commandline_options():
 
     parser.add_argument('-t', '--trace', action='store_true',
                         help="output trace information")
-    
+
     parser.add_argument('file', metavar="FILE", help="the input file to parse")
 
     parser.add_argument('startrule', metavar="STARTRULE",
@@ -77,11 +76,11 @@ def commandline_options():
     return options
 
 
-# -------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
-# FIXME: work functions
+# work functions
 #
-# -------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 class ListRules(argparse.Action):
     """Class to print rules from a grako parser.
     """
@@ -94,19 +93,19 @@ class ListRules(argparse.Action):
         sys.exit(0)
 
 
-
-# -------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #
 # main
 #
-# -------------------------------------------------------------------------------
-
+# -----------------------------------------------------------------------------
 def main(options):
     whitespace = ""
 
     with open(options.file) as f:
         text = f.read()
-    parser = fortran_2003Parser(parseinfo=True, ignorecase=True, trace_length=512)
+    parser = fortran_2003Parser(parseinfo=True,
+                                ignorecase=True,
+                                trace_length=512)
     print("--> parser.trace_length = {0}".format(parser.trace_length))
     semantic_actions = Fortran2003SemanticActions()
     ast = parser.parse(
