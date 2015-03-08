@@ -1,13 +1,21 @@
 # editor files
 *~
 
-# python files
-*.pyc
+# generated parser file
+fortran_2003.py
 
-# fortran files
+# python build artifacts
+*.pyc
+*.egg-info
+
+# fortran build artifacts
 *.o
 *.mod
 *.a
+
+# virtual environments
+phast-env2
+phast-env3
 
 # test files
 *.tmp

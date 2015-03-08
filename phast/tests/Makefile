@@ -15,10 +15,11 @@ endif
 #
 ifdef SUBDIRS
 $(SUBDIRS) : FORCE
+	@echo $@ $(TARGET)
 	@if [ -d $@ ]; then \
 		$(MAKE) --directory=$@ $(TARGET); \
 	fi	
-	@echo Build complete: $@ : $(shell date)
+	@echo Build complete: $@ : $(TARGET) : $(shell date)
 endif	
 
 #
@@ -26,14 +27,7 @@ endif
 #
 all : $(SUBDIRS)
 
-test : $(SUBDIRS) py-unit
-
-py-unit : FORCE
-	PYTHONPATH="${PYTHONPATH}:.." python -m unittest discover
-
-py3-unit : FORCE
-	PYTHONPATH="${PYTHONPATH}:.." python3 -m unittest discover
-
+test : all $(SUBDIRS)
 
 #
 # clean - Clean up the directory.

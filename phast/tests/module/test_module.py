@@ -2,7 +2,7 @@
 
 import unittest
 
-from tests.test_phast_base import TestPhastBase
+from phast.tests.test_phast_base import TestPhastBase
 
 class TestPhastModule(TestPhastBase):
     """unittest suite for phast's ability to process fortran 2003 modules
@@ -11,7 +11,7 @@ class TestPhastModule(TestPhastBase):
     def setUp(self):
         super(TestPhastModule, self).setUp()
         self.startrule = "module"
-        self.test_dir = "module"
+        self.test_dir = "phast/tests/module"
 
     def tearDown(self):
         super(TestPhastModule, self).tearDown()

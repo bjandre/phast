@@ -63,6 +63,7 @@ class TestPhastBase(unittest.TestCase):
 
     def generate_write(self, filename):
         filename = "{0}/{1}".format(self.test_dir, filename)
+        self.assertTrue(os.path.isfile(filename), msg="Could not find fortran file '{0}'. cwd = {1}".format(filename, os.getcwd()))
         ast = self._generate_ast(filename)
         self.assertIsNotNone(ast, msg=ast.__repr__())
         self._write_ast(filename, ast)

@@ -37,9 +37,9 @@ else:
     from configparser import ConfigParser as config_parser
 
 
-from fortran_2003 import fortran_2003Parser
-from fortran_2003_semantics import Fortran2003SemanticActions
-from phast_utils import PhastWriter
+from phast.fortran_2003 import fortran_2003Parser
+from phast.fortran_2003_semantics import Fortran2003SemanticActions
+from phast.phast_utils import PhastWriter
 
     
 # -------------------------------------------------------------------------------
