@@ -1,2 +1,0 @@
-"""phast module test suite.
-"""

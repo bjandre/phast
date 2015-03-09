@@ -7,6 +7,7 @@ fortran_2003.py
 # python build artifacts
 *.pyc
 *.egg-info
+build/*
 
 # fortran build artifacts
 *.o

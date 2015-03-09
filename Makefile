@@ -68,7 +68,7 @@ clean : $(SRC_SUBDIRS)
 #
 clobber : clean $(SRC_SUBDIRS)
 	-rm -f .Makedepend *.o *.mod *.il *.pyc
-	-rm -rf *.egg-info
+	-rm -rf *.egg-info build
 
 
 clobber-env : FORCE
