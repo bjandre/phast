@@ -46,7 +46,7 @@ class TestPhastBase(unittest.TestCase):
         h = hashlib.sha256()
         with open(filename, 'r') as src:
             for s in src.readlines():
-                h.update(s)
+                h.update(s.encode('utf-8'))
         return h.digest()
 
     def _write_ast(self, filename, ast):

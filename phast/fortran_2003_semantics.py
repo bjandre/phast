@@ -13,6 +13,7 @@ file, you can obtain one at http://mozilla.org/MPL/2.0/
 """
 
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import sys
 
@@ -58,15 +59,15 @@ class Fortran2003SemanticActions(object):
         """
         """
         ast_str = u''
-        if type(ast) == list:
+        if isinstance(ast, list):
             ast_str += self._ast_list_to_str(ast)
-        elif type(ast) == dict:
+        elif isinstance(ast, dict):
             ast_str += self._ast_dict_to_str(ast)
-        elif type(ast) == str:
+        elif isinstance(ast, str):
             ast_str += u'{0}'.format(ast)
-        elif type(ast) == unicode:
-            ast_str += ast
-        elif type(ast) == grako.contexts.Closure:
+        elif isinstance(ast, unicode):
+            ast_str += u'{0}'.format(ast)
+        elif isinstance(ast, grako.contexts.Closure):
             if len(ast) > 0:
                 ast_str += self._ast_list_to_str(ast)
         else:
