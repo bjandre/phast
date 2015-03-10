@@ -43,7 +43,7 @@ class PhastWriter(object):
         else:
             self._file = sys.stdout
 
-    def close(self):
+    def __del__(self):
         if self._filename is not None:
             self._file.close()
         

@@ -54,7 +54,7 @@ class TestPhastBase(unittest.TestCase):
         tmp = "{0}.tmp".format(filename)
         phast_writer = PhastWriter(tmp)
         phast_writer.write(ast)
-        phast_writer.close()
+        del phast_writer
         hash_new = self._hash_file(tmp)
         self.assertEqual(hash_orig, hash_new)
         if hash_orig == hash_new:
