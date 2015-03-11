@@ -24,6 +24,8 @@ endif
 # all - Make everything in the listed sub directories
 #
 all : $(SRC_SUBDIRS)
+
+develop : setup.py
 	python setup.py develop
 
 #

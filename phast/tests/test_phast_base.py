@@ -1,19 +1,51 @@
 #!/usr/bin/env python
 
+import copy
 import hashlib
 import os
+import subprocess
 import unittest
 
 from phast.fortran_2003 import fortran_2003Parser
 from phast.fortran_2003_semantics import Fortran2003SemanticActions
 from phast.phast_utils import PhastWriter
 
+from grako.exceptions import FailedParse 
 
 class TestPhastBase(unittest.TestCase):
     """unittest suite for phast's ability to process fortran 2003 modules
     """
+    _compiler_cmds = []
+    _devnull = None
+    @classmethod
+    def setUpClass(cls):
+        """Run once per class
+        """
+        cls._compiler_cmds = []
+        cls._check_compiler()
+    
+    @classmethod
+    def _check_compiler(cls):
+        """
+        """
+        try:
+            from subprocess import DEVNULL # py3k
+        except ImportError:
+            import os
+            DEVNULL = open(os.devnull, 'wb')
+        cls._devnull = DEVNULL
+
+        cmd = ['gfortran', '--version']
+        try:
+            subprocess.check_call(cmd, stdout=cls._devnull, stderr=subprocess.STDOUT)
+            cls._compiler_cmds = ['gfortran', '-c', '-std=f2003', '-fsyntax-only', '-pedantic-errors', ] #'-J', ]
+        except subprocess.CalledProcessError:
+            # gfortran unavailable...?
+            cls._compiler_cmds = []
 
     def setUp(self):
+        """run before every test function
+        """
         self.whitespace = ""
         self.nameguard = False
         self.semantic_actions = Fortran2003SemanticActions()
@@ -22,24 +54,48 @@ class TestPhastBase(unittest.TestCase):
                                          trace_length=512)
         self.text = None
         self.ast = None
-        self.startrule = None
-        self.test_dir = None
+        self.startrule = 'program'
+        self.test_dir = 'phast/tests'
 
     def tearDown(self):
         pass
 
-    def _generate_ast(self, filename):
+    def _generate_ast_from_file(self, src_file):
+        """
+        """
         ast = None
         try:
-            with open(filename) as f:
+            with open(src_file) as f:
                 self.text = f.read()
+        except IOError as e:
+            err_msg = "Could not find fortran file '{0}'. cwd = {1}".format(
+                src_file, os.getcwd())
+            e.strerror += err_msg
+            raise e
         except Exception:
             pass
         else:
-            ast = self.parser.parse(self.text, self.startrule, filename,
+            try:
+                ast = self.parser.parse(
+                    self.text, self.startrule, src_file,
+                    semantics=self.semantic_actions,
+                    whitespace=self.whitespace,
+                    nameguard=self.nameguard)
+            except FailedParse:
+                pass
+        return ast
+
+    def _generate_ast_from_str(self, code_str):
+        """
+        """
+        ast = None
+        try:
+            ast = self.parser.parse(code_str, self.startrule,
                                     semantics=self.semantic_actions,
                                     whitespace=self.whitespace,
                                     nameguard=self.nameguard)
+        except FailedParse:
+            pass
         return ast
 
     def _hash_file(self, filename):
@@ -49,9 +105,9 @@ class TestPhastBase(unittest.TestCase):
                 h.update(s.encode('utf-8'))
         return h.digest()
 
-    def _write_ast(self, filename, ast):
-        hash_orig = self._hash_file(filename)
-        tmp = "{0}.tmp".format(filename)
+    def _write_ast(self, src_file, ast):
+        hash_orig = self._hash_file(src_file)
+        tmp = "{0}.tmp".format(src_file)
         phast_writer = PhastWriter(tmp)
         phast_writer.write(ast)
         del phast_writer
@@ -60,33 +116,77 @@ class TestPhastBase(unittest.TestCase):
         if hash_orig == hash_new:
             os.remove(tmp)
 
-    def generate_write(self, filename):
-        filename = "{0}/{1}".format(self.test_dir, filename)
-        err_msg = "Could not find fortran file '{0}'. cwd = {1}".format(
-            filename, os.getcwd())
-        self.assertTrue(os.path.isfile(filename), msg=err_msg)
-        ast = self._generate_ast(filename)
-        self.assertIsNotNone(ast, msg=ast.__repr__())
-        self._write_ast(filename, ast)
+    def _compile_src(self, src_file, valid_src):
+        """Check to see if the source file can be compiled by the compiler. assert that the actual compilability agrees with what the test developer expected.
+        """
+        #mod_file = "{0}.mod".format(src_file[0:-4])
+        cmd = copy.deepcopy(self._compiler_cmds)
+        cmd.append(src_file)
+
+        can_compile = True
+        try:
+            subprocess.check_call(cmd, stdout=self._devnull, stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError:
+            #print("could not compile '{0}'".format(src_file))
+            can_compile = False
+        self.assertTrue(can_compile == valid_src)
+        return can_compile
+            
+    def check_source(self, name, compilable=False, valid_src=True, filename=None, code_str=None):
+        if filename and code_str:
+            # FIXME(bja, 2015-03) should be an error!
+            pass
+
+        if filename:
+            src_file = os.path.join(self.test_dir, filename)
+        if code_str:
+            filename = "{0}.F03".format(name)
+            src_file = os.path.join(self.test_dir, filename)
+            with open(src_file, 'w') as tmp:
+                tmp.write(code_str)
+
+        can_compile = compilable
+        if compilable:
+            can_compile = self._compile_src(src_file, valid_src)
+        
+        if filename:
+            ast = self._generate_ast_from_file(src_file)
+
+        if code_str:    
+            ast = self._generate_ast_from_str(code_str)
+
+        if valid_src:
+            self.assertIsNotNone(ast, msg=ast.__repr__())
+        else:
+            self.assertIsNone(ast)
+
+        # check the ast can be written to recreate the original source
+        # file.
+        if valid_src:
+            self._write_ast(src_file, ast)
+        
+        if code_str and (can_compile and valid_src):
+            # FIXME(bja, 201503) if we created the input file and
+            # everything worked as espected, then we remove the file?
+            # don't think the logic is correct.
+            os.remove(src_file)
 
     def test_bad_filename(self):
         """Test that the generate_ast function returns None for a bad filename
         """
         filename = "bad-filename"
-        ast = self._generate_ast(filename)
-        self.assertIsNone(ast)
+        self.assertRaises(IOError, self._generate_ast_from_file, filename)
 
     def test_not_f03(self):
-        c_file = u"""#include <stdio.h>
+        code_src = u"""#include <stdio.h>
 int main(int argc, char** argv) {
    printf("Hello, world!\\n");
    return 0;
 }
 """
-        filename = "tmp.c"
-        with open(filename, 'w') as tmp_c:
-            tmp_c.write(c_file)
-        self.assertRaises(Exception, self._generate_ast, filename)
+        self.check_source(name='not_f03',
+                          compilable=True, valid_src=False,
+                          code_str=code_src)
 
 if __name__ == "__main__":
     unittest.main()
