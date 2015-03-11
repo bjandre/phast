@@ -22,13 +22,13 @@ def readfile(filename, func):
             data = func(f)
     except (IOError, IndexError):
         sys.stderr.write(u"""
-Unable to open file: '%s'
+Unable to open file: {0}
 For development run:
     make version
     setup.py develop
 To build a valid release, run:
     make release
-""" % filename)
+""".format(filename))
         sys.exit(1)
     return data
 
