@@ -38,7 +38,7 @@ class TestPhastBase(unittest.TestCase):
         cmd = ['gfortran', '--version']
         try:
             subprocess.check_call(cmd, stdout=cls._devnull, stderr=subprocess.STDOUT)
-            cls._compiler_cmds = ['gfortran', '-c', '-std=f2003', '-fsyntax-only', '-pedantic-errors', ] #'-J', ]
+            cls._compiler_cmds = ['gfortran', '-c', '-std=f2003', '-fsyntax-only', '-pedantic-errors', '-J', ]
         except subprocess.CalledProcessError:
             # gfortran unavailable...?
             cls._compiler_cmds = []
@@ -119,13 +119,17 @@ class TestPhastBase(unittest.TestCase):
     def _compile_src(self, src_file, valid_src):
         """Check to see if the source file can be compiled by the compiler. assert that the actual compilability agrees with what the test developer expected.
         """
-        #mod_file = "{0}.mod".format(src_file[0:-4])
+        mod_file = "{0}.mod".format(src_file[0:-4])
         cmd = copy.deepcopy(self._compiler_cmds)
+        cmd.append(self.test_dir) # module file directory
         cmd.append(src_file)
 
         can_compile = True
         try:
             subprocess.check_call(cmd, stdout=self._devnull, stderr=subprocess.STDOUT)
+            if os.path.isfile(mod_file):
+                os.remove(mod_file)
+            
         except subprocess.CalledProcessError:
             #print("could not compile '{0}'".format(src_file))
             can_compile = False
@@ -165,28 +169,11 @@ class TestPhastBase(unittest.TestCase):
         if valid_src:
             self._write_ast(src_file, ast)
         
-        if code_str and (can_compile and valid_src):
+        if code_str:
             # FIXME(bja, 201503) if we created the input file and
             # everything worked as espected, then we remove the file?
-            # don't think the logic is correct.
             os.remove(src_file)
 
-    def test_bad_filename(self):
-        """Test that the generate_ast function returns None for a bad filename
-        """
-        filename = "bad-filename"
-        self.assertRaises(IOError, self._generate_ast_from_file, filename)
-
-    def test_not_f03(self):
-        code_src = u"""#include <stdio.h>
-int main(int argc, char** argv) {
-   printf("Hello, world!\\n");
-   return 0;
-}
-"""
-        self.check_source(name='not_f03',
-                          compilable=True, valid_src=False,
-                          code_str=code_src)
 
 if __name__ == "__main__":
     unittest.main()

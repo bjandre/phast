@@ -6,7 +6,9 @@ from phast.tests.test_phast_base import TestPhastBase
 
 
 class TestPhastSubprogram(TestPhastBase):
-    """unittest suite for phast's ability to process fortran 2003 modules
+    """unittest suite for phast's ability to process fortran 2003
+    subprograms
+
     """
 
     def setUp(self):
@@ -72,18 +74,6 @@ end function foo_empty_function_ws_paren_ws_result
 
 """
         self.check_source(name='subprogram_empty_function_whitespace_paren_whitespace_result', compilable=True, valid_src=True, code_str=code_str)
-
-    def test_subprogram_comment_special_chars(self):
-        code_str = """subroutine foo_special_chars()
-  ! this is a comment with an => in it.
-  ! this is a comment with an :: in it.
-  ! this is a comment with an (/ in it.
-  ! this is a comment with an /) in it.
-  ! this is a comment with ; in it.
-end subroutine foo_special_chars
-
-"""
-        self.check_source(name='subprogram_comment_special_chars', compilable=True, valid_src=True, code_str=code_str)
 
     def test_subprogram_intrinsic_types(self):
         code_str = """subroutine foo_intrinsic_types

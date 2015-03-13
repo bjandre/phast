@@ -34,7 +34,7 @@ end module minimal_module
                           compilable=True, valid_src=True,
                           code_str=code_str)
 
-    def test_0002(self):
+    def test_minimal_module_comments(self):
         code_str = """module minimal_module_comments   ! this is module test_module_03
   ! comment in an empty module
   ! another comment
@@ -56,7 +56,7 @@ end module minimal_module_comments
                           compilable=True, valid_src=True,
                           code_str=code_str)
 
-    def test_0003(self):
+    def test_public_vars(self):
         """
         """
         code_str = """module public_vars
@@ -81,16 +81,16 @@ end module public_vars
                           compilable=True, valid_src=True,
                           code_str=code_str)
 
-    def test_0004(self):
+    def test_module_use(self):
         """
         """
         code_str = """module module_use
-  use t0001_minimal_module
-  use t0002_minimal_module_comments, only : &
+  use minimal_module
+  use minimal_module_comments, only : &
        bar
-  use t0002_minimal_module_comments, only : &
+  use minimal_module_comments, only : &
        bob => baz
-  use t0003_module_param, only : coffee, cream_use, use_sugar
+  use module_param, only : coffee, cream_use, use_sugar
 
 contains
   
@@ -106,7 +106,7 @@ end module module_use
                           compilable=False, valid_src=True,
                           code_str=code_str)
 
-    def test_0005(self):
+    def test_implicit_none(self):
         """
         """
         code_str = """module implicit_none
@@ -128,7 +128,7 @@ end module implicit_none
                           compilable=True, valid_src=True,
                           code_str=code_str)
 
-    def test_0006(self):
+    def test_dummy_args(self):
         """
         """
         code_str = """module dummy_args
@@ -156,7 +156,7 @@ end module dummy_args
                           compilable=True, valid_src=True,
                           code_str=code_str)
 
-    def test_0007(self):
+    def test_minimal_module_fail(self):
         """
         """
         code_str = """module minimal_module_fail
@@ -276,7 +276,7 @@ end module call_function
                           code_str=code_str)
 
     def test_module_call_procedure(self):
-        code_str = """module test_call_procedure
+        code_str = """module call_procedure
   
 contains
   
@@ -312,7 +312,7 @@ contains
     
   end subroutine test_calls
 
-end module test_call_procedure
+end module call_procedure
 """
         self.check_source(name='call_procedure',
                           compilable=True, valid_src=True,
